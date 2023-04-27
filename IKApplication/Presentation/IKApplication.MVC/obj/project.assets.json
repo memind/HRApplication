@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\TARTAR\\.nuget\\packages\\": {}
+    "C:\\Users\\MSİ\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Presentation\\IKApplication.MVC\\IKApplication.MVC.csproj",
+      "projectUniqueName": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Presentation\\IKApplication.MVC\\IKApplication.MVC.csproj",
       "projectName": "IKApplication.MVC",
-      "projectPath": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Presentation\\IKApplication.MVC\\IKApplication.MVC.csproj",
-      "packagesPath": "C:\\Users\\TARTAR\\.nuget\\packages\\",
-      "outputPath": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Presentation\\IKApplication.MVC\\obj\\",
+      "projectPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Presentation\\IKApplication.MVC\\IKApplication.MVC.csproj",
+      "packagesPath": "C:\\Users\\MSİ\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Presentation\\IKApplication.MVC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\TARTAR\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MSİ\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

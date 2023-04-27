@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj": {}
+    "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj": {}
   },
   "projects": {
-    "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj": {
+    "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj",
         "projectName": "IKApplication.Domain",
-        "projectPath": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj",
-        "packagesPath": "C:\\Users\\TARTAR\\.nuget\\packages\\",
-        "outputPath": "C:\\MyProjects\\HS-8\\IKApplication\\IKApplication\\Core\\IKApplication.Domain\\obj\\",
+        "projectPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Core\\IKApplication.Domain\\IKApplication.Domain.csproj",
+        "packagesPath": "C:\\Users\\MSİ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Core\\IKApplication.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\TARTAR\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MSİ\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
