@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="ConcreteRepositories\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
