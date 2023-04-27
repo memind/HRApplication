@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj": {}
+    "C:\\Users\\TAHA\\Desktop\\IK_App\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj": {
+    "C:\\Users\\TAHA\\Desktop\\IK_App\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\TAHA\\Desktop\\IK_App\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj",
         "projectName": "IKApplication.Infrastructure",
-        "projectPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\MSİ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MSİ\\OneDrive\\Masaüstü\\IKApp\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\TAHA\\Desktop\\IK_App\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\IKApplication.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\TAHA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TAHA\\Desktop\\IK_App\\IKApplication\\Infrustructure\\IKApplication.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MSİ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TAHA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
