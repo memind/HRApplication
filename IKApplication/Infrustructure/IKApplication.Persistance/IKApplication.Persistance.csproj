@@ -10,4 +10,8 @@
     <Folder Include="ConcreteServices\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
+  </ItemGroup>
+
 </Project>

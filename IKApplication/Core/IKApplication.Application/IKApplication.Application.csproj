@@ -14,4 +14,8 @@
     <Folder Include="VMs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IKApplication.Domain\IKApplication.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
