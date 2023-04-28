@@ -15,7 +15,7 @@ namespace IKApplication.MVC.Controllers
 			if (User.Identity.IsAuthenticated)
 			{
 				//return RedirectToAction("Index", nameof(Areas.Member.Controllers.HomeController));
-				return RedirectToAction("Index", "");
+				return RedirectToAction("Index", "Home");
 			}
 
 			ViewData["ReturnURL"] = returnUrl;
@@ -27,15 +27,12 @@ namespace IKApplication.MVC.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				//var result = await _appUserService.Login(loginDTO);
-				//if (result.Succeeded)
-				//	return RedirectToLocal(returnUrl);
+				return View("Index");
+            }
 
-				return RedirectToAction("Index", "");
+            ViewData["ReturnURL"] = returnUrl;
 
-				//ModelState.AddModelError("", "Invalid Login Attempt");
-			}
-			return View(loginDTO);
+            return View(loginDTO);
 		}
 	}
 }
