@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AbstractRepositories\" />
     <Folder Include="AbstractServices\" />
     <Folder Include="DTOs\UserDTOs\" />
     <Folder Include="Mappings\" />
     <Folder Include="VMs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKApplication.Domain.Repositories
+namespace IKApplication.Application.Repositories
 {
     public interface IBaseRepository<T> where T : IBaseEntity  // sadece IBaseEntity ten kalıtım alanlar verilebilsin
     {

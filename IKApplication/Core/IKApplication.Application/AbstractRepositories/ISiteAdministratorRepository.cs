@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKApplication.Domain.Repositories
+namespace IKApplication.Application.Repositories
 {
     public interface ISiteAdministratorRepository : IBaseRepository<SiteAdministrator>
     {

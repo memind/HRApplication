@@ -1,8 +1,10 @@
-﻿using IKApplication.Domain.Entites;
-using IKApplication.Domain.Repositories;
+﻿using IKApplication.Application.Repositories;
+using IKApplication.Domain.Entites;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -12,17 +14,51 @@ namespace IKApplication.Infrastructure.ConcreteRepositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
     {
+
+        // DEPENDENCY INJECTION
+
+        private readonly IKAppDbContext _iKAppDbContext;
+        protected Microsoft.EntityFrameworkCore.DbSet<T> table;
+        //private DbSet<T> _table { get => _iKAppDbContext.Set<T>(); }
+        public BaseRepository(IKAppDbContext iKAppDbContext)
+        {
+            _iKAppDbContext = iKAppDbContext;
+            table = _iKAppDbContext.Set<T>();
+        }
+
+
+
+        // C R U D
+        // C R U D
+        // C R U D
+
+        // C R E A T E
+        public async Task Create(T entity)
+        {
+            table.Add(entity);
+            await _iKAppDbContext.SaveChangesAsync();
+        }
+
+        //  U P D A T E
+        public async Task Update(T entity)
+        {
+            _iKAppDbContext.Entry<T>(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            await _iKAppDbContext.SaveChangesAsync();
+        }
+
+        // D E L E T E
+        public async Task Delete(T entity)
+        {
+            await _iKAppDbContext.SaveChangesAsync();
+            // to do: servis katmanında entity'sine göre pasif hale getireceğiz.    DB den silmeyeceğizde pasif hale çekeceğiz, kullanıcı silindi zannedecek
+        }
+
+
+        //-------------------------------------
+        //-------------------------------------
+        //-------------------------------------
+
         public Task<bool> Any(Expression<Func<T, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Create(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(T entity)
         {
             throw new NotImplementedException();
         }
@@ -47,9 +83,8 @@ namespace IKApplication.Infrastructure.ConcreteRepositories
             throw new NotImplementedException();
         }
 
-        public Task Update(T entity)
-        {
-            throw new NotImplementedException();
-        }
+
+
+      
     }
 }

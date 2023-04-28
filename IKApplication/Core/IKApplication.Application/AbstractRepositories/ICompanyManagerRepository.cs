@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKApplication.Domain.Repositories
+namespace IKApplication.Application.Repositories
 {
-    internal interface ICompanyManagerRepository : IBaseRepository<CompanyManager>
+    public interface ICompanyManagerRepository : IBaseRepository<CompanyManager>
     {
         //CompanyManager ile ilgili özel üyeler varsa buraya eklenecek.
     }
