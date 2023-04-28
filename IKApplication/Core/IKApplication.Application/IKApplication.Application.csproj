@@ -9,7 +9,7 @@
   <ItemGroup>
     <Folder Include="AbstractRepositories\" />
     <Folder Include="AbstractServices\" />
-    <Folder Include="DTOs\" />
+    <Folder Include="DTOs\UserDTOs\" />
     <Folder Include="Mappings\" />
     <Folder Include="VMs\" />
   </ItemGroup>

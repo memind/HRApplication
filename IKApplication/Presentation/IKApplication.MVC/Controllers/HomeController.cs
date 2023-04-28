@@ -1,4 +1,4 @@
-﻿using IKApplication.MVC.Models;
+﻿using IKApplication.Application.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,27 +6,36 @@ namespace IKApplication.MVC.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
-
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
-
 		public IActionResult Index()
 		{
 			return View();
 		}
-
-		public IActionResult Privacy()
+		public IActionResult Login(string returnUrl = "/")
 		{
+			if (User.Identity.IsAuthenticated)
+			{
+				//return RedirectToAction("Index", nameof(Areas.Member.Controllers.HomeController));
+				return RedirectToAction("Index", "");
+			}
+
+			ViewData["ReturnURL"] = returnUrl;
+
 			return View();
 		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
+		[HttpPost]
+		public IActionResult Login(LoginDTO loginDTO, string returnUrl)
 		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			if (ModelState.IsValid)
+			{
+				//var result = await _appUserService.Login(loginDTO);
+				//if (result.Succeeded)
+				//	return RedirectToLocal(returnUrl);
+
+				return RedirectToAction("Index", "");
+
+				//ModelState.AddModelError("", "Invalid Login Attempt");
+			}
+			return View(loginDTO);
 		}
 	}
 }
