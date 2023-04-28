@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Company 
+
+<h3> Create Company</h3>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label>Name:</label>
+        @Html.TextBoxFor(model => model.CompanyName, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Address:</label>
+        @Html.TextBoxFor(model => model.CompanyEmail, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.CompanyDirector, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.CompanyPhoneNumber, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.CompanySector, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.NumberOfEmployees, new { @class = "formcontrol" })
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+}
