@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -15,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
     <ProjectReference Include="..\..\Infrustructure\IKApplication.Infrastructure\IKApplication.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrustructure\IKApplication.Persistance\IKApplication.Persistance.csproj" />
   </ItemGroup>
