@@ -7,17 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ConcreteServices\" />
   </ItemGroup>
 
 </Project>
