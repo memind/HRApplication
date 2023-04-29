@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AbstractRepositories\" />
-    <Folder Include="DTOs\UserDTOs\" />
     <Folder Include="Mappings\" />
     <Folder Include="VMs\" />
   </ItemGroup>
