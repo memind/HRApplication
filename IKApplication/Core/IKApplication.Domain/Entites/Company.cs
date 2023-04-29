@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IKApplication.Domain.Enums;
 
 namespace IKApplication.Domain.Entites
 {
-    public class Company 
+    public class Company  : IBaseEntity
     {
-        //Id guid olabilir??
-        public int Id { get; set; }
-        public string CompanyName { get; set; }
-   
-        public string CompanyEmail { get; set;}
+        // Implement IBaseEntity
+        public Guid Id { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public Status Status { get; set; }
 
-        public string CompanyDirector { get; set; }
-
-        //To do: site yöneticisi sınıfından al string yerine
-        public string CompanyPhoneNumber { get; set; }
-
-        public string CompanySector { get; set; }
-
+        // Company Properties
+        public string Name { get; set; }
+        public string Email { get; set;}
+        public string PhoneNumber { get; set; }
+        public string Sector { get; set; }
         public int NumberOfEmployees { get; set; }
 
+        // Navigation Properties
+        public List<AppUser> CompanyManagers { get; set; }
 
-
-
-
+        // Create new Lists in constructor
+        public Company()
+        {
+            CompanyManagers = new List<AppUser>();
+        }
     }
 }
