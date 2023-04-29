@@ -1,9 +1,7 @@
-﻿using IKApplication.Application.AbstractServices.DashboardServices;
+﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.DashBoardDTOs;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-namespace IKApplication.Persistance.ConcreteServices.DashboardServices
+namespace IKApplication.Infrastructure.ConcreteServices
 {
     public class DashboardService : IDashboardService
     {

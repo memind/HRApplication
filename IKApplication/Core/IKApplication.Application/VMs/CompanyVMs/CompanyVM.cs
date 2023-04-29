@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IKApplication.Application.VMs
+﻿namespace IKApplication.Application.VMs.CompanyVMs
 {
     public class CompanyVM
     {

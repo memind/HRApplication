@@ -5,9 +5,6 @@
 //{
 //    public class CompanyController : Controller
 //    {
-        
-
-        
 //        //private readonly ApplicationDbContext _context;
 //        //public CompanyController(ApplicationDbContext context)
 //        //{

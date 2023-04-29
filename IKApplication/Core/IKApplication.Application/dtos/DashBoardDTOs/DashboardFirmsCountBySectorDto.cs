@@ -1,5 +1,4 @@
-﻿
-namespace IKApplication.Application.DTOs.DashBoardDTOs
+﻿namespace IKApplication.Application.DTOs.DashBoardDTOs
 {
     public class DashboardFirmsCountBySectorDto
     {

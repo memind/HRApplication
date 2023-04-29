@@ -1,6 +1,6 @@
 ﻿using IKApplication.Application.DTOs.DashBoardDTOs;
 
-namespace IKApplication.Application.AbstractServices.DashboardServices
+namespace IKApplication.Application.AbstractServices
 {
     public interface IDashboardService
     {
