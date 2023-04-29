@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ConcreteRepositories\" />
-    <Folder Include="Configurations\" />
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
+    <Folder Include="ConcreteServices\" />
   </ItemGroup>
 
 </Project>
