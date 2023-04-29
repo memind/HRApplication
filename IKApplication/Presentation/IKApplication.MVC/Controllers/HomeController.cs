@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IKApplication.MVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Site Administrator")]
     public class HomeController : Controller
     {
         public IActionResult Index()

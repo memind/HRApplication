@@ -14502,10 +14502,11 @@ fieldset:disabled .wizard > .actions a,
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #191c24;
+    background: transparent;
     background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 0.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 0.5rem;
 }
 
     .card > hr {
@@ -24643,13 +24644,13 @@ code {
 .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead,
 .tt-query,
 .tt-hint {
-    border: 1px solid #2c2e33;
     height: calc(2.25rem + 2px);
     font-weight: normal;
     font-size: 0.875rem;
     padding: 0.625rem 0.6875rem;
-    background-color: #2A3038;
-    border-radius: 2px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
     color: #ffffff;
 }
 
@@ -24657,8 +24658,8 @@ code {
     .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .select2-container--default .select2-selection--single:focus, .select2-container--default .select2-selection--single .select2-search__field:focus, .typeahead:focus,
     .tt-query:focus,
     .tt-hint:focus {
-        border: 1px solid rgba(71, 164, 71, 0.5);
-        background-color: #2A3038;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        background: transparent;
         color: #ffffff;
     }
 
