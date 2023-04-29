@@ -1,14 +1,9 @@
-﻿using IKApplication.Domain.Entites;
-using IKApplication.Domain.Repositories;
+﻿using IKApplication.Application.AbstractRepositories;
+using IKApplication.Domain.Entites;
 using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IKApplication.Infrastructure.ConcreteRepositories
+namespace IKApplication.Persistance.ConcreteRepositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
     {

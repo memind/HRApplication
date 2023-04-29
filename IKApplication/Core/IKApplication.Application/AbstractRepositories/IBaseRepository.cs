@@ -1,13 +1,8 @@
 ﻿using IKApplication.Domain.Entites;
 using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IKApplication.Domain.Repositories
+namespace IKApplication.Application.AbstractRepositories
 {
     public interface IBaseRepository<T> where T : IBaseEntity  // sadece IBaseEntity ten kalıtım alanlar verilebilsin
     {
@@ -18,8 +13,6 @@ namespace IKApplication.Domain.Repositories
         Task<T> GetDefault(Expression<Func<T, bool>> expression);   // dinamik olarak where işlemi sağlar.  Id ye göre getir.  Id DB de yoksa null döner
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);   // Mesela  CompanyManagerID = 5 olan hepsini döndür. Bir liste dönecek sonuç olarak.
 
-
-
         //  Select , Where , Sıralama , Join
         // Hem select, hem order by yapabileceğimiz entitie 'leri birlikte çekmek için include etmek gerekir.  Bir sorguya birden fazla tablo girecek yani eagerloading kullanacağız
         Task<TResult> GetFilteredFirstOrDefault<TResult>(
@@ -27,7 +20,6 @@ namespace IKApplication.Domain.Repositories
             Expression<Func<T, bool>> where,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,  // sıralama
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null//join   //using Microsoft.EntityFrameworkCore.Query;
-
             );   // orderBy verilmediyse null kullanacak.  include da girilmediyse null geçsin
 
         // GetFilteredFirstOrDefault metodunu kullandığımızda
@@ -43,6 +35,5 @@ namespace IKApplication.Domain.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,  // sıralama
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null  //join
             );
-
     }
 }
