@@ -40,8 +40,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Password *</label>
-                                    <input asp-for="Password" type="text" class="form-control p_input">
+                                    <input asp-for="Password" type="password" class="form-control p_input">
                                     <span asp-validation-for="Password" class="text-danger"></span>
+                                    <span class="text-danger">
+                                        @ViewData["InvalidLogin"]
+                                    </span>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>

@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using AutoMapper;
+using IKApplication.Application.AbstractServices;
 using IKApplication.Application.Mappings;
+using IKApplication.Infrastructure.ConcreteServices;
 
 namespace IKApplication.MVC.IoC
 {
@@ -8,6 +10,11 @@ namespace IKApplication.MVC.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
+
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>
             {

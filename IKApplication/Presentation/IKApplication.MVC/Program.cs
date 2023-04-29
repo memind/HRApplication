@@ -1,4 +1,7 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 using IKApplication.Domain.Entites;
+using IKApplication.MVC.IoC;
 using IKApplication.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,12 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<IKAppDbContext>().AddDefaultTokenProviders();
 
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new DependencyResolver());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,10 +48,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Login}/{id?}");
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
