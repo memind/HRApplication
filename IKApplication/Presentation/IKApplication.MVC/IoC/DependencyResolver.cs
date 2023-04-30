@@ -18,7 +18,7 @@ namespace IKApplication.MVC.IoC
         {
             builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
 
-            
+
             builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
             builder.RegisterType<AppUserServices>().As<IAppUserServices>().InstancePerLifetimeScope();
             builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
