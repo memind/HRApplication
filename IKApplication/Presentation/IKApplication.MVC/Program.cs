@@ -13,6 +13,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IKAppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddIdentityCore<AppUser>().AddRoles<IdentityRole<Guid>>().AddEntityFrameworkStores<IKAppDbContext>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
