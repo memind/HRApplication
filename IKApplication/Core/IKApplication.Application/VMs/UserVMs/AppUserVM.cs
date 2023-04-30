@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IKApplication.Application.VMs.SiteManagerVMs
+namespace IKApplication.Application.VMs.UserVMs
 {
-    public class SiteManagerVMs
+    public class AppUserVM
     {
         public string Name { get; set; }
         public string? SecondName { get; set; }

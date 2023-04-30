@@ -17,37 +17,21 @@ namespace IKApplication.Persistance.ConcreteRepositories
             _iKAppDbContext = iKAppDbContext;
             table = _iKAppDbContext.Set<T>();
         }
-
-        // C R U D
-        // C R U D
-        // C R U D
-
-        // C R E A T E
         public async Task Create(T entity)
         {
             table.Add(entity);
             await _iKAppDbContext.SaveChangesAsync();
         }
-
-        //  U P D A T E
         public async Task Update(T entity)
         {
-            _iKAppDbContext.Entry<T>(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _iKAppDbContext.Entry<T>(entity).State = EntityState.Modified;
             await _iKAppDbContext.SaveChangesAsync();
         }
-
-        // D E L E T E
         public async Task Delete(T entity)
         {
             await _iKAppDbContext.SaveChangesAsync();
             // to do: servis katmanında entity'sine göre pasif hale getireceğiz.    DB den silmeyeceğizde pasif hale çekeceğiz, kullanıcı silindi zannedecek
         }
-
-
-        //-------------------------------------
-        //-------------------------------------
-        //-------------------------------------
-
         public async Task<bool> Any(Expression<Func<T, bool>> expression)
         {
             return await table.AnyAsync(expression);

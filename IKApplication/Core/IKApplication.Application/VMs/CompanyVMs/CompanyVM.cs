@@ -2,16 +2,14 @@
 {
     public class CompanyVM
     {
-        //guid ıd yapılacak
-        public string CompanyName { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
 
-        public string CompanyEmail { get; set; }
+        public string Email { get; set; }
 
-        public string CompanyDirector { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public string CompanyPhoneNumber { get; set; }
-
-        public string CompanySector { get; set; }
+        public string Sector { get; set; }
 
         public int NumberOfEmployees { get; set; }
     }

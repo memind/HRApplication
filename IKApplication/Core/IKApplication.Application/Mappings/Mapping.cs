@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.DTOs.CompanyDTOs;
-using IKApplication.Application.DTOs.SiteManagerDTO;
-using IKApplication.Application.VMs.SiteManagerVMs;
+using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 
 namespace IKApplication.Application.Mappings
@@ -13,8 +13,8 @@ namespace IKApplication.Application.Mappings
             CreateMap<Company,UpdateCompanyDTO>().ReverseMap();
             CreateMap<Company,CreateCompanyDTO>().ReverseMap();
             
-            CreateMap<AppUser, SiteManagerUpdateDTO>().ReverseMap();
-            CreateMap<AppUser, SiteManagerVMs>().ReverseMap();
+            CreateMap<AppUser, AppUserUpdateDTO>().ReverseMap();
+            CreateMap<AppUser, AppUserVM>().ReverseMap();
 
         }
     }

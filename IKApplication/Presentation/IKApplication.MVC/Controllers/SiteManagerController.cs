@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
-using IKApplication.Application.DTOs.SiteManagerDTO;
+using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +8,10 @@ namespace IKApplication.MVC.Controllers
 {
     public class SiteManagerController : Controller
     {
-        private readonly IAppUserServices _managerServices;
+        private readonly IAppUserService _managerServices;
         private readonly IMapper _mapper;
 
-        public SiteManagerController(IMapper mapper, IAppUserServices managerSerives)
+        public SiteManagerController(IMapper mapper, IAppUserService managerSerives)
         {
             _mapper = mapper;
             _managerServices = managerSerives;
@@ -23,7 +23,7 @@ namespace IKApplication.MVC.Controllers
             return View(user);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(SiteManagerUpdateDTO user)
+        public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {
             var map = _mapper.Map<AppUser>(user);  
           if(ModelState.IsValid) 
