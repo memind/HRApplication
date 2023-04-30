@@ -13,7 +13,6 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IKAppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentityCore<AppUser>().AddEntityFrameworkStores<IKAppDbContext>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
@@ -27,14 +26,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<IKAppDbContext>().AddDefaultTokenProviders();
 
-
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
     builder.RegisterModule(new DependencyResolver());
-}
-);
-
+});
 
 var app = builder.Build();
 
@@ -51,10 +47,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Login}/{id?}");
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
