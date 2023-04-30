@@ -1,8 +1,14 @@
 ﻿using Autofac;
+using Autofac.Features.ResolveAnything;
 using AutoMapper;
+using DotNetOpenAuth.OAuth;
+using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.Mappings;
+using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
+using IKApplication.Persistance.ConcreteRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.MVC.IoC
 {
@@ -14,6 +20,8 @@ namespace IKApplication.MVC.IoC
 
 
             builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserServices>().As<IAppUserServices>().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
 
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>
