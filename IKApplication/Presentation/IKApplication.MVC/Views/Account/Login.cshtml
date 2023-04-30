@@ -21,6 +21,12 @@
     <!-- endinject -->
     <!-- Layout styles -->
     <link rel="stylesheet" href="~/assets/css/style.css">
+    <style>
+        input:-webkit-autofill, input:-webkit-autofill:focus {
+            box-shadow: 0 0 0 1000px #CB647B inset;
+            -webkit-text-fill-color: #ffffff;
+        }
+    </style>
     <!-- End layout styles -->
     <link rel="shortcut icon" href="~/assets/images/favicon.png" />
 </head>
@@ -34,15 +40,15 @@
                             <h2 class="card-title text-center mb-3">Login</h2>
                             <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
                                 <div class="form-floating mb-3">
-                                    <input asp-for="UserName" class="form-control" placeholder="Email" type="text">
+                                    <input asp-for="UserName" class="form-control" placeholder="Email" type="text" />
                                     <label asp-for="UserName">Email *</label>
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <span asp-validation-for="UserName" class="text-light"></span>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input asp-for="Password" class="form-control" placeholder="Password" type="password">
+                                    <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
                                     <label asp-for="Password">Password *</label>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <span class="text-danger">
+                                    <span asp-validation-for="Password" class="text-light"></span>
+                                    <span class="text-light">
                                         @ViewData["InvalidLogin"]
                                     </span>
                                 </div>
