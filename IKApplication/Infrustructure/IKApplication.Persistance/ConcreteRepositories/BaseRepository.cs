@@ -1,7 +1,7 @@
 ﻿using IKApplication.Domain.Entites;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using IKApplication.Application.AbstractRepositories;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.Persistance.ConcreteRepositories
