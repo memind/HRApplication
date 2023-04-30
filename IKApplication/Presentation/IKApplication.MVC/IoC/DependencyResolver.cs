@@ -16,14 +16,10 @@ namespace IKApplication.MVC.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-
-            
-            builder.RegisterType<Mapper>().As<IMapper>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
             builder.RegisterType<AppUserServices>().As<IAppUserServices>().InstancePerLifetimeScope();
             builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
-
-
-
 
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>
