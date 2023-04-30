@@ -22,7 +22,7 @@ namespace IKApplication.MVC.Controllers
             var user = await _managerServices.GetById(id);
             return View(user);
         }
-
+        [HttpPost]
         public async Task<IActionResult> Update(SiteManagerUpdateDTO user)
         {
             var map = _mapper.Map<AppUser>(user);  
