@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using IKApplication.Application.AbstractRepositories;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.Persistance.ConcreteRepositories
 {
@@ -47,29 +48,45 @@ namespace IKApplication.Persistance.ConcreteRepositories
         //-------------------------------------
         //-------------------------------------
 
-        public Task<bool> Any(Expression<Func<T, bool>> expression)
+               public async Task<bool> Any(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await table.AnyAsync(expression);
         }
 
-        public Task<T> GetDefault(Expression<Func<T, bool>> expression)
+        public async Task<T> GetDefault(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await table.FirstOrDefaultAsync(expression);
         }
 
-        public Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression)
+        public async Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await table.Where(expression).ToListAsync();
         }
 
-        public Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = table; //Select * from Post
+            if (where != null)
+                query = query.Where(where); //Select*From where GenreID = 3
+            if (orderBy != null)
+                query = include(query);
+            if (orderBy != null)
+                return await orderBy(query).Select(select).FirstOrDefaultAsync();
+            else
+                return await query.Select(select).FirstOrDefaultAsync();
         }
 
-        public Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = table; //Select * from Post
+            if (where != null)
+                query = query.Where(where); //Select*From where GenreID = 3
+            if (include != null)
+                query = include(query);
+            if (orderBy != null)
+                return await orderBy(query).Select(select).ToListAsync();
+            else
+                return await query.Select(select).ToListAsync();
         }
     }
 }
