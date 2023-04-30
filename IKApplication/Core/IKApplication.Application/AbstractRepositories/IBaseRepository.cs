@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace IKApplication.Application.AbstractRepositories
 {
-    public interface IBaseRepository<T> where T : IBaseEntity  // sadece IBaseEntity ten kalıtım alanlar verilebilsin
+    public interface IBaseRepository<T> where T :class, IBaseEntity  // sadece IBaseEntity ten kalıtım alanlar verilebilsin
     {
         Task Create(T entity);
         Task Update(T entity);

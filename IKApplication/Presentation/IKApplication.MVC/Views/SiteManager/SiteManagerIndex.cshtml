@@ -1,0 +1,53 @@
+﻿@using IKApplication.Application.DTOs.SiteManagerDTO;
+@model SiteManagerUpdateDTO
+
+<h3> Site Manager </h3>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label>Name:</label>
+        @Html.TextBoxFor(model => model.Name, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Address:</label>
+        @Html.TextBoxFor(model => model.SecondName, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.Surname, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.Title, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.BloodGroup, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.Profession, new { @class = "formcontrol" })
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.BirthDate, new { @class = "formcontrol" })
+    </div>
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.IdentityId, new { @class = "formcontrol" })
+    </div>
+    <div class="form-group">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.ImagePath, new { @class = "formcontrol" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+}
+

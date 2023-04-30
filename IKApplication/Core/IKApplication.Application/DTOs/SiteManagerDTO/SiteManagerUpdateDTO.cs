@@ -10,6 +10,7 @@ namespace IKApplication.Application.DTOs.SiteManagerDTO
 {
     public class SiteManagerUpdateDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string? SecondName { get; set; }
         public string Surname { get; set; }

@@ -1,6 +1,12 @@
 ﻿using Autofac;
+using Autofac.Features.ResolveAnything;
 using AutoMapper;
+using IKApplication.Application.AbstractServices;
 using IKApplication.Application.Mappings;
+using IKApplication.Domain.Entites;
+using IKApplication.Infrastructure.ConcreteServices;
+using IKApplication.Persistance.ConcreteRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.MVC.IoC
 {
@@ -8,6 +14,14 @@ namespace IKApplication.MVC.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
+
+            
+            builder.RegisterType<Mapper>().As<IMapper>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<AppUserServices>().As<IAppUserServices>().InstancePerLifetimeScope();
+            
+
+            
+
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>
             {
