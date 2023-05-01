@@ -9,12 +9,10 @@ namespace IKApplication.MVC.Controllers
     public class SiteManagerController : Controller
     {
         private readonly IAppUserService _managerServices;
-        private readonly IMapper _mapper;
 
-        public SiteManagerController(IMapper mapper, IAppUserService managerSerives)
+        public SiteManagerController(IAppUserService managerSerives)
         {
-            _mapper = mapper;
-            _managerServices = managerSerives;
+             _managerServices = managerSerives;
         }
 
         public async Task<IActionResult> Index(Guid id)
@@ -25,13 +23,12 @@ namespace IKApplication.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {
-            var map = _mapper.Map<AppUser>(user);  
           if(ModelState.IsValid) 
           {
-                _managerServices.UpdateUser(map);
+                _managerServices.UpdateUser(user);
                 return RedirectToAction("Index");
           }
-          return View(map);
+          return View(user);
         }
 
 

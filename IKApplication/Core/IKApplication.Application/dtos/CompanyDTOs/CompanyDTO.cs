@@ -2,7 +2,7 @@
 
 namespace IKApplication.Application.DTOs.CompanyDTOs
 {
-    public class CreateCompanyDTO
+    public class CompanyDTO
     {
         public string Name { get; set; }
 

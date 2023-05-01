@@ -9,30 +9,28 @@ namespace IKApplication.MVC.Controllers
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
-        private readonly IMapper _mapper;
         public CompanyController(ICompanyService companyService, IMapper mapper)
         {
             _companyService = companyService;
-            _mapper = mapper;
         }
 
         public IActionResult Index()
         {
-
             var companies = _companyService.GetAllCompanies();
             return View(companies);
         }
+
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCompanyDTO createCompanyDTO)
+        public async Task<IActionResult> Create(CompanyDTO createCompanyDTO)
         {
-            var map= _mapper.Map<Company>(createCompanyDTO);
             if (ModelState.IsValid)
             {
-                await _companyService.Create(map);
+                await _companyService.Create(createCompanyDTO);
                 return RedirectToAction("Index");
             }
             return View(createCompanyDTO);
@@ -40,24 +38,19 @@ namespace IKApplication.MVC.Controllers
 
         public async Task<IActionResult> Update(Guid id) 
         {
-           var map = _mapper.Map<UpdateCompanyDTO>(await _companyService.GetById(id));
-            return View(map);
+            return View(await _companyService.GetDtoById(id));
         }
+
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateCompanyDTO updateCompanyDTO)
+        public async Task<IActionResult> Update(CompanyDTO updateCompanyDTO)
         {
-            var map = _mapper.Map<Company>(updateCompanyDTO);
             if (ModelState.IsValid)
             {
-                await _companyService.Update(map);
+                await _companyService.Update(updateCompanyDTO);
                 return RedirectToAction("Index");
             }
 
-            return View(map);
-
+            return View(updateCompanyDTO);
         }
-
-
-
     }
 }

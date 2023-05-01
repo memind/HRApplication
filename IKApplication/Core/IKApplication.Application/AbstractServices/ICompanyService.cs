@@ -6,16 +6,19 @@ namespace IKApplication.Application.AbstractServices
     public interface ICompanyService
     {
         //Company Create
-        Task Create(Company model);
+        Task Create(CompanyDTO createCompanyDTO);
 
         //Company Update
-        Task Update(Company model);
+        Task Update(CompanyDTO updateCompanyDTO);
 
         //Get All Companies
         Task<List<Company>> GetAllCompanies();
 
         //Get Company By Id
         Task<Company> GetById(Guid id);
+
+        //Get Company By Id
+        Task<CompanyDTO> GetDtoById(Guid id);
 
     }
 }

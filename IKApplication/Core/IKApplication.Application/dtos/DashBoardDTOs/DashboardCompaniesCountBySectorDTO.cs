@@ -1,8 +1,8 @@
 ﻿namespace IKApplication.Application.DTOs.DashBoardDTOs
 {
-    public class DashboardCountInfosDTO
+    public class DashboardCompaniesCountBySectorDTO
     {
         public int CompaniesCount { get; set; }
-        public int CompanyAdminsCount { get; set; }
+        public string CompanySectorName { get; set; }
     }
 }
