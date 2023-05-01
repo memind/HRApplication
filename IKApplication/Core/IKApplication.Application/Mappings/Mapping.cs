@@ -10,8 +10,7 @@ namespace IKApplication.Application.Mappings
     {
         public Mapping()
         {
-            CreateMap<Company,UpdateCompanyDTO>().ReverseMap();
-            CreateMap<Company,CreateCompanyDTO>().ReverseMap();
+            CreateMap<Company,CompanyDTO>().ReverseMap();
             
             CreateMap<AppUser, AppUserUpdateDTO>().ReverseMap();
             CreateMap<AppUser, AppUserVM>().ReverseMap();

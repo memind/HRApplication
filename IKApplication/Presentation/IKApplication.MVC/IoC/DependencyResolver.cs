@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Autofac.Features.ResolveAnything;
+//using Autofac.Features.ResolveAnything;
 using AutoMapper;
 using DotNetOpenAuth.OAuth;
 using IKApplication.Application.AbstractRepositories;
@@ -8,7 +8,9 @@ using IKApplication.Application.Mappings;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.Persistance.ConcreteRepositories;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace IKApplication.MVC.IoC
 {
@@ -16,10 +18,24 @@ namespace IKApplication.MVC.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
-            builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
+            //builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
 
-            builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
+            builder.RegisterAssemblyTypes(typeof(AppUserRepository).Assembly)
+                   .Where(t => t.Name.EndsWith("Repository"))
+                   .AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(AppUserService).Assembly)
+                   .Where(t => t.Name.EndsWith("Service"))
+                   .AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(Mapper).Assembly)
+                   .Where(t => t.Name.EndsWith("Mapper"))
+                   .AsImplementedInterfaces()
+                   .InstancePerLifetimeScope();
 
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>

@@ -47,6 +47,11 @@ namespace IKApplication.Persistance.ConcreteRepositories
             return await table.Where(expression).ToListAsync();
         }
 
+        public async Task<List<T>> GetAll() 
+        { 
+            return await table.ToListAsync();
+        }
+
         public async Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = table; //Select * from Post
