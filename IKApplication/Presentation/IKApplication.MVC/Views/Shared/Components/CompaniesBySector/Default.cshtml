@@ -1,0 +1,12 @@
+﻿@using IKApplication.Application.DTOs.DashBoardDTOs;
+
+
+@model List<DashboardCompaniesCountBySectorDTO>
+
+<div class="content">
+        @foreach (var info in Model)
+        {
+            <p>Sector Name: @info.CompanySectorName</p> <br />
+            <p>Company Count: @info.CompaniesCount</p>
+        }
+</div>

@@ -8,9 +8,16 @@ namespace IKApplication.MVC.Controllers
     [Authorize(Roles = "Site Administrator")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IDashboardService _boardService;
+
+        public HomeController(IDashboardService boardService)
         {
-            return View();
+            _boardService = boardService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await _boardService.GetCountInfos());
         }
     }
 }
