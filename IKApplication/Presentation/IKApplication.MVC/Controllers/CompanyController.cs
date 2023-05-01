@@ -2,10 +2,13 @@
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Domain.Entites;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace IKApplication.MVC.Controllers
 {
+    [Authorize(Roles = "SiteAdmin")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;

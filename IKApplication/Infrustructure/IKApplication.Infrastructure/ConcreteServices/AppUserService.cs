@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
+using IKApplication.Application.dtos.UserDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;
@@ -73,6 +74,20 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return false;
+        }
+
+        public async Task<IdentityResult> CreateCompanyManagerAsync(AppUserCreateDTO model)
+        {
+            var map = _mapper.Map<AppUser>(model);
+            var result = await _userManager.CreateAsync(map, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(map, "CompanyManager");
+                return result;
+            }
+
+            return result;
         }
 
         ////sistemden çıkıç için kullanırız. User bilgileri sessiondan silinşr.

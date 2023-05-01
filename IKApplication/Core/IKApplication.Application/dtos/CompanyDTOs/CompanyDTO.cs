@@ -4,6 +4,7 @@ namespace IKApplication.Application.DTOs.CompanyDTOs
 {
     public class CompanyDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
         public string Email { get; set; }

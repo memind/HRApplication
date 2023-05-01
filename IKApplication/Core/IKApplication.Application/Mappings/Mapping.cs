@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IKApplication.Application.dtos.UserDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
@@ -13,6 +14,7 @@ namespace IKApplication.Application.Mappings
             CreateMap<Company,CompanyDTO>().ReverseMap();
             
             CreateMap<AppUser, AppUserUpdateDTO>().ReverseMap();
+            CreateMap<AppUser, AppUserCreateDTO>().ReverseMap();
             CreateMap<AppUser, AppUserVM>().ReverseMap();
 
         }

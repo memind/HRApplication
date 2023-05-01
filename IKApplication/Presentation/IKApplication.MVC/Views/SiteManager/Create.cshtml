@@ -1,0 +1,85 @@
+﻿@model AppUserCreateDTO
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Manage Users /</span> Add User
+    </h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Add User</h5>
+                <form asp-controller="User" asp-action="Add" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" style="color:red"></div>
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label">Name</label><br />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <input asp-for="Name" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Name" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SecondName" class="form-label">Second Name</label><br />
+                            <span asp-validation-for="SecondName" class="text-danger"></span>
+                            <input asp-for="SecondName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Second Name" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Surname" class="form-label">Surname</label><br />
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                            <input asp-for="Surname" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Surname" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Title" class="form-label">Title</label><br />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                            <input asp-for="Title" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Title" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
+                            <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                            <input asp-for="BloodGroup" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="BloodGroup" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Profession" class="form-label">Profession</label><br />
+                            <span asp-validation-for="Profession" class="text-danger"></span>
+                            <input asp-for="Profession" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Profession" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            <input asp-for="BirthDate" type="date" class="form-control mb-3" id="defaultFormControlInput" placeholder="Profession" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label">Email</label><br />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" type="Email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Email" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Password" class="form-label">Password</label><br />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <input asp-for="Password" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="form-label">Confirm Your Password</label><br />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Add User</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
