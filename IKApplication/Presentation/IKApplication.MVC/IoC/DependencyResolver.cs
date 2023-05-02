@@ -20,7 +20,7 @@ namespace IKApplication.MVC.IoC
         {
             //builder.RegisterType<AppUserService>().As<IAppUserService>().InstancePerLifetimeScope();
             //builder.RegisterType<AppUserRepository>().As<IAppUserRepository>().InstancePerLifetimeScope();
-            //builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
+            builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(typeof(AppUserRepository).Assembly)
                    .Where(t => t.Name.EndsWith("Repository"))
@@ -32,10 +32,10 @@ namespace IKApplication.MVC.IoC
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
 
-            builder.RegisterAssemblyTypes(typeof(Mapper).Assembly)
-                   .Where(t => t.Name.EndsWith("Mapper"))
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
+            //builder.RegisterAssemblyTypes(typeof(Mapper).Assembly)
+            //       .Where(t => t.Name.EndsWith("Mapper"))
+            //       .AsImplementedInterfaces()
+            //       .InstancePerLifetimeScope();
 
             #region AutoMapper
             builder.Register(context => new MapperConfiguration(cfg =>

@@ -8,7 +8,7 @@ using System.Data;
 
 namespace IKApplication.MVC.Controllers
 {
-    [Authorize(Roles = "SiteAdmin")]
+    [Authorize(Roles = "Site Administrator")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
@@ -41,7 +41,7 @@ namespace IKApplication.MVC.Controllers
 
         public async Task<IActionResult> Update(Guid id) 
         {
-            return View(await _companyService.GetDtoById(id));
+            return View(await _companyService.GetById(id));
         }
 
         [HttpPost]

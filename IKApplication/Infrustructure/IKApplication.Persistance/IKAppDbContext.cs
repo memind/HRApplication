@@ -12,6 +12,7 @@ namespace IKApplication.Persistance
 
         // DbSet
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Company> companies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -5,6 +5,7 @@ using IKApplication.MVC.IoC;
 using IKApplication.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using IKApplication.Application.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<IKAppDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {

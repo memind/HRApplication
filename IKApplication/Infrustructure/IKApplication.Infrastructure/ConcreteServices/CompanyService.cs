@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;
 
 namespace IKApplication.Infrastructure.ConcreteServices
@@ -11,9 +12,10 @@ namespace IKApplication.Infrastructure.ConcreteServices
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
 
-        public CompanyService(ICompanyRepository companyRepository)
+        public CompanyService(ICompanyRepository companyRepository, IMapper mapper)
         {
             _companyRepository = companyRepository;
+            _mapper = mapper;
         }
 
         public async Task Create(CompanyDTO createCompanyDTO)
@@ -35,16 +37,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
             await _companyRepository.Update(map);
         }
 
-        public async Task<Company> GetById(Guid id)
+        public async Task<CompanyDTO> GetById(Guid id)
         {
-           var company = await _companyRepository.GetDefault(x=> x.Id == id);
-            return company;
-        }
-
-        public async Task<CompanyDTO> GetDtoById(Guid id)
-        {
-            var companyDto = _mapper.Map<CompanyDTO>(await _companyRepository.GetDefault(x => x.Id == id));
-            return companyDto;
+            
+            Company company = await _companyRepository.GetDefault(x => x.Id == id);
+            if (company != null)
+            {
+                var model = _mapper.Map<CompanyDTO>(company);
+                return model;
+            }
+            return null;
         }
     }
 }

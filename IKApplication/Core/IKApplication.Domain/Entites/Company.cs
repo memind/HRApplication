@@ -18,13 +18,13 @@ namespace IKApplication.Domain.Entites
         public string Sector { get; set; }
         public int NumberOfEmployees { get; set; }
 
-        // Navigation Properties
-        public List<AppUser> CompanyManagers { get; set; }
+        //// Navigation Properties
+        //public List<AppUser> CompanyManagers { get; set; }
 
-        // Create new Lists in constructor
-        public Company()
-        {
-            CompanyManagers = new List<AppUser>();
-        }
+        //// Create new Lists in constructor
+        //public Company()
+        //{
+        //    CompanyManagers = new List<AppUser>();
+        //}
     }
 }

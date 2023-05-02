@@ -1,4 +1,5 @@
 ﻿using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;
 
 namespace IKApplication.Application.AbstractServices
@@ -15,10 +16,8 @@ namespace IKApplication.Application.AbstractServices
         Task<List<Company>> GetAllCompanies();
 
         //Get Company By Id
-        Task<Company> GetById(Guid id);
+        Task<CompanyDTO> GetById(Guid id);
 
-        //Get Company By Id
-        Task<CompanyDTO> GetDtoById(Guid id);
 
     }
 }

@@ -21,12 +21,11 @@ namespace IKApplication.Application.dtos.UserDTOs
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Email { get; set; }
-        public string ImagePath { get; set; }
+        public string ImagePath { get; set; } = $"/images/defaultuser.jpg";
         [NotMapped]
         public IFormFile? UploadPath { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? UpdateDate => DateTime.Now;
-        public Status Status => Status.Modified;
+        public DateTime CreateDate => DateTime.Now;
+        public Status Status => Status.Active;
         public Guid? CompanyId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
     }

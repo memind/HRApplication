@@ -79,11 +79,12 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task<IdentityResult> CreateCompanyManagerAsync(AppUserCreateDTO model)
         {
             var map = _mapper.Map<AppUser>(model);
+            map.UserName = model.Email;
             var result = await _userManager.CreateAsync(map, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(map, "CompanyManager");
+                await _userManager.AddToRoleAsync(map, "Company Administrator");
                 return result;
             }
 

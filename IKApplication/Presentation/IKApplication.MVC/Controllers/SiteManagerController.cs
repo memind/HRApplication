@@ -10,6 +10,7 @@ using System.Data;
 
 namespace IKApplication.MVC.Controllers
 {
+    [Authorize(Roles = "Site Administrator")]
     public class SiteManagerController : Controller
     {
         private readonly IAppUserService _userService;
@@ -25,14 +26,12 @@ namespace IKApplication.MVC.Controllers
             return View(user);
         }
 
-        [Authorize(Roles = "SiteAdmin,CompanyManager")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "SiteAdmin,CompanyManager")]
         [HttpPost]
         public async Task<IActionResult> Create(AppUserCreateDTO user)
         {
@@ -44,14 +43,12 @@ namespace IKApplication.MVC.Controllers
             return View(user);
         }
 
-        [Authorize(Roles = "SiteAdmin,CompanyManager")]
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             return View(await _userService.GetById(id));
         }
 
-        [Authorize(Roles = "SiteAdmin,CompanyManager")]
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {

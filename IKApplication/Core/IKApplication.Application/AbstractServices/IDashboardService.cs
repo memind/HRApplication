@@ -1,5 +1,4 @@
 ﻿using IKApplication.Application.DTOs.DashBoardDTOs;
-using IKApplication.Domain.Entites;
 
 namespace IKApplication.Application.AbstractServices
 {
