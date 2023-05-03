@@ -10,7 +10,6 @@ namespace IKApplication.Application.AbstractRepositories
         Task Update(T entity);
         Task Delete(T entity);  // veritabanından silme işlemi yapmayız, status'ü pasife çekeriz !!
         Task<bool> Any(Expression<Func<T, bool>> expression);   // kayıt varsa true, yoksa false döner.  Mesela veritabanında kayıt arıyorsun, bu kayıt varmı yokmu diye bakacak
-        Task<List<T>> GetAll();
         Task<T> GetDefault(Expression<Func<T, bool>> expression);   // dinamik olarak where işlemi sağlar.  Id ye göre getir.  Id DB de yoksa null döner
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);   // Mesela  CompanyManagerID = 5 olan hepsini döndür. Bir liste dönecek sonuç olarak.
 

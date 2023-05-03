@@ -17,7 +17,7 @@ namespace IKApplication.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _boardService.GetCountInfos());
+            return View(await _boardService.GetDashboardInfos());
         }
     }
 }

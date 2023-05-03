@@ -18,6 +18,5 @@ namespace IKApplication.Application.AbstractServices
         //Get Company By Id
         Task<CompanyDTO> GetById(Guid id);
 
-
     }
 }
