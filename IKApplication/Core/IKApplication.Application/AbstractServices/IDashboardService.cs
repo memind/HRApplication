@@ -1,5 +1,5 @@
-﻿
-using IKApplication.Application.VMs.DashboardVMs;
+﻿using IKApplication.Application.VMs.DashboardVMs;
+using IKApplication.Application.VMs.SectorVMs;
 
 namespace IKApplication.Application.AbstractServices
 {
@@ -7,7 +7,7 @@ namespace IKApplication.Application.AbstractServices
     {
         Task<int> GetCompaniesCount();
         Task<int> GetCompanyManagersCount();
-        Task<List<DashboardCompaniesCountBySectorVM>> GetCompaniesBySector();
+        Task<List<SectorVM>> GetSectorList();
         Task<DashboardVM> GetDashboardInfos();
     }
 }

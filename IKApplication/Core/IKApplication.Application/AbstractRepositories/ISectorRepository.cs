@@ -2,7 +2,7 @@
 
 namespace IKApplication.Application.AbstractRepositories
 {
-    public interface IAppUserRepository : IBaseRepository<AppUser>
+    public interface ISectorRepository : IBaseRepository<Sector>
     {
     }
 }

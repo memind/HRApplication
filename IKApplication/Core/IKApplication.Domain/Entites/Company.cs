@@ -15,16 +15,17 @@ namespace IKApplication.Domain.Entites
         public string Name { get; set; }
         public string Email { get; set;}
         public string PhoneNumber { get; set; }
-        public string Sector { get; set; }
         public int NumberOfEmployees { get; set; }
+        public int SectorId { get; set; }
 
-        //// Navigation Properties
-        //public List<AppUser> CompanyManagers { get; set; }
+        // Navigation Properties
+        public Sector Sector { get; set; }
+        public List<AppUser> CompanyManagers { get; set; }
 
-        //// Create new Lists in constructor
-        //public Company()
-        //{
-        //    CompanyManagers = new List<AppUser>();
-        //}
+        // Create new Lists in constructor
+        public Company()
+        {
+            CompanyManagers = new List<AppUser>();
+        }
     }
 }

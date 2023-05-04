@@ -1,5 +1,7 @@
-﻿using IKApplication.Application.AbstractServices;
+﻿using IKApplication.Application.AbstractRepositories;
+using IKApplication.Application.AbstractServices;
 using IKApplication.Application.VMs.DashboardVMs;
+using IKApplication.Application.VMs.SectorVMs;
 using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
 
@@ -28,39 +30,40 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return companyManagers.Count();
         }
 
-        public async Task<List<DashboardCompaniesCountBySectorVM>> GetCompaniesBySector()
+        public async Task<List<SectorVM>> GetSectorList()
         {
             // 1) Get all companies and create company list
             var companies = await _companyService.GetAllCompanies();
-            List<DashboardCompaniesCountBySectorVM> categorizedCompaniesList = new List<DashboardCompaniesCountBySectorVM>();
+            List<SectorVM> Sectors = new List<SectorVM>();
 
             // 2) Group them by sector
-            var sectors = companies.OrderBy(company => company.Sector)
-                .GroupBy(company => company.Sector)
-                .Select(x => new { Sector = x.Key, CompanyCount = x.Count() });
+            var result = companies.OrderBy(company => company.SectorName)
+                .GroupBy(company => company.SectorName)
+                .Select(x => new { Name = x.Key, CompanyCount = x.Count()});
 
             // 3) Convert them into DashboardCompaniesCountBySectorDto and add to list
-            foreach (var sectorInfo in sectors)
+            foreach (var item in result)
             {
-                DashboardCompaniesCountBySectorVM sectorInfoDto = new DashboardCompaniesCountBySectorVM
-                { SectorName = sectorInfo.Sector, CompanyCountInSector = sectorInfo.CompanyCount };
+                SectorVM sector = new SectorVM
+                {   Name = item.Name, 
+                    CompanyCount = item.CompanyCount };
 
-                categorizedCompaniesList.Add(sectorInfoDto);
+                Sectors.Add(sector);
             }
 
             // 4) Return that list
-            return categorizedCompaniesList;
+            return Sectors;
         }
 
         public async Task<DashboardVM> GetDashboardInfos()
         {
-            DashboardVM infos = new();
+            DashboardVM dashboardVM = new();
 
-            infos.TotalCompaniesCount = await this.GetCompaniesCount();
-            infos.TotalCompanyManagersCount = await this.GetCompanyManagersCount();
-            infos.CompanyListBySector = await this.GetCompaniesBySector();
+            dashboardVM.TotalCompanyCount = await this.GetCompaniesCount();
+            dashboardVM.TotalCompanyManagerCount = await this.GetCompanyManagersCount();
+            dashboardVM.Sectors = await this.GetSectorList();
 
-            return infos;
+            return dashboardVM;
         }
     }
 }
