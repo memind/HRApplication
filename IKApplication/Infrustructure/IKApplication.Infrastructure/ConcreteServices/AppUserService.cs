@@ -6,6 +6,7 @@ using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
@@ -51,15 +52,15 @@ namespace IKApplication.Infrastructure.ConcreteServices
             result.Companies = await _companyRepository.GetFilteredList(
                 select: x => new CompanyVM
                 {
-                    Id = x.Id,
                     Name = x.Name,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
-                    Sector = x.Sector,
+                    SectorName = x.Sector.Name,
                     NumberOfEmployees = x.NumberOfEmployees
                 },
                 where: x => x.Status != Status.Passive,
-                orderBy: x => x.OrderBy(x => x.Name));
+                orderBy: x => x.OrderBy(x => x.Name),
+                include: x => x.Include(x => x.Sector));
 
             return result;
         }
@@ -75,15 +76,15 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return false;
         }
 
-        public async Task<IdentityResult> CreateAppUserAsync(AppUserCreateDTO model, string role)
+        public async Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role)
         {
-            var map = _mapper.Map<AppUser>(model);
-            map.UserName = model.Email;
-            var result = await _userManager.CreateAsync(map, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
+            var appUser = _mapper.Map<AppUser>(model);
+            appUser.UserName = model.Email;
+            var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(map, role);
+                await _userManager.AddToRoleAsync(appUser, role);
                 return result;
             }
 
@@ -123,36 +124,36 @@ namespace IKApplication.Infrastructure.ConcreteServices
             //Update işlemlerind eönce Id ile ilgili nesneyi rame çekeriz. Dışarıdan gelen güncel bilgilerle değişiklikleri yaparız.
             //En Son SaveChanges ile veri tabanına güncellemeleri göndeririz. 
 
-            AppUser user = await _appUserRepository.GetDefault(x => x.Id == model.Id);
+            AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == model.Id);
 
-            if (user != null && model.Email == user.Email)
+            if (appUser != null && model.Email == appUser.Email)
             {
-                user = _mapper.Map<AppUser>(model);
+                appUser = _mapper.Map<AppUser>(model);
                 if (model.Password != null)
-                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+                    appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, model.Password);
             }
         }
 
         public async Task<AppUserUpdateDTO> GetById(Guid id)
         {
-            AppUser user = await _appUserRepository.GetDefault(x => x.Id == id);
+            AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == id);
 
-            if (user == null)
+            if (appUser == null)
             {
-                var model = _mapper.Map<AppUserUpdateDTO>(user);
+                var model = _mapper.Map<AppUserUpdateDTO>(appUser);
 
                 model.Companies = await _companyRepository.GetFilteredList(
                     select: x => new CompanyVM
                     {
-                        Id = x.Id,
                         Name = x.Name,
                         Email = x.Email,
                         PhoneNumber = x.PhoneNumber,
-                        Sector = x.Sector,
+                        SectorName = x.Sector.Name,
                         NumberOfEmployees = x.NumberOfEmployees
                     },
                     where: x => x.Status != Status.Passive,
-                    orderBy: x => x.OrderBy(x => x.Name));
+                    orderBy: x => x.OrderBy(x => x.Name),
+                    include: x => x.Include(x => x.Sector));
 
                 return model;
             }

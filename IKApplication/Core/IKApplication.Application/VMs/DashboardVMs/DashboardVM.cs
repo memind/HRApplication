@@ -1,13 +1,15 @@
-﻿namespace IKApplication.Application.VMs.DashboardVMs
+﻿using IKApplication.Application.VMs.SectorVMs;
+
+namespace IKApplication.Application.VMs.DashboardVMs
 {
     public class DashboardVM
     {
+        public int TotalCompanyCount { get; set; }
+        public int TotalCompanyManagerCount { get; set; }
+        public List<SectorVM> Sectors { get; set; }
         public DashboardVM()
         {
-            CompanyListBySector = new List<DashboardCompaniesCountBySectorVM>();
+            Sectors = new List<SectorVM>();
         }
-        public int TotalCompaniesCount { get; set; }
-        public int TotalCompanyManagersCount { get; set; }
-        public List<DashboardCompaniesCountBySectorVM> CompanyListBySector { get; set; }
     }
 }

@@ -15,18 +15,17 @@ namespace IKApplication.Application.AbstractRepositories
 
         //  Select , Where , Sıralama , Join
         // Hem select, hem order by yapabileceğimiz entitie 'leri birlikte çekmek için include etmek gerekir.  Bir sorguya birden fazla tablo girecek yani eagerloading kullanacağız
+        // GetFilteredFirstOrDefault metodunu kullandığımızda
+        // 1.parametre olarak select edilmesini istediğimiz kolonlar,
+        // 2.parametre olarak koşul,
+        // 3. parametre olarak sıralama,
+        // 4. parametre olarak  neyi join lemek istiyosak onu yazıyoruz
         Task<TResult> GetFilteredFirstOrDefault<TResult>(
             Expression<Func<T, TResult>> select,
             Expression<Func<T, bool>> where,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,  // sıralama
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null//join   //using Microsoft.EntityFrameworkCore.Query;
             );   // orderBy verilmediyse null kullanacak.  include da girilmediyse null geçsin
-
-        // GetFilteredFirstOrDefault metodunu kullandığımızda
-        // 1.parametre olarak select edilmesini istediğimiz kolonlar,
-        // 2.parametre olarak koşul,
-        // 3. parametre olarak sıralama,
-        // 4. parametre olarak  neyi join lemek istiyosak onu yazıyoruz
 
         // yukarıdakinin List olanı.  çoklu dönecek
         Task<List<TResult>> GetFilteredList<TResult>(

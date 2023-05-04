@@ -1,5 +1,4 @@
 ﻿using IKApplication.Application.AbstractServices;
-using IKApplication.Application.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +7,16 @@ namespace IKApplication.MVC.Controllers
     [Authorize(Roles = "Site Administrator")]
     public class HomeController : Controller
     {
-        private readonly IDashboardService _boardService;
+        private readonly IDashboardService _dashboardService;
 
-        public HomeController(IDashboardService boardService)
+        public HomeController(IDashboardService dashboardService)
         {
-            _boardService = boardService;
+            _dashboardService = dashboardService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _boardService.GetDashboardInfos());
+            return View(await _dashboardService.GetDashboardInfos());
         }
     }
 }

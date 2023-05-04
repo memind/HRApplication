@@ -1,7 +1,6 @@
 ﻿using IKApplication.Application.AbstractServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
@@ -9,16 +8,16 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
     [Authorize(Roles = "Company Administrator")]
     public class DashboardController : Controller
     {
-        private readonly IDashboardService _boardService;
+        private readonly IDashboardService _dashboardService;
 
-        public DashboardController(IDashboardService boardService)
+        public DashboardController(IDashboardService dashboardService)
         {
-            _boardService = boardService;
+            _dashboardService = dashboardService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _boardService.GetCountInfos());
+            return View(await _dashboardService.GetDashboardInfos());
         }
     }
 }

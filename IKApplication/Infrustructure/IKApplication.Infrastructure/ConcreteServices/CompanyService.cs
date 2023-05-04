@@ -4,6 +4,8 @@ using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;
+using IKApplication.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
@@ -18,35 +20,45 @@ namespace IKApplication.Infrastructure.ConcreteServices
             _mapper = mapper;
         }
 
-        public async Task Create(CompanyDTO createCompanyDTO)
+        public async Task Create(CompanyCreateDTO createCompanyDTO)
         {
-            var map = _mapper.Map<Company>(createCompanyDTO);
-            await _companyRepository.Create(map);
+            var model = _mapper.Map<Company>(createCompanyDTO);
+            await _companyRepository.Create(model);
 
         }
 
-        public async Task<List<Company>> GetAllCompanies()
+        public async Task<List<CompanyVM>> GetAllCompanies()
         {
-            //var companies = await _companyRepository.GetDefaults(x => x.Status == Domain.Enums.Status.Active || x.Status == Domain.Enums.Status.Modified);
-            var companies = await _companyRepository.GetDefaults(x => x.Id != null);
+            var companies = await _companyRepository.GetFilteredList(
+                select: x => new CompanyVM
+                {
+                    Name = x.Name,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    SectorName = x.Sector.Name,
+                    NumberOfEmployees = x.NumberOfEmployees
+                },
+                where: x => x.Status != Status.Passive,
+                orderBy: x => x.OrderBy(x => x.Name),
+                include: x => x.Include(x => x.Sector));
             return companies;
         }
 
-        public async Task Update(CompanyDTO updateCompanyDTO)
+        public async Task Update(CompanyUpdateDTO updateCompanyDTO)
         {
-            var map = _mapper.Map<Company>(updateCompanyDTO);
-            await _companyRepository.Update(map);
+            var model = _mapper.Map<Company>(updateCompanyDTO);
+            await _companyRepository.Update(model);
         }
 
-        public async Task<CompanyDTO> GetById(Guid id)
+        public async Task<CompanyUpdateDTO> GetById(Guid id)
         {
-            
             Company company = await _companyRepository.GetDefault(x => x.Id == id);
             if (company != null)
             {
-                var model = _mapper.Map<CompanyDTO>(company);
+                var model = _mapper.Map<CompanyUpdateDTO>(company);
                 return model;
             }
+
             return null;
         }
     }

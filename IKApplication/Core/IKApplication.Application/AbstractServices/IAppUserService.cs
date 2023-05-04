@@ -6,10 +6,10 @@ namespace IKApplication.Application.AbstractServices
     public interface IAppUserService
     {
         Task<AppUserUpdateDTO> GetByUserName(string userName);
-        Task<bool> Login(LoginDTO model);
-        Task<IdentityResult> CreateAppUserAsync(AppUserCreateDTO model, string role);
-        //Task LogOut();
-        Task UpdateUser(AppUserUpdateDTO model);
         Task<AppUserUpdateDTO> GetById(Guid id);
+        Task<bool> Login(LoginDTO model);
+        //Task LogOut();
+        Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
+        Task UpdateUser(AppUserUpdateDTO model);
     }
 }

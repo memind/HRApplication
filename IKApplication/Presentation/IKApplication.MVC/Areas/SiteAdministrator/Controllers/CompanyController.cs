@@ -1,15 +1,12 @@
-﻿using AutoMapper;
-using IKApplication.Application.AbstractServices;
+﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
-using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
-namespace IKApplication.MVC.Controllers
+namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
-    [Area("CompanyAdministrator")]
-    [Authorize(Roles = "Company Administrator")]
+    [Area("SiteAdministrator")]
+    [Authorize(Roles = "Site Administrator")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
@@ -18,11 +15,11 @@ namespace IKApplication.MVC.Controllers
             _companyService = companyService;
         }
 
-        public IActionResult Index()
-        {
-            var companies = _companyService.GetAllCompanies();
-            return View(companies);
-        }
+        //public IActionResult Index()
+        //{
+        //    var companies = _companyService.GetAllCompanies();
+        //    return View(companies);
+        //}
 
         public IActionResult Create()
         {
@@ -30,7 +27,7 @@ namespace IKApplication.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CompanyDTO createCompanyDTO)
+        public async Task<IActionResult> Create(CompanyCreateDTO createCompanyDTO)
         {
             if (ModelState.IsValid)
             {
@@ -46,7 +43,7 @@ namespace IKApplication.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(CompanyDTO updateCompanyDTO)
+        public async Task<IActionResult> Update(CompanyUpdateDTO updateCompanyDTO)
         {
             if (ModelState.IsValid)
             {

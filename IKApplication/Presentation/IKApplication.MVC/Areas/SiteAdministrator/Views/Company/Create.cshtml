@@ -1,17 +1,16 @@
-﻿@model CompanyDTO
+﻿@model CompanyCreateDTO
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Manage Companies /</span> Update Company
+        <span class="text-muted fw-light">Manage Companies /</span> Create Company
     </h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">Create Company</h5>
-                <form asp-controller="Company" asp-action="Update" method="post">
+                <form asp-controller="Company" asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
-                        <input type="hidden" asp-for="Id" />
 
                         <div class="form-group">
                             <label asp-for="Name" class="form-label">Company Name</label><br />
@@ -44,7 +43,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">Update Company</button>
+                            <button type="submit" class="btn btn-primary btn-block">Create Company</button>
                         </div>
                     </div>
                 </form>

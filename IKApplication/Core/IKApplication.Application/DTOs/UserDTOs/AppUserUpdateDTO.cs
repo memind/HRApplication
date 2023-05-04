@@ -1,5 +1,4 @@
 ﻿using IKApplication.Application.VMs.CompanyVMs;
-using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;

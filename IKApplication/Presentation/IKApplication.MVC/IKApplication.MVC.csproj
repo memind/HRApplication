@@ -50,11 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\CompanyAdministrator\Views\Company\Create.cshtml">
+    <Content Update="Areas\SiteAdministrator\Views\Company\Create.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Areas\CompanyAdministrator\Views\Company\Update.cshtml">
+    <Content Update="Areas\SiteAdministrator\Views\Company\Update.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
