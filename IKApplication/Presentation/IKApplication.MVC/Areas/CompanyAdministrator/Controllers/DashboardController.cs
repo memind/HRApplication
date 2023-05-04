@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
     [Area("CompanyAdministrator")]
-    [Authorize(Roles = "Company Administrator")]
+    [Authorize(Roles = "Site Administrator, Company Administrator")]
     public class DashboardController : Controller
     {
         private readonly IDashboardService _dashboardService;

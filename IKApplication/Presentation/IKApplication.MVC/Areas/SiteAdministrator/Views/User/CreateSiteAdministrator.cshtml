@@ -2,12 +2,12 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Manage Users /</span> Add User
+        <span class="text-muted fw-light">Manage Users /</span> Add Site Administrator
     </h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Add User</h5>
+                <h5 class="card-header">Add Site Administrator</h5>
                 <form asp-controller="User" asp-action="CreateSiteAdministrator" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="All" style="color:red"></div>
                     <div class="card-body">
@@ -55,12 +55,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
-                            <span asp-validation-for="BirthDate" class="text-danger"></span>
-                            <input asp-for="BirthDate" type="date" class="form-control mb-3" id="defaultFormControlInput" placeholder="Profession" aria-describedby="defaultFormControlHelp">
-                        </div>
-
-                        <div class="form-group">
                             <label asp-for="Email" class="form-label">Email</label><br />
                             <span asp-validation-for="Email" class="text-danger"></span>
                             <input asp-for="Email" type="Email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Email" aria-describedby="defaultFormControlHelp">
@@ -79,7 +73,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">Add User</button>
+                            <button type="submit" class="btn btn-primary btn-block">Create Site Administrator</button>
                         </div>
                     </div>
                 </form>

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IKApplication.MVC.CompanyAdministratorControllers
 {
     [Area("CompanyAdministrator")]
-    [Authorize(Roles = "Company Administrator")]
+    [Authorize(Roles = "Site Administrator, Company Administrator")]
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
