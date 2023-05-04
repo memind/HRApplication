@@ -20,9 +20,9 @@ namespace IKApplication.MVC.Controllers
             _userService = appUserSerives;
         }
 
-        public async Task<IActionResult> Index(Guid id)
+        public async Task<IActionResult> Index()
         {
-            var user = await _userService.GetById(id);
+            var user = await _userService.GetByUserName(User.Identity.Name);
             return View(user);
         }
 
@@ -38,7 +38,7 @@ namespace IKApplication.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _userService.CreateCompanyManagerAsync(user);
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Index");
             }
             return View(user);
         }
@@ -55,7 +55,7 @@ namespace IKApplication.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _userService.UpdateUser(user);
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Index");
             }
             return View(user);
         }

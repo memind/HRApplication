@@ -35,12 +35,12 @@ namespace IKApplication.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Create(createCompanyDTO);
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Index");
             }
             return View(createCompanyDTO);
         }
 
-        public async Task<IActionResult> Update(Guid id) 
+        public async Task<IActionResult> Update(Guid id)
         {
             return View(await _companyService.GetById(id));
         }
@@ -51,7 +51,7 @@ namespace IKApplication.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Update(updateCompanyDTO);
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard", "Index");
             }
 
             return View(updateCompanyDTO);
