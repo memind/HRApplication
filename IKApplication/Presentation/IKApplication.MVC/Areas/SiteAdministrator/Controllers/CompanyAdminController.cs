@@ -37,7 +37,7 @@ namespace IKApplication.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.CreateAppUserAsync(user, "Company Administrator");
+                await _userService.CreateUser(user, "Company Administrator");
                 return RedirectToAction("Dashboard", "Index");
             }
             return View(user);
