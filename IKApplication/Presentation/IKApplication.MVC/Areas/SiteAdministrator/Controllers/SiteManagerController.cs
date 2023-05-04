@@ -15,9 +15,9 @@ namespace IKApplication.MVC.Controllers
     {
         private readonly IAppUserService _userService;
 
-        public SiteManagerController(IAppUserService managerSerives)
+        public SiteManagerController(IAppUserService appUserSerives)
         {
-            _userService = managerSerives;
+            _userService = appUserSerives;
         }
 
         public async Task<IActionResult> Index(Guid id)

@@ -7,6 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\CompanyAdministrator\Data\**" />
+    <Compile Remove="Areas\CompanyAdministrator\Models\**" />
+    <Compile Remove="Areas\SiteAdministrator\Data\**" />
+    <Compile Remove="Areas\SiteAdministrator\Models\**" />
+    <Content Remove="Areas\CompanyAdministrator\Data\**" />
+    <Content Remove="Areas\CompanyAdministrator\Models\**" />
+    <Content Remove="Areas\SiteAdministrator\Data\**" />
+    <Content Remove="Areas\SiteAdministrator\Models\**" />
+    <EmbeddedResource Remove="Areas\CompanyAdministrator\Data\**" />
+    <EmbeddedResource Remove="Areas\CompanyAdministrator\Models\**" />
+    <EmbeddedResource Remove="Areas\SiteAdministrator\Data\**" />
+    <EmbeddedResource Remove="Areas\SiteAdministrator\Models\**" />
+    <None Remove="Areas\CompanyAdministrator\Data\**" />
+    <None Remove="Areas\CompanyAdministrator\Models\**" />
+    <None Remove="Areas\SiteAdministrator\Data\**" />
+    <None Remove="Areas\SiteAdministrator\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="DotNetOpenAuth.OAuth.Core" Version="4.3.4.13329" />
@@ -24,14 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\CompanyAdministrator\Data\" />
-    <Folder Include="Areas\CompanyAdministrator\Models\" />
     <Folder Include="Areas\Personals\Controllers\" />
     <Folder Include="Areas\Personals\Data\" />
     <Folder Include="Areas\Personals\Models\" />
     <Folder Include="Areas\Personals\Views\" />
-    <Folder Include="Areas\SiteAdministrator\Data\" />
-    <Folder Include="Areas\SiteAdministrator\Models\" />
   </ItemGroup>
 
   <ItemGroup>

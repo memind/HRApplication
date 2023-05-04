@@ -12,7 +12,7 @@ namespace IKApplication.MVC.Controllers
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
-        public CompanyController(ICompanyService companyService, IMapper mapper)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
         }
