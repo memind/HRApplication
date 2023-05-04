@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using IKApplication.Application.dtos.UserDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;

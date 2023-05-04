@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
-using IKApplication.Application.dtos.UserDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;

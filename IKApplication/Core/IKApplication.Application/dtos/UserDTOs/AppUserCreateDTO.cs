@@ -1,11 +1,9 @@
-﻿
-using IKApplication.Application.VMs.CompanyVMs;
-using IKApplication.Domain.Entites;
+﻿using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IKApplication.Application.dtos.UserDTOs
+namespace IKApplication.Application.DTOs.UserDTOs
 {
     public class AppUserCreateDTO
     {

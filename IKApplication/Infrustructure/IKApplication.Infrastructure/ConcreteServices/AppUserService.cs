@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
-using IKApplication.Application.dtos.UserDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Domain.Entites;

@@ -1,6 +1,4 @@
-﻿using IKApplication.Application.dtos.UserDTOs;
-using IKApplication.Application.DTOs.UserDTOs;
-using IKApplication.Domain.Entites;
+﻿using IKApplication.Application.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Identity;
 
 namespace IKApplication.Application.AbstractServices
