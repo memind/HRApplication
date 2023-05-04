@@ -8,7 +8,8 @@ using System.Data;
 
 namespace IKApplication.MVC.Controllers
 {
-    [Authorize(Roles = "Site Administrator")]
+    [Area("CompanyAdministrator")]
+    [Authorize(Roles = "Company Administrator")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;

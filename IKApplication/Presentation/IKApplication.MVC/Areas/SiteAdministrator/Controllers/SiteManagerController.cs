@@ -9,6 +9,7 @@ using System.Data;
 
 namespace IKApplication.MVC.Controllers
 {
+    [Area("SiteAdministrator")]
     [Authorize(Roles = "Site Administrator")]
     public class SiteManagerController : Controller
     {
