@@ -1,12 +1,13 @@
-﻿using IKApplication.Application.DTOs.DashBoardDTOs;
+﻿
+using IKApplication.Application.VMs.DashboardVMs;
 
 namespace IKApplication.Application.AbstractServices
 {
     public interface IDashboardService
     {
         Task<int> GetCompaniesCount();
-        Task<int> GetCompanyAdminsCount();
-        Task<List<DashboardCompaniesCountBySectorDTO>> GetCompanyBySector();
-        Task<DashboardCountInfosDTO> GetCountInfos();
+        Task<int> GetCompanyManagersCount();
+        Task<List<DashboardCompaniesCountBySectorVM>> GetCompaniesBySector();
+        Task<DashboardVM> GetDashboardInfos();
     }
 }

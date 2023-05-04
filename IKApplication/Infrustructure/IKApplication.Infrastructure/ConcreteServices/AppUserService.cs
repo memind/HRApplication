@@ -75,7 +75,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return false;
         }
 
-        public async Task<IdentityResult> CreateCompanyManagerAsync(AppUserCreateDTO model)
+        public async Task<IdentityResult> CreateAppUserAsync(AppUserCreateDTO model, string role)
         {
             var map = _mapper.Map<AppUser>(model);
             map.UserName = model.Email;
@@ -83,7 +83,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(map, "Company Administrator");
+                await _userManager.AddToRoleAsync(map, role);
                 return result;
             }
 

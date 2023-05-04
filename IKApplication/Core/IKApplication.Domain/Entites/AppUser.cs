@@ -23,7 +23,7 @@ namespace IKApplication.Domain.Entites
         public string? Profession { get; set; }   //meslek
         public DateTime BirthDate { get; set; }
         public string IdentityId { get; set; }  // TC Kimlik No - Pasaport no vb.
-        public string ImagePath { get; set; }  // Fotoğraf Yolu
+        public string ImagePath { get; set; } = $"/images/defaultuser.jpg";  // Fotoğraf Yolu
         [NotMapped]   // DB ile bağlantı olmasın
         public IFormFile? UploadPath { get; set; }  // IFormFile usinglere eklendi.  (using Microsoft.AspNetCore.Http;)  bir tane resim seçeceğiz resmi tutabilmek için bunu kullanacağız. Veritabanı ile bağlantı olmadan.  ImagePath veritabanı ile bağlantılı olacak, resmin yolu
         public Guid? CompanyId { get; set; }

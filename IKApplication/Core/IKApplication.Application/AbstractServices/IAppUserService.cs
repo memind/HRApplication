@@ -7,7 +7,7 @@ namespace IKApplication.Application.AbstractServices
     {
         Task<AppUserUpdateDTO> GetByUserName(string userName);
         Task<bool> Login(LoginDTO model);
-        Task<IdentityResult> CreateCompanyManagerAsync(AppUserCreateDTO model);
+        Task<IdentityResult> CreateAppUserAsync(AppUserCreateDTO model, string role);
         //Task LogOut();
         Task UpdateUser(AppUserUpdateDTO model);
         Task<AppUserUpdateDTO> GetById(Guid id);

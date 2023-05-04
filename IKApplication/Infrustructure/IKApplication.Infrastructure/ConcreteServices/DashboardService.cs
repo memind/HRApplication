@@ -1,5 +1,5 @@
 ﻿using IKApplication.Application.AbstractServices;
-using IKApplication.Application.DTOs.DashBoardDTOs;
+using IKApplication.Application.VMs.DashboardVMs;
 using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,17 +22,17 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return companies.Count();
         }
 
-        public async Task<int> GetCompanyAdminsCount()
+        public async Task<int> GetCompanyManagersCount()
         {
-            var companyAdmins = await _userManager.GetUsersInRoleAsync("CompanyAdmin");
-            return companyAdmins.Count();
+            var companyManagers = await _userManager.GetUsersInRoleAsync("Company Administrator");
+            return companyManagers.Count();
         }
 
-        public async Task<List<DashboardCompaniesCountBySectorDTO>> GetCompanyBySector()
+        public async Task<List<DashboardCompaniesCountBySectorVM>> GetCompaniesBySector()
         {
             // 1) Get all companies and create company list
             var companies = await _companyService.GetAllCompanies();
-            List<DashboardCompaniesCountBySectorDTO> categorizedCompaniesList = new List<DashboardCompaniesCountBySectorDTO>();
+            List<DashboardCompaniesCountBySectorVM> categorizedCompaniesList = new List<DashboardCompaniesCountBySectorVM>();
 
             // 2) Group them by sector
             var sectors = companies.OrderBy(company => company.Sector)
@@ -42,8 +42,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
             // 3) Convert them into DashboardCompaniesCountBySectorDto and add to list
             foreach (var sectorInfo in sectors)
             {
-                DashboardCompaniesCountBySectorDTO sectorInfoDto = new DashboardCompaniesCountBySectorDTO 
-                { CompanySectorName = sectorInfo.Sector, CompaniesCount = sectorInfo.CompanyCount };
+                DashboardCompaniesCountBySectorVM sectorInfoDto = new DashboardCompaniesCountBySectorVM
+                { SectorName = sectorInfo.Sector, CompanyCountInSector = sectorInfo.CompanyCount };
 
                 categorizedCompaniesList.Add(sectorInfoDto);
             }
@@ -52,12 +52,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return categorizedCompaniesList;
         }
 
-        public async Task<DashboardCountInfosDTO> GetCountInfos()
+        public async Task<DashboardVM> GetDashboardInfos()
         {
-            DashboardCountInfosDTO infos = new();
+            DashboardVM infos = new();
 
-            infos.CompaniesCount = await GetCompaniesCount();
-            infos.CompanyAdminsCount = await GetCompanyAdminsCount();
+            infos.TotalCompaniesCount = await this.GetCompaniesCount();
+            infos.TotalCompanyManagersCount = await this.GetCompanyManagersCount();
+            infos.CompanyListBySector = await this.GetCompaniesBySector();
 
             return infos;
         }

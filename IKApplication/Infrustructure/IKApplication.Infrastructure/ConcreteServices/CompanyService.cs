@@ -27,7 +27,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task<List<Company>> GetAllCompanies()
         {
-            List<Company> companies = await _companyRepository.GetAll();
+            //var companies = await _companyRepository.GetDefaults(x => x.Status == Domain.Enums.Status.Active || x.Status == Domain.Enums.Status.Modified);
+            var companies = await _companyRepository.GetDefaults(x => x.Id != null);
             return companies;
         }
 
