@@ -10,42 +10,42 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>IKApp Login</title>
+    <title>Corona Admin</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="~/assets/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="~/assets/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../../assets/images/favicon.png" />
     <style>
         input:-webkit-autofill, input:-webkit-autofill:focus {
             box-shadow: 0 0 0 1000px #CB647B inset;
             -webkit-text-fill-color: #ffffff;
         }
     </style>
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="~/assets/images/favicon.png" />
 </head>
 <body>
     <div class="container-scroller">
         <div class="container-fluid page-body-wrapper full-page-wrapper">
             <div class="row w-100 m-0">
                 <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-                    <div class="card col-lg-4 mx-auto">
+                    <div class="card card-inverse-danger col-lg-4 mx-auto">
                         <div class="card-body px-5 py-5">
                             <h2 class="card-title text-center mb-3">Login</h2>
                             <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
                                 <div class="form-floating mb-3">
-                                    <input asp-for="UserName" class="form-control" placeholder="Email" type="text" />
+                                    <input asp-for="UserName" class="form-control auth-form-transparent" placeholder="Email" type="text" />
                                     <label asp-for="UserName">Email *</label>
                                     <span asp-validation-for="UserName" class="text-light"></span>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
+                                    <input asp-for="Password" class="form-control auth-form-transparent form" placeholder="Password" type="password" />
                                     <label asp-for="Password">Password *</label>
                                     <span asp-validation-for="Password" class="text-light"></span>
                                     <span class="text-light">
@@ -67,16 +67,16 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="~/assets/js/vendor.bundle.base.js"></script>
+    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="~/assets/js/off-canvas.js"></script>
-    <script src="~/assets/js/hoverable-collapse.js"></script>
-    <script src="~/assets/js/misc.js"></script>
-    <script src="~/assets/js/settings.js"></script>
-    <script src="~/assets/js/todolist.js"></script>
+    <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script src="../../assets/js/todolist.js"></script>
     <!-- endinject -->
 </body>
 </html>
