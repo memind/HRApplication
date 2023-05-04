@@ -16,7 +16,7 @@ namespace IKApplication.Domain.Entites
         public string Email { get; set;}
         public string PhoneNumber { get; set; }
         public int NumberOfEmployees { get; set; }
-        public int SectorId { get; set; }
+        public Guid SectorId { get; set; }
 
         // Navigation Properties
         public Sector Sector { get; set; }

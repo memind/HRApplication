@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IKApplication.Persistance.Migrations
 {
     [DbContext(typeof(IKAppDbContext))]
-    [Migration("20230502190732_iki")]
-    partial class iki
+    [Migration("20230504165620_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,7 +167,35 @@ namespace IKApplication.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sector")
+                    b.Property<Guid>("SectorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectorId");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -179,7 +207,7 @@ namespace IKApplication.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("companies");
+                    b.ToTable("Sectors");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -322,6 +350,17 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("IKApplication.Domain.Entites.Company", b =>
+                {
+                    b.HasOne("IKApplication.Domain.Entites.Sector", "Sector")
+                        .WithMany("Companies")
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sector");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -376,6 +415,11 @@ namespace IKApplication.Persistance.Migrations
             modelBuilder.Entity("IKApplication.Domain.Entites.Company", b =>
                 {
                     b.Navigation("CompanyManagers");
+                });
+
+            modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>
+                {
+                    b.Navigation("Companies");
                 });
 #pragma warning restore 612, 618
         }
