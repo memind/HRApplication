@@ -23,4 +23,26 @@
     <ProjectReference Include="..\..\Infrustructure\IKApplication.Persistance\IKApplication.Persistance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\CompanyAdministrator\Data\" />
+    <Folder Include="Areas\CompanyAdministrator\Models\" />
+    <Folder Include="Areas\Personals\Controllers\" />
+    <Folder Include="Areas\Personals\Data\" />
+    <Folder Include="Areas\Personals\Models\" />
+    <Folder Include="Areas\Personals\Views\" />
+    <Folder Include="Areas\SiteAdministrator\Data\" />
+    <Folder Include="Areas\SiteAdministrator\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\CompanyAdministrator\Views\Company\Create.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\CompanyAdministrator\Views\Company\Update.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
