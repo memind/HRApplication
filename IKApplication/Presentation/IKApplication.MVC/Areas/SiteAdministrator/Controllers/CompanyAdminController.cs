@@ -11,11 +11,11 @@ namespace IKApplication.MVC.Controllers
 {
     [Area("SiteAdministrator")]
     [Authorize(Roles = "Site Administrator")]
-    public class SiteManagerController : Controller
+    public class CompanyAdminController : Controller
     {
         private readonly IAppUserService _userService;
 
-        public SiteManagerController(IAppUserService appUserSerives)
+        public CompanyAdminController(IAppUserService appUserSerives)
         {
             _userService = appUserSerives;
         }
