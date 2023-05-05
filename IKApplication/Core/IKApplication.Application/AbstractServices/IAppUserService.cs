@@ -1,4 +1,6 @@
 ﻿using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Application.VMs.UserVMs;
+using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
 
 namespace IKApplication.Application.AbstractServices
@@ -11,5 +13,7 @@ namespace IKApplication.Application.AbstractServices
         //Task LogOut();
         Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
         Task UpdateUser(AppUserUpdateDTO model);
+        Task RegisterUserWithCompany(RegisterVM registerVm, string role); 
+        Task<List<Sector>> GetSectorsAsync();
     }
 }

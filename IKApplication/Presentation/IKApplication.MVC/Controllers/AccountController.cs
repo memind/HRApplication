@@ -1,5 +1,6 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Application.VMs.UserVMs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,30 @@ namespace IKApplication.MVC.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Register()
+        {
+            var sectors = await _appUserService.GetSectorsAsync();
+            return View(new RegisterVM { SectorList = sectors});
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM registerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _appUserService.RegisterUserWithCompany(registerModel, "Company Administrator");
+                return RedirectToAction("Index", "Home");
+            }
+            var sectors = await _appUserService.GetSectorsAsync();
+
+            RegisterVM registerVM = registerModel;
+            registerVM.SectorList = sectors;
+
+            return View(registerVM);
         }
     }
 }
