@@ -26,7 +26,6 @@ namespace IKApplication.Application.VMs.UserVMs
         public DateTime UserCreateDate => DateTime.Now;
         public Status UserStatus => Status.Passive;
         public Guid UserCompanyId { get; set; }
-        //public List<CompanyVM>? UserCompanies { get; set; }
 
 
         // Company
@@ -34,13 +33,12 @@ namespace IKApplication.Application.VMs.UserVMs
         public string CompanyEmail { get; set; }
         public string CompanyPhoneNumber { get; set; }
         public Guid CompanySectorId { get; set; }
-        public Sector CompanySector { get; set; }
         public int CompanyNumberOfEmployees { get; set; }
         public DateTime CompanyCreateDate => DateTime.Now;
         public Status CompanyStatus => Status.Passive;
 
         // Sector list for passing data
-        public List<Sector>? SectorList { get; set; }
+        public List<Sector> SectorList { get; set; }
 
         // Constructor
         public RegisterVM()

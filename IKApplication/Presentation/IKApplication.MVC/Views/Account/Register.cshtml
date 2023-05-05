@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Register </h5>
+                <h2 class="card-header">Register </h2>
                 <form asp-controller="Account" asp-action="Register" method="post">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label asp-for="UserProfession" class="form-label">Profession</label><br />
                             <span asp-validation-for="UserProfession" class="text-danger"></span>
-                            <input asp-for="UserProfession" type="number" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Profession" aria-describedby="defaultFormControlHelp">
+                            <input asp-for="UserProfession" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Profession" aria-describedby="defaultFormControlHelp">
                         </div>
 
                         <div class="form-group">
@@ -102,19 +102,14 @@
                             <label asp-for="CompanyNumberOfEmployees" class="form-label">Number of Employees</label><br />
                             <span asp-validation-for="CompanyNumberOfEmployees" class="text-danger"></span>
                             <input asp-for="CompanyNumberOfEmployees" type="number" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Number of Employees" aria-describedby="defaultFormControlHelp">
-                        </div>
-
+                        </div>    
+                        
                         <div class="form-group">
-                            <label asp-for="CompanySector" class="form-label">Sector</label><br />
-                            <span asp-validation-for="CompanySector" class="text-danger"></span>
-                            <select asp-for="CompanySector" class="form-control mb-3" asp-items="@(new SelectList(Model.SectorList, "Id", "Name"))"></select>
+                            <label asp-for="CompanySectorId">Sector</label><br />
+                            <span asp-validation-for="CompanySectorId" class="text-danger"></span>
+                            <select class="form-control mb-3" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.SectorList,"Id","Name"))"></select>
                         </div>
 
-                        @*<div class="form-group">
-                        <label asp-for="CompanySector" class="form-label">Sector</label><br />
-                        <span asp-validation-for="CompanySector" class="text-danger"></span>
-                        <input asp-for="CompanySector" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Sector" aria-describedby="defaultFormControlHelp">
-                        </div>*@
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">Register</button>
                         </div>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
+using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Application.VMs.UserVMs;
@@ -172,13 +173,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task RegisterUserWithCompany(RegisterVM registerVm, string role)
         {
-            Company newCompany = new Company() 
+            Company newCompany = new Company()
             {
                 Id = Guid.NewGuid(),
                 Name = registerVm.CompanyName,
                 Email = registerVm.CompanyEmail,
                 PhoneNumber = registerVm.CompanyPhoneNumber,
-                Sector = registerVm.CompanySector,
+                SectorId = registerVm.CompanySectorId,
                 NumberOfEmployees = registerVm.CompanyNumberOfEmployees,
                 CreateDate = registerVm.CompanyCreateDate,
                 Status = registerVm.CompanyStatus
@@ -202,6 +203,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 Company = newCompany
             };
 
+            newUser.UserName = registerVm.UserEmail;
+
             if (registerVm.UserPassword == registerVm.UserConfirmPassword)
             {
                 await _companyRepository.Create(newCompany);
@@ -212,7 +215,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     await _userManager.AddToRoleAsync(newUser, role);
                 }
             }
-            
+
         }
     }
 }

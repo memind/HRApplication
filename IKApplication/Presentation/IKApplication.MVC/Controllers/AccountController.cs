@@ -1,15 +1,18 @@
-﻿using IKApplication.Application.AbstractServices;
+﻿using IKApplication.Application.AbstractRepositories;
+using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
+using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IKApplication.MVC.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        IAppUserService _appUserService;
+        private readonly IAppUserService _appUserService;
 
         public AccountController(IAppUserService appUserService)
         {
@@ -63,6 +66,9 @@ namespace IKApplication.MVC.Controllers
         public async Task<IActionResult> Register()
         {
             var sectors = await _appUserService.GetSectorsAsync();
+
+            List<SelectListItem> sectorsSelectList = (from s in sectors select new SelectListItem { Text = s.Name, Value = s.Id.ToString()}).ToList();
+            ViewBag.Sectors = sectorsSelectList;
             return View(new RegisterVM { SectorList = sectors});
         }
 
@@ -70,17 +76,18 @@ namespace IKApplication.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerModel)
         {
+
             if (ModelState.IsValid)
             {
                 await _appUserService.RegisterUserWithCompany(registerModel, "Company Administrator");
+                // SendEmail(...);
                 return RedirectToAction("Index", "Home");
             }
+
             var sectors = await _appUserService.GetSectorsAsync();
+            registerModel.SectorList = sectors;
 
-            RegisterVM registerVM = registerModel;
-            registerVM.SectorList = sectors;
-
-            return View(registerVM);
+            return View(registerModel);
         }
     }
 }
