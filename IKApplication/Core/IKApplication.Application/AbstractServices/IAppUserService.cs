@@ -15,5 +15,6 @@ namespace IKApplication.Application.AbstractServices
         Task UpdateUser(AppUserUpdateDTO model);
         Task RegisterUserWithCompany(RegisterVM registerVm, string role); 
         Task<List<Sector>> GetSectorsAsync();
+        Task<AppUserVM> GetCurrentUserInfo(string userName);
     }
 }
