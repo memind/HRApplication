@@ -3,10 +3,10 @@ using IKApplication.Application.DTOs.CompanyDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
+namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
-    [Area("SiteAdministrator")]
-    [Authorize(Roles = "Site Administrator")]
+    [Area("CompanyAdministrator")]
+    [Authorize(Roles = "Site Administrator, Company Administrator")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
@@ -20,22 +20,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         //    var companies = _companyService.GetAllCompanies();
         //    return View(companies);
         //}
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CompanyCreateDTO createCompanyDTO)
-        {
-            if (ModelState.IsValid)
-            {
-                await _companyService.Create(createCompanyDTO);
-                return RedirectToAction("Dashboard", "Index");
-            }
-            return View(createCompanyDTO);
-        }
 
         public async Task<IActionResult> Update(Guid id)
         {

@@ -43,10 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Personals\Controllers\" />
-    <Folder Include="Areas\Personals\Data\" />
-    <Folder Include="Areas\Personals\Models\" />
-    <Folder Include="Areas\Personals\Views\" />
+    <Folder Include="Areas\Personal\Controllers\" />
+    <Folder Include="Areas\Personal\Data\" />
+    <Folder Include="Areas\Personal\Models\" />
+    <Folder Include="Areas\Personal\Views\" />
   </ItemGroup>
 
   <ItemGroup>

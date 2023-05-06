@@ -1,0 +1,72 @@
+﻿@model AppUserVM
+@{
+    string area = @Model.Roles[0].Replace(" ", "");
+}
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" asp-controller="" asp-action=""><img src="../../assets/images/logo.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo-mini" asp-controller="" asp-action=""><img src="../../assets/images/logo-mini.svg" alt="logo" /></a>
+    </div>
+    <ul class="nav">
+        <li class="nav-item profile">
+            <div class="profile-desc">
+                <div class="profile-pic">
+                    <div class="count-indicator">
+                        <img class="img-xs rounded-circle " src="@Model.ImagePath" alt="">
+                        <span class="count bg-success"></span>
+                    </div>
+                    <div class="profile-name">
+                        <h5 class="mb-0 font-weight-normal">@Model.FullName</h5>
+                        <span>@Model.Roles[0]</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+        </li>
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Company" asp-action="Update" asp-route-id="@Model.CompanyId">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-office-building"></i>
+                    </span>
+                    <span class="menu-title">Company Details</span>
+                </a>
+            }
+            @if (area == "SiteAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Company" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-office-building"></i>
+                    </span>
+                    <span class="menu-title">Company List</span>
+                </a>
+            }
+        </li>
+        <li class="nav-item menu-items">
+            @if (area == "SiteAdministrator" || area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-account"></i>
+                    </span>
+                    <span class="menu-title">Users</span>
+                </a>
+            }
+        </li>
+        <li class="nav-item menu-items">
+            @if (area == "SiteAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="RegistrationList">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-database"></i>
+                    </span>
+                    <span class="menu-title">Registration Requests</span>
+                </a>
+            }
+        </li>
+    </ul>
+</nav>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IKApplication.MVC.Controllers
 {
-    [Authorize(Roles = "Site Administrator")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IDashboardService _dashboardService;
@@ -16,7 +16,7 @@ namespace IKApplication.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _dashboardService.GetDashboardInfos());
+            return View();
         }
     }
 }
