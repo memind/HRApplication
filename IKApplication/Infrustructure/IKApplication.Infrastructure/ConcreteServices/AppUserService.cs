@@ -138,8 +138,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 appUser = _mapper.Map<AppUser>(model);
                 if (model.Password != null)
                     appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, model.Password);
+                //!!!!!!!!!!AppUser'ı Update Et!!!!!!!!!!!
             }
-            //!!!!!!!!!!AppUser'ı Update Et!!!!!!!!!!!
         }
 
         public async Task<AppUserUpdateDTO> GetById(Guid id)
@@ -218,7 +218,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     await _userManager.AddToRoleAsync(newUser, role);
                 }
             }
-
         }
         public async Task<AppUserVM> GetCurrentUserInfo(string userName)
         {
