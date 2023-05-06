@@ -1,4 +1,5 @@
 ﻿using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Application.VMs.UserVMs;
 using Microsoft.AspNetCore.Identity;
 
 namespace IKApplication.Application.AbstractServices
@@ -11,5 +12,6 @@ namespace IKApplication.Application.AbstractServices
         //Task LogOut();
         Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
         Task UpdateUser(AppUserUpdateDTO model);
+        Task<AppUserVM> GetCurrentUserInfo(string userName);
     }
 }

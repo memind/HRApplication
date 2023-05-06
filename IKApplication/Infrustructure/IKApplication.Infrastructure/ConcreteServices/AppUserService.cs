@@ -3,8 +3,10 @@ using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
+using IKApplication.Persistance.ConcreteRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,6 +81,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role)
         {
             var appUser = _mapper.Map<AppUser>(model);
+            //!!!!!!!!!!Email'in daha önce kullanılıp kullanılmadığını kontrol et!!!!!!!!!!!!
             appUser.UserName = model.Email;
             var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
 
@@ -131,6 +134,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 appUser = _mapper.Map<AppUser>(model);
                 if (model.Password != null)
                     appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, model.Password);
+                //!!!!!!!!!!AppUser'ı Update Et!!!!!!!!!!!
             }
         }
 
@@ -138,7 +142,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
         {
             AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == id);
 
-            if (appUser == null)
+            if (appUser != null)
             {
                 var model = _mapper.Map<AppUserUpdateDTO>(appUser);
 
@@ -159,6 +163,32 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return null;
+        }
+        public async Task<AppUserVM> GetCurrentUserInfo(string userName)
+        {
+            AppUserVM result = await _appUserRepository.GetFilteredFirstOrDefault(
+                select: x => new AppUserVM
+                {
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    Title = x.Title,
+                    BloodGroup = x.BloodGroup,
+                    Profession = x.Profession,
+                    BirthDate = x.BirthDate,
+                    IdentityId = x.IdentityId,
+                    CompanyId = x.CompanyId,
+                    CompanyName = x.Company.Name,
+                    ImagePath = x.ImagePath,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                },
+                where: x => x.UserName == userName,
+                include: x => x.Include(x => x.Company));
+
+            result.Roles =(List<string>) await _userManager.GetRolesAsync( await _userManager.FindByNameAsync(userName) );
+
+            return result;
         }
     }
 }

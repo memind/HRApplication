@@ -28,34 +28,20 @@ namespace IKApplication.MVC.Controllers
             return View();
         }
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> Login(LoginDTO loginDTO, string returnUrl)
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             if (ModelState.IsValid)
             {
-
                 if (await _appUserService.Login(loginDTO))
                 {
-                    return RedirectToLocal(returnUrl);
+                    var model = await _appUserService.GetCurrentUserInfo(loginDTO.UserName);
+                    return RedirectToAction("Index", "Dashboard", new { area = model.Roles[0].Replace(" ", "") });
                 }
 
                 ViewData["InvalidLogin"] = "Wrong Credentials";
             }
 
-            ViewData["ReturnURL"] = returnUrl;
-
             return View(loginDTO);
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl = "/")
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
         }
     }
 }

@@ -40,6 +40,12 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             return View(await _appUserService.GetById(id));
         }
 
+        public async Task<IActionResult> ProfileDetails()
+        {
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
+            return View("Update", user);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {
