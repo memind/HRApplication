@@ -146,7 +146,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
         {
             AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == id);
 
-            if (appUser == null)
+            if (appUser != null)
             {
                 var model = _mapper.Map<AppUserUpdateDTO>(appUser);
 
