@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
+using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
@@ -14,18 +17,20 @@ namespace IKApplication.Infrastructure.ConcreteServices
     {
         private readonly IAppUserRepository _appUserRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly ISectorRepository _sectorRepository;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
         //Dependency Injection
-        public AppUserService(IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper, ICompanyRepository companyRepository)
+        public AppUserService(IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper, ICompanyRepository companyRepository, ISectorRepository sectorRepository)
         {
             _appUserRepository = appUserRepository;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
             _companyRepository = companyRepository;
+            _sectorRepository = sectorRepository;
         }
         //USerName ile AppUser tablosunda bulunan (eğer varsa) AppUser satrını çekeriz ve UpdateProfileDTO nesnesini doldururuz.
         public async Task<AppUserUpdateDTO> GetByUserName(string userName)
@@ -159,6 +164,58 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return null;
+        }
+
+        public async Task<List<Sector>> GetSectorsAsync()
+        {
+            return await _sectorRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
+        }
+
+        public async Task RegisterUserWithCompany(RegisterVM registerVm, string role)
+        {
+            Company newCompany = new Company()
+            {
+                Id = Guid.NewGuid(),
+                Name = registerVm.CompanyName,
+                Email = registerVm.CompanyEmail,
+                PhoneNumber = registerVm.CompanyPhoneNumber,
+                SectorId = registerVm.CompanySectorId,
+                NumberOfEmployees = registerVm.CompanyNumberOfEmployees,
+                CreateDate = registerVm.CompanyCreateDate,
+                Status = registerVm.CompanyStatus
+            };
+
+            AppUser newUser = new AppUser()
+            {
+                Name = registerVm.UserName,
+                SecondName = registerVm.UserSecondName,
+                Surname = registerVm.UserSurname,
+                Title = registerVm.UserTitle,
+                BloodGroup = registerVm.UserBloodGroup,
+                Profession = registerVm.UserProfession,
+                BirthDate = registerVm.UserBirthDate,
+                IdentityId = registerVm.UserIdentityId,
+                Email = registerVm.UserEmail,
+                ImagePath = registerVm.UserImagePath,
+                CreateDate = registerVm.UserCreateDate,
+                Status = registerVm.UserStatus,
+                CompanyId = newCompany.Id,
+                Company = newCompany
+            };
+
+            newUser.UserName = registerVm.UserEmail;
+
+            if (registerVm.UserPassword == registerVm.UserConfirmPassword)
+            {
+                await _companyRepository.Create(newCompany);
+                var result = await _userManager.CreateAsync(newUser, string.IsNullOrEmpty(registerVm.UserPassword) ? "" : registerVm.UserPassword);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(newUser, role);
+                }
+            }
+
         }
     }
 }
