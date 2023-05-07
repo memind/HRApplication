@@ -1,121 +1,178 @@
 ﻿@model RegisterVM
 
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card mb-4">
-                <h2 class="card-header">Register </h2>
-                <form asp-controller="Account" asp-action="Register" method="post">
-                    <div asp-validation-summary="ModelOnly"></div>
-                    <div class="card-body">
-                        <h4>Personal Info</h4>
+@{
+    Layout = null;
+}
 
-                        <div class="form-group">
-                            <label asp-for="UserName" class="form-label">Name</label><br />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                            <input asp-for="UserName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Name" aria-describedby="defaultFormControlHelp">
-                        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../../assets/images/favicon.png" />
+    <style>
+        input:-webkit-autofill, input:-webkit-autofill:focus {
+            box-shadow: 0 0 0 1000px #CB647B inset;
+            -webkit-text-fill-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card card-inverse-danger col-lg-8 mx-auto">
+                                    <h2 class="card-header">Register </h2>
+                                    <form asp-controller="Account" asp-action="Register" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="card-body">
+                                            <h4>Personal Info</h4>
 
-                        <div class="form-group">
-                            <label asp-for="UserSecondName" class="form-label">Second Name</label><br />
-                            <span asp-validation-for="UserSecondName" class="text-danger"></span>
-                            <input asp-for="UserSecondName" type="email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Second Name" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserName" class="form-label">Name</label><br />
+                                                <span asp-validation-for="UserName" class="text-danger"></span>
+                                                <input asp-for="UserName" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Name" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserSurname" class="form-label">Surname</label><br />
-                            <span asp-validation-for="UserSurname" class="text-danger"></span>
-                            <input asp-for="UserSurname" type="tel" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Surname" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserSecondName" class="form-label">Second Name</label><br />
+                                                <span asp-validation-for="UserSecondName" class="text-danger"></span>
+                                                <input asp-for="UserSecondName" type="email" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Second Name" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserTitle" class="form-label">Title</label><br />
-                            <span asp-validation-for="UserTitle" class="text-danger"></span>
-                            <input asp-for="UserTitle" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Title" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserSurname" class="form-label">Surname</label><br />
+                                                <span asp-validation-for="UserSurname" class="text-danger"></span>
+                                                <input asp-for="UserSurname" type="tel" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Surname" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserBloodGroup" class="form-label">Blood Group</label><br />
-                            <span asp-validation-for="UserBloodGroup" class="text-danger"></span>
-                            <input asp-for="UserBloodGroup" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Blood Group" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserTitle" class="form-label">Title</label><br />
+                                                <span asp-validation-for="UserTitle" class="text-danger"></span>
+                                                <input asp-for="UserTitle" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Title" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserProfession" class="form-label">Profession</label><br />
-                            <span asp-validation-for="UserProfession" class="text-danger"></span>
-                            <input asp-for="UserProfession" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Profession" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserBloodGroup" class="form-label">Blood Group</label><br />
+                                                <span asp-validation-for="UserBloodGroup" class="text-danger"></span>
+                                                <input asp-for="UserBloodGroup" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Blood Group" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserBirthDate" class="form-label">Birth Date</label><br />
-                            <span asp-validation-for="UserBirthDate" class="text-danger"></span>
-                            <input asp-for="UserBirthDate" type="date" class="form-control mb-3" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserProfession" class="form-label">Profession</label><br />
+                                                <span asp-validation-for="UserProfession" class="text-danger"></span>
+                                                <input asp-for="UserProfession" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Profession" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserIdentityId" class="form-label">Identity Id</label><br />
-                            <span asp-validation-for="UserIdentityId" class="text-danger"></span>
-                            <input asp-for="UserIdentityId" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Identity ID" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserBirthDate" class="form-label">Birth Date</label><br />
+                                                <span asp-validation-for="UserBirthDate" class="text-danger"></span>
+                                                <input asp-for="UserBirthDate" type="date" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserEmail" class="form-label">Email</label><br />
-                            <span asp-validation-for="UserEmail" class="text-danger"></span>
-                            <input asp-for="UserEmail" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Your Email" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserIdentityId" class="form-label">Identity Id</label><br />
+                                                <span asp-validation-for="UserIdentityId" class="text-danger"></span>
+                                                <input asp-for="UserIdentityId" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Identity ID" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserPassword" class="form-label">Password</label><br />
-                            <span asp-validation-for="UserPassword" class="text-danger"></span>
-                            <input asp-for="UserPassword" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
-                        </div>
+                                            <div class="form-group">
+                                                <label asp-for="UserEmail" class="form-label">Email</label><br />
+                                                <span asp-validation-for="UserEmail" class="text-danger"></span>
+                                                <input asp-for="UserEmail" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Email" aria-describedby="defaultFormControlHelp">
+                                            </div>
 
-                        <div class="form-group">
-                            <label asp-for="UserConfirmPassword" class="form-label">Confirm Your Password</label><br />
-                            <span asp-validation-for="UserConfirmPassword" class="text-danger"></span>
-                            <input asp-for="UserConfirmPassword" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
+                                            <div class="form-group">
+                                                <label asp-for="UserPassword" class="form-label">Password</label><br />
+                                                <span asp-validation-for="UserPassword" class="text-danger"></span>
+                                                <input asp-for="UserPassword" type="password" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="UserConfirmPassword" class="form-label">Confirm Your Password</label><br />
+                                                <span asp-validation-for="UserConfirmPassword" class="text-danger"></span>
+                                                <input asp-for="UserConfirmPassword" type="password" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp">
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h4>Company Info</h4>
+
+                                            <div class="form-group">
+                                                <label asp-for="CompanyName" class="form-label">Company Name</label><br />
+                                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                                                <input asp-for="CompanyName" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Name" aria-describedby="defaultFormControlHelp">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="CompanyEmail" class="form-label">Company Email</label><br />
+                                                <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                                                <input asp-for="CompanyEmail" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Email" aria-describedby="defaultFormControlHelp">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="CompanyPhoneNumber" class="form-label">Company Phone Number</label><br />
+                                                <span asp-validation-for="CompanyPhoneNumber" class="text-danger"></span>
+                                                <input asp-for="CompanyPhoneNumber" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Phone Number" aria-describedby="defaultFormControlHelp">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="CompanyNumberOfEmployees" class="form-label">Number of Employees</label><br />
+                                                <span asp-validation-for="CompanyNumberOfEmployees" class="text-danger"></span>
+                                                <input asp-for="CompanyNumberOfEmployees" type="number" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Number of Employees" aria-describedby="defaultFormControlHelp">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="CompanySectorId">Sector</label><br />
+                                                <span asp-validation-for="CompanySectorId" class="text-danger"></span>
+                                                <select class="form-control mb-3 auth-form-transparent" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.SectorList,"Id","Name"))"></select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-success btn-block">Register</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card-body">
-                        <h4>Company Info</h4>
-
-                        <div class="form-group">
-                            <label asp-for="CompanyName" class="form-label">Company Name</label><br />
-                            <span asp-validation-for="CompanyName" class="text-danger"></span>
-                            <input asp-for="CompanyName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Name" aria-describedby="defaultFormControlHelp">
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="CompanyEmail" class="form-label">Company Email</label><br />
-                            <span asp-validation-for="CompanyEmail" class="text-danger"></span>
-                            <input asp-for="CompanyEmail" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Email" aria-describedby="defaultFormControlHelp">
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="CompanyPhoneNumber" class="form-label">Company Phone Number</label><br />
-                            <span asp-validation-for="CompanyPhoneNumber" class="text-danger"></span>
-                            <input asp-for="CompanyPhoneNumber" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Phone Number" aria-describedby="defaultFormControlHelp">
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="CompanyNumberOfEmployees" class="form-label">Number of Employees</label><br />
-                            <span asp-validation-for="CompanyNumberOfEmployees" class="text-danger"></span>
-                            <input asp-for="CompanyNumberOfEmployees" type="number" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Number of Employees" aria-describedby="defaultFormControlHelp">
-                        </div>    
-                        
-                        <div class="form-group">
-                            <label asp-for="CompanySectorId">Sector</label><br />
-                            <span asp-validation-for="CompanySectorId" class="text-danger"></span>
-                            <select class="form-control mb-3" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.SectorList,"Id","Name"))"></select>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-block">Register</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
+                <!-- content-wrapper ends -->
             </div>
+            <!-- row ends -->
         </div>
+        <!-- page-body-wrapper ends -->
     </div>
-</div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script src="../../assets/js/todolist.js"></script>
+    <!-- endinject -->
+</body>
+</html>
