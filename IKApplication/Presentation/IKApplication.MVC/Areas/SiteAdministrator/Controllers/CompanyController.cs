@@ -15,26 +15,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             _companyService = companyService;
         }
 
-        //public IActionResult Index()
-        //{
-        //    var companies = _companyService.GetAllCompanies();
-        //    return View(companies);
-        //}
-
-        public IActionResult Create()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CompanyCreateDTO createCompanyDTO)
-        {
-            if (ModelState.IsValid)
-            {
-                await _companyService.Create(createCompanyDTO);
-                return RedirectToAction("Dashboard", "Index");
-            }
-            return View(createCompanyDTO);
+            var companies = await _companyService.GetAllCompanies();
+            return View(companies);
         }
 
         public async Task<IActionResult> Update(Guid id)
@@ -48,7 +32,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Update(updateCompanyDTO);
-                return RedirectToAction("Dashboard", "Index");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return View(updateCompanyDTO);

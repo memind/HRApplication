@@ -1,49 +1,50 @@
-﻿@model CompanyCreateDTO
+﻿@model CompanyUpdateDTO
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Manage Companies /</span> Create Company
-    </h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Create Company</h5>
-                <form asp-controller="Company" asp-action="Create" method="post">
+                <h5 class="card-header">Update Company</h5>
+                <form asp-controller="Company" asp-action="Update" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreateDate" />
+                        <input type="hidden" asp-for="UpdateDate" />
+                        <input type="hidden" asp-for="Status" />
 
                         <div class="form-group">
                             <label asp-for="Name" class="form-label">Name</label><br />
                             <span asp-validation-for="Name" class="text-danger"></span>
-                            <input asp-for="Name" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Name" aria-describedby="defaultFormControlHelp">
+                            <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name">
                         </div>
 
                         <div class="form-group">
                             <label asp-for="Email" class="form-label">Email</label><br />
                             <span asp-validation-for="Email" class="text-danger"></span>
-                            <input asp-for="Email" type="email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Email" aria-describedby="defaultFormControlHelp">
+                            <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email">
                         </div>
 
                         <div class="form-group">
                             <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                            <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Phone Number" aria-describedby="defaultFormControlHelp">
+                            <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Sector" class="form-label">Sector</label><br />
-                            <span asp-validation-for="Sector" class="text-danger"></span>
-                            <input asp-for="Sector" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Company Sector" aria-describedby="defaultFormControlHelp">
+                            <label asp-for="SectorId" class="form-label">Sector</label><br />
+                            <span asp-validation-for="SectorId" class="text-danger"></span>
+                            <select asp-for="SectorId" class="form-control" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))"></select>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="NumberOfEmployees" class="form-label">Number Of Employees</label><br />
                             <span asp-validation-for="NumberOfEmployees" class="text-danger"></span>
-                            <input asp-for="NumberOfEmployees" type="number" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter Number of Employees" aria-describedby="defaultFormControlHelp">
+                            <input asp-for="NumberOfEmployees" type="number" class="form-control mb-3" placeholder="Enter Number of Employees">
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">Create Company</button>
+                            <button type="submit" class="btn btn-primary btn-block">Update</button>
                         </div>
                     </div>
                 </form>

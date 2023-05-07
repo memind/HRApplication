@@ -16,16 +16,15 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string? Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public string IdentityId { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
         public string Email { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
         public string ImagePath { get; set; }
         [NotMapped]
         public IFormFile? UploadPath { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? UpdateDate => DateTime.Now;
-        public Status Status => Status.Modified;
         public Guid? CompanyId { get; set; }
-        public List<CompanyVM>? Companies { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime UpdateDate => DateTime.Now;
+        public Status Status => Status.Modified;
     }
 }

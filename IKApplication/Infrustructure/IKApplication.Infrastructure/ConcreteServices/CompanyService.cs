@@ -3,6 +3,7 @@ using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.SectorVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,14 @@ namespace IKApplication.Infrastructure.ConcreteServices
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly ISectorRepository _sectorRepository;
         private readonly IMapper _mapper;
 
-        public CompanyService(ICompanyRepository companyRepository, IMapper mapper)
+        public CompanyService(ICompanyRepository companyRepository, IMapper mapper, ISectorRepository sectorRepository)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
+            _sectorRepository = sectorRepository;
         }
 
         public async Task Create(CompanyCreateDTO createCompanyDTO)
@@ -32,6 +35,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var companies = await _companyRepository.GetFilteredList(
                 select: x => new CompanyVM
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
@@ -56,6 +60,18 @@ namespace IKApplication.Infrastructure.ConcreteServices
             if (company != null)
             {
                 var model = _mapper.Map<CompanyUpdateDTO>(company);
+
+                model.Sectors = await _sectorRepository.GetFilteredList(
+                        select: x => new SectorVM
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            CompanyCount = x.Companies.Count,
+                        },
+                        where: x => x.Status != Status.Passive,
+                        orderBy: x => x.OrderBy(x => x.Name),
+                        include: x => x.Include(x => x.Companies));
+
                 return model;
             }
 

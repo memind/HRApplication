@@ -6,7 +6,7 @@ namespace IKApplication.MVC.ViewComponents
 {
     public class SideMenuViewComponent : ViewComponent
     {
-        IAppUserService _userService;
+        private readonly IAppUserService _userService;
 
         public SideMenuViewComponent(IAppUserService userService)
         {

@@ -50,23 +50,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     IdentityId = x.IdentityId,
                     Email = x.Email,
                     ImagePath = x.ImagePath,
+                    CompanyId = x.CompanyId,
                     CreateDate = x.CreateDate,
-                    CompanyId = x.CompanyId
                 },
-                where: x => x.UserName == userName);
-
-            result.Companies = await _companyRepository.GetFilteredList(
-                select: x => new CompanyVM
-                {
-                    Name = x.Name,
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    SectorName = x.Sector.Name,
-                    NumberOfEmployees = x.NumberOfEmployees
-                },
-                where: x => x.Status != Status.Passive,
-                orderBy: x => x.OrderBy(x => x.Name),
-                include: x => x.Include(x => x.Sector));
+                where: x => x.UserName == userName,
+                include: x => x.Include(x => x.Company));
 
             return result;
         }
@@ -98,47 +86,41 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return result;
         }
 
-        ////sistemden çıkıç için kullanırız. User bilgileri sessiondan silinşr.
-        //public async Task LogOut()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //}
+        //sistemden çıkıç için kullanırız. User bilgileri sessiondan silinir.
+        public async Task LogOut()
+        {
+            await _signInManager.SignOutAsync();
+        }
 
-        //Yeni bir AppUSer oluştururuz.
-        //public async Task<IdentityResult> Register(RegisterDTO model)
-        //{
-        //    //Gelen RegisterDTO,Create edilmesi gereken AppUser
-        //    //AutoMapper kullanacağız.
-
-        //    AppUser user = new AppUser();
-        //    user.UserName = model.UserName;
-        //    user.Email = model.Email;
-        //    //user.PasswordHash = model.PasswordHash;
-        //    user.CreatedDate = model.CreateDate;
-
-        //    IdentityResult result = await _userManager.CreateAsync(user, model.Password);
-        //    if (result.Succeeded)
-        //    {
-        //        await _signInManager.SignInAsync(user, isPersistent: false);
-        //    }
-        //    return result;
-        //}
-
-        //Kullanıcı bilgilerini güncellemek için kullanırız.
-        //Kullanıcının güncellemek istediği  bilgileri View'dan UpdateProfileDTO nesnesi aracılığıyla alırız. REsim, Email, Password alanlarını kontrol ederekgüncelleriz.
         public async Task UpdateUser(AppUserUpdateDTO model)
         {
             //Update işlemlerind eönce Id ile ilgili nesneyi rame çekeriz. Dışarıdan gelen güncel bilgilerle değişiklikleri yaparız.
             //En Son SaveChanges ile veri tabanına güncellemeleri göndeririz. 
 
-            AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == model.Id);
+            AppUser user = await _userManager.FindByIdAsync(model.Id.ToString());
 
-            if (appUser != null && model.Email == appUser.Email)
+            if (user != null)
             {
-                appUser = _mapper.Map<AppUser>(model);
                 if (model.Password != null)
-                    appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, model.Password);
-                //!!!!!!!!!!AppUser'ı Update Et!!!!!!!!!!!
+                {
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+                }
+
+                user.Name = model.Name;
+                user.SecondName = model.SecondName;
+                user.Surname = model.Surname;
+                user.Title = model.Title;
+                user.BloodGroup = model.BloodGroup;
+                user.Profession = model.Profession;
+                user.BirthDate = model.BirthDate;
+                user.IdentityId = model.IdentityId;
+                user.ImagePath = model.ImagePath;
+                user.CompanyId = model.CompanyId;
+                user.CreateDate = model.CreateDate;
+                user.UpdateDate = model.UpdateDate;
+                user.Status = model.Status;
+
+                await _userManager.UpdateAsync(user);
             }
         }
 
@@ -149,19 +131,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
             if (appUser != null)
             {
                 var model = _mapper.Map<AppUserUpdateDTO>(appUser);
-
-                model.Companies = await _companyRepository.GetFilteredList(
-                    select: x => new CompanyVM
-                    {
-                        Name = x.Name,
-                        Email = x.Email,
-                        PhoneNumber = x.PhoneNumber,
-                        SectorName = x.Sector.Name,
-                        NumberOfEmployees = x.NumberOfEmployees
-                    },
-                    where: x => x.Status != Status.Passive,
-                    orderBy: x => x.OrderBy(x => x.Name),
-                    include: x => x.Include(x => x.Sector));
 
                 return model;
             }

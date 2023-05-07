@@ -24,7 +24,7 @@ namespace IKApplication.Persistance.ConcreteRepositories
         }
         public async Task Update(T entity)
         {
-            _iKAppDbContext.Entry<T>(entity).State = EntityState.Modified;
+            _iKAppDbContext.Update(entity);
             await _iKAppDbContext.SaveChangesAsync();
         }
         public async Task Delete(T entity)

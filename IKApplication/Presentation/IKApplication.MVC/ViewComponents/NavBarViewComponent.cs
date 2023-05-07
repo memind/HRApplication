@@ -5,7 +5,7 @@ namespace IKApplication.MVC.ViewComponents
 {
     public class NavBarViewComponent : ViewComponent
     {
-        IAppUserService _userService;
+        private readonly IAppUserService _userService;
 
         public NavBarViewComponent(IAppUserService userService)
         {

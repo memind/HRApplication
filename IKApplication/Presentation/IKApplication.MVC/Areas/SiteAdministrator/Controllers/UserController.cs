@@ -17,50 +17,32 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             _appUserService = appUserSerives;
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            //Todo: Get all users and send to view
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult RegistrationList()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> ProfileDetails()
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
+            ViewBag.Title = "Profile Details";
             return View("Update",user);
-        }
-
-        [HttpGet]
-        public IActionResult CreateSiteAdministrator()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateSiteAdministrator(AppUserCreateDTO user)
-        {
-            if (ModelState.IsValid)
-            {
-                await _appUserService.CreateUser(user, "Site Administrator");
-                return RedirectToAction("Dashboard", "Index");
-            }
-            return View(user);
-        }
-
-        [HttpGet]
-        public IActionResult CreateCompanyAdministrator()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCompanyAdministrator(AppUserCreateDTO user)
-        {
-            if (ModelState.IsValid)
-            {
-                await _appUserService.CreateUser(user, "Company Administrator");
-                return RedirectToAction("Dashboard", "Index");
-            }
-            return View(user);
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            return View(await _appUserService.GetById(id));
+            var user = await _appUserService.GetById(id);
+            ViewBag.Title = "Update User";
+            return View("Update", user);
         }
 
         [HttpPost]
@@ -69,7 +51,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _appUserService.UpdateUser(user);
-                return RedirectToAction("Dashboard", "Index");
+                return RedirectToAction("Index", "Dashboard");
             }
             return View(user);
         }

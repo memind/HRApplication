@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using IKApplication.Application.AbstractServices;
+﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IKApplication.MVC.CompanyAdministratorControllers
 {
     [Area("CompanyAdministrator")]
-    [Authorize(Roles = "Site Administrator, Company Administrator")]
+    [Authorize(Roles = "Company Administrator")]
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
@@ -18,32 +17,24 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         }
 
         [HttpGet]
-        public IActionResult CreateCompanyAdministrator()
+        public IActionResult Index()
         {
+            //Todo: Get all users and send to view
             return View();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCompanyAdministrator(AppUserCreateDTO user)
+        [HttpGet]
+        public async Task<IActionResult> ProfileDetails()
         {
-            if (ModelState.IsValid)
-            {
-                await _appUserService.CreateUser(user, "Company Administrator");
-                return RedirectToAction("Dashboard", "Index");
-            }
-            return View(user);
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
+            ViewBag.Title = "Profile Details";
+            return View("Update", user);
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
+            ViewBag.Title = "Update User";
             return View(await _appUserService.GetById(id));
-        }
-
-        public async Task<IActionResult> ProfileDetails()
-        {
-            var user = await _appUserService.GetByUserName(User.Identity.Name);
-            return View("Update", user);
         }
 
         [HttpPost]
@@ -51,8 +42,15 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         {
             if (ModelState.IsValid)
             {
-                await _appUserService.UpdateUser(user);
-                return RedirectToAction("Dashboard", "Index");
+                if (user.Password == user.ConfirmPassword)
+                {
+                    await _appUserService.UpdateUser(user);
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    return View(user);
+                }
             }
             return View(user);
         }
