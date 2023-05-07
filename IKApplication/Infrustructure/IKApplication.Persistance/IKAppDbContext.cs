@@ -20,8 +20,7 @@ namespace IKApplication.Persistance
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.ApplyConfiguration(new AppUserConfig());
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Assembly'deki (tum katmanlar) tum configleri uygular.
+            builder.ApplyConfiguration(new AppUserConfig());
 
             base.OnModelCreating(builder);
         }
