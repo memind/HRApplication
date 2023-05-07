@@ -1,7 +1,9 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
@@ -10,9 +12,11 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
-        public CompanyController(ICompanyService companyService)
+        private readonly IToastNotification _toast;
+        public CompanyController(ICompanyService companyService, IToastNotification toast)
         {
             _companyService = companyService;
+            _toast = toast;
         }
         public async Task<IActionResult> Update(Guid id)
         {
@@ -24,9 +28,11 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Update(updateCompanyDTO);
+                _toast.AddSuccessToastMessage(Messages.Company.Create(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
                 return RedirectToAction("Index", "Dashboard");
             }
 
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Company" });
             return View(updateCompanyDTO);
         }
     }

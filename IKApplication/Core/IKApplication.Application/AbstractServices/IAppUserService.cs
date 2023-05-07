@@ -10,7 +10,7 @@ namespace IKApplication.Application.AbstractServices
         Task<AppUserUpdateDTO> GetByUserName(string userName);
         Task<AppUserUpdateDTO> GetById(Guid id);
         Task<bool> Login(LoginDTO model);
-        //Task LogOut();
+        Task LogOut();
         Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
         Task UpdateUser(AppUserUpdateDTO model);
         Task RegisterUserWithCompany(RegisterVM registerVm, string role);

@@ -3,9 +3,11 @@ using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
+using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NToastNotify;
 
 namespace IKApplication.MVC.Controllers
 {
@@ -13,10 +15,12 @@ namespace IKApplication.MVC.Controllers
     public class AccountController : Controller
     {
         private readonly IAppUserService _appUserService;
+        private readonly IToastNotification _toast;
 
-        public AccountController(IAppUserService appUserService)
+        public AccountController(IAppUserService appUserService, IToastNotification toast)
         {
             _appUserService = appUserService;
+            _toast = toast;
         }
 
         [AllowAnonymous]
@@ -66,12 +70,15 @@ namespace IKApplication.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _appUserService.RegisterUserWithCompany(registerModel, "Company Administrator");
+                _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
                 // SendEmail(...);
                 return RedirectToAction("Index", "Home");
             }
 
             var sectors = await _appUserService.GetSectorsAsync();
             registerModel.SectorList = sectors;
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Registration" });
 
             return View(registerModel);
         }

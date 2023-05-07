@@ -1,7 +1,9 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 
 namespace IKApplication.MVC.CompanyAdministratorControllers
 {
@@ -10,10 +12,12 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
+        private readonly IToastNotification _toast;
 
-        public UserController(IAppUserService appUserSerives)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast)
         {
             _appUserService = appUserSerives;
+            _toast = toast;
         }
 
         [HttpGet]
@@ -45,13 +49,17 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 if (user.Password == user.ConfirmPassword)
                 {
                     await _appUserService.UpdateUser(user);
+                    _toast.AddSuccessToastMessage(Messages.User.Update(user.Email), new ToastrOptions { Title = "Updating User" });
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else
                 {
+                    _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
                     return View(user);
                 }
             }
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
             return View(user);
         }
     }
