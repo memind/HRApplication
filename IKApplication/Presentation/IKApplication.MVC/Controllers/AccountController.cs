@@ -86,7 +86,7 @@ namespace IKApplication.MVC.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _appUserService.LogOut();
             return RedirectToAction("Login");
         }
     }
