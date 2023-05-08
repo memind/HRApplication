@@ -59,12 +59,12 @@ namespace IKApplication.MVC.Controllers
 
             List<SelectListItem> sectorsSelectList = (from s in sectors select new SelectListItem { Text = s.Name, Value = s.Id.ToString() }).ToList();
             ViewBag.Sectors = sectorsSelectList;
-            return View(new RegisterVM { SectorList = sectors });
+            return View(new RegisterDTO { SectorList = sectors });
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM registerModel)
+        public async Task<IActionResult> Register(RegisterDTO registerModel)
         {
 
             if (ModelState.IsValid)

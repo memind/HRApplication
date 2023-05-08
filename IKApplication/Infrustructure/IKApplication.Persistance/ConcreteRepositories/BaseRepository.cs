@@ -10,7 +10,7 @@ namespace IKApplication.Persistance.ConcreteRepositories
     {
         // DEPENDENCY INJECTION
         private readonly IKAppDbContext _iKAppDbContext;
-        protected Microsoft.EntityFrameworkCore.DbSet<T> table;
+        protected DbSet<T> table;
         //private DbSet<T> _table { get => _iKAppDbContext.Set<T>(); }
         public BaseRepository(IKAppDbContext iKAppDbContext)
         {
@@ -24,34 +24,37 @@ namespace IKApplication.Persistance.ConcreteRepositories
         }
         public async Task Update(T entity)
         {
-            _iKAppDbContext.Update(entity);
+            table.Attach(entity);
+            _iKAppDbContext.Entry<T>(entity).State = EntityState.Modified;
             await _iKAppDbContext.SaveChangesAsync();
         }
         public async Task Delete(T entity)
         {
+            table.Attach(entity);
+            _iKAppDbContext.Entry<T>(entity).State = EntityState.Modified;
             await _iKAppDbContext.SaveChangesAsync();
             // to do: servis katmanında entity'sine göre pasif hale getireceğiz.    DB den silmeyeceğizde pasif hale çekeceğiz, kullanıcı silindi zannedecek
         }
         public async Task<bool> Any(Expression<Func<T, bool>> expression)
         {
-            return await table.AnyAsync(expression);
+            return await table.AsNoTracking().AnyAsync(expression);
         }
 
         public async Task<T> GetDefault(Expression<Func<T, bool>> expression)
         {
-            return await table.FirstOrDefaultAsync(expression);
+            return await table.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
         public async Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression)
         {
-            return await table.Where(expression).ToListAsync();
+            return await table.AsNoTracking().Where(expression).ToListAsync();
         }
 
         public async Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = table; //Select * from Post
             if (where != null)
-                query = query.Where(where); //Select*From where GenreID = 3
+                query = query.Where(where).AsNoTracking(); //Select*From where GenreID = 3
             if (orderBy != null)
                 query = include(query);
             if (orderBy != null)
@@ -64,7 +67,7 @@ namespace IKApplication.Persistance.ConcreteRepositories
         {
             IQueryable<T> query = table; //Select * from Post
             if (where != null)
-                query = query.Where(where); //Select*From where GenreID = 3
+                query = query.Where(where).AsNoTracking(); //Select*From where GenreID = 3
             if (include != null)
                 query = include(query);
             if (orderBy != null)

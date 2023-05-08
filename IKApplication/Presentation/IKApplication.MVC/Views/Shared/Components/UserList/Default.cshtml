@@ -1,0 +1,40 @@
+﻿@model List<AppUserVM>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">User List</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Full Name</th>
+                                    <th>Title</th>
+                                    <th>Company Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Email</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.CompanyName</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

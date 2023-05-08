@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Domain.Enums;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
@@ -13,32 +15,62 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
+        private readonly ICompanyService _companyService;
         private readonly IToastNotification _toast;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast)
+        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast)
         {
             _appUserService = appUserSerives;
+            _companyService = companyService;
             _toast = toast;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //Todo: Get all users and send to view
-            return View();
+            var users = await _appUserService.GetAllUsers();
+            return View(users);
         }
 
         [HttpGet]
-        public IActionResult RegistrationList()
+        public async Task<IActionResult> RegistrationList()
         {
+            var registrations = await _appUserService.GetAllRegistrations();
+            return View(registrations);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RegistrationDetails(Guid userId, Guid companyId)
+        {
+            ViewBag.User = await _appUserService.GetById(userId);
+            ViewBag.Company = await _companyService.GetById(companyId);
             return View();
+        }
+        public async Task<IActionResult> AcceptRegistration(Guid userId, Guid companyId)
+        {
+            var company = await _companyService.GetById(companyId);
+            await _companyService.Update(company);
+
+            var user = await _appUserService.GetById(userId);
+            await _appUserService.UpdateUser(user);
+
+            return RedirectToAction("RegistrationList");
+        }
+
+        public async Task<IActionResult> DeclineRegistration(Guid userId, Guid companyId)
+        {
+            await _appUserService.Delete(userId);
+            await _companyService.Delete(companyId);
+
+            return RedirectToAction("RegistrationList");
         }
 
         public async Task<IActionResult> ProfileDetails()
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
-            return View("Update",user);
+            return View("Update", user);
         }
 
         [HttpGet]

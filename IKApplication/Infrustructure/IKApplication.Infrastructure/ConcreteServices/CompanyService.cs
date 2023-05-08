@@ -54,9 +54,23 @@ namespace IKApplication.Infrastructure.ConcreteServices
             await _companyRepository.Update(model);
         }
 
+        public async Task Delete(Guid id)
+        {
+            Company company = await _companyRepository.GetDefault(x => x.Id == id);
+
+            if (company != null)
+            {
+                company.DeleteDate = DateTime.Now;
+                company.Status = Status.Deleted;
+
+                await _companyRepository.Delete(company);
+            }
+        }
+
         public async Task<CompanyUpdateDTO> GetById(Guid id)
         {
             Company company = await _companyRepository.GetDefault(x => x.Id == id);
+
             if (company != null)
             {
                 var model = _mapper.Map<CompanyUpdateDTO>(company);
