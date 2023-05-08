@@ -1,0 +1,46 @@
+﻿@model List<RegisterVM>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Company List</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>User Email</th>
+                                    <th>User Name</th>
+                                    <th>User Title</th>
+                                    <th>Company Name</th>
+                                    <th>Company Sector</th>
+                                    <th>Number of Employees</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.UserEmail</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.UserTitle</td>
+                                        <td>@item.CompanyName</td>
+                                        <td>@item.CompanySector</td>
+                                        <td>@item.NumberOfEmployees</td>
+                                        <td>
+                                            <a asp-controller="User" asp-action="RegistrationDetails" asp-route-userId="@item.UserId" asp-route-companyId="@item.CompanyId">
+                                                <button class="btn btn-outline-primary" type="button">Details</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

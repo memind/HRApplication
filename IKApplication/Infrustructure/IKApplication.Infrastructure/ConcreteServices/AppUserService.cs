@@ -58,6 +58,36 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             return result;
         }
+        public async Task<List<AppUserVM>> GetAllUsers()
+        {
+            var users = await _appUserRepository.GetFilteredList(
+                select: x => new AppUserVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    Title = x.Title,
+                    BloodGroup = x.BloodGroup,
+                    Profession = x.Profession,
+                    BirthDate = x.BirthDate,
+                    IdentityId = x.IdentityId,
+                    CompanyId = x.CompanyId,
+                    CompanyName = x.Company.Name,
+                    ImagePath = x.ImagePath,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                },
+                where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                include: x => x.Include(x => x.Company));
+
+            foreach (var user in users)
+            {
+                user.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(user.UserName));
+            }
+
+            return users;
+        }
         public async Task<bool> Login(LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -84,6 +114,19 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return result;
+        }
+
+        public async Task Delete(Guid id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user != null)
+            {
+                user.DeleteDate = DateTime.Now;
+                user.Status = Status.Deleted;
+
+                await _appUserRepository.Delete(user);
+            }
         }
 
         //sistemden çıkıç için kullanırız. User bilgileri sessiondan silinir.
@@ -143,44 +186,44 @@ namespace IKApplication.Infrastructure.ConcreteServices
             return await _sectorRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
         }
 
-        public async Task RegisterUserWithCompany(RegisterVM registerVm, string role)
+        public async Task RegisterUserWithCompany(RegisterDTO register, string role)
         {
             Company newCompany = new Company()
             {
                 Id = Guid.NewGuid(),
-                Name = registerVm.CompanyName,
-                Email = registerVm.CompanyEmail,
-                PhoneNumber = registerVm.CompanyPhoneNumber,
-                SectorId = registerVm.CompanySectorId,
-                NumberOfEmployees = registerVm.CompanyNumberOfEmployees,
-                CreateDate = registerVm.CompanyCreateDate,
-                Status = registerVm.CompanyStatus
+                Name = register.CompanyName,
+                Email = register.CompanyEmail,
+                PhoneNumber = register.CompanyPhoneNumber,
+                SectorId = register.CompanySectorId,
+                NumberOfEmployees = register.CompanyNumberOfEmployees,
+                CreateDate = register.CompanyCreateDate,
+                Status = register.CompanyStatus
             };
 
             AppUser newUser = new AppUser()
             {
-                Name = registerVm.UserName,
-                SecondName = registerVm.UserSecondName,
-                Surname = registerVm.UserSurname,
-                Title = registerVm.UserTitle,
-                BloodGroup = registerVm.UserBloodGroup,
-                Profession = registerVm.UserProfession,
-                BirthDate = registerVm.UserBirthDate,
-                IdentityId = registerVm.UserIdentityId,
-                Email = registerVm.UserEmail,
-                ImagePath = registerVm.UserImagePath,
-                CreateDate = registerVm.UserCreateDate,
-                Status = registerVm.UserStatus,
+                Name = register.UserName,
+                SecondName = register.UserSecondName,
+                Surname = register.UserSurname,
+                Title = register.UserTitle,
+                BloodGroup = register.UserBloodGroup,
+                Profession = register.UserProfession,
+                BirthDate = register.UserBirthDate,
+                IdentityId = register.UserIdentityId,
+                Email = register.UserEmail,
+                ImagePath = register.UserImagePath,
+                CreateDate = register.UserCreateDate,
+                Status = register.UserStatus,
                 CompanyId = newCompany.Id,
                 Company = newCompany
             };
 
-            newUser.UserName = registerVm.UserEmail;
+            newUser.UserName = register.UserEmail;
 
-            if (registerVm.UserPassword == registerVm.UserConfirmPassword)
+            if (register.UserPassword == register.UserConfirmPassword)
             {
                 await _companyRepository.Create(newCompany);
-                var result = await _userManager.CreateAsync(newUser, string.IsNullOrEmpty(registerVm.UserPassword) ? "" : registerVm.UserPassword);
+                var result = await _userManager.CreateAsync(newUser, string.IsNullOrEmpty(register.UserPassword) ? "" : register.UserPassword);
 
                 if (result.Succeeded)
                 {
@@ -213,6 +256,28 @@ namespace IKApplication.Infrastructure.ConcreteServices
             result.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(userName));
 
             return result;
+        }
+
+        public async Task<List<RegisterVM>> GetAllRegistrations()
+        {
+            var registers = await _appUserRepository.GetFilteredList(
+                select: x => new RegisterVM
+                {
+                    UserId = x.Id,
+                    UserName = x.Name,
+                    UserSecondName = x.SecondName,
+                    UserSurname = x.Surname,
+                    UserTitle = x.Title,
+                    UserEmail = x.Email,
+                    CompanyId = x.CompanyId,
+                    CompanyName = x.Company.Name,
+                    CompanySector = x.Company.Sector.Name,
+                    NumberOfEmployees = x.Company.NumberOfEmployees
+                },
+                where: x => (x.Status == Status.Passive),
+                include: x => x.Include(x => x.Company));
+
+            return registers;
         }
     }
 }

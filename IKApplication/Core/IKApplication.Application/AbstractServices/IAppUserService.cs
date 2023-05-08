@@ -13,8 +13,11 @@ namespace IKApplication.Application.AbstractServices
         Task LogOut();
         Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
         Task UpdateUser(AppUserUpdateDTO model);
-        Task RegisterUserWithCompany(RegisterVM registerVm, string role);
+        Task Delete(Guid id);
+        Task RegisterUserWithCompany(RegisterDTO register, string role);
         Task<List<Sector>> GetSectorsAsync();
         Task<AppUserVM> GetCurrentUserInfo(string userName);
+        Task<List<AppUserVM>> GetAllUsers();
+        Task<List<RegisterVM>> GetAllRegistrations();
     }
 }

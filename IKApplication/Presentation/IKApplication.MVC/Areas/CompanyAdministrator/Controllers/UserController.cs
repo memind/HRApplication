@@ -1,5 +1,6 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,11 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //Todo: Get all users and send to view
-            return View();
+            var users = await _appUserService.GetAllUsers();
+            return View(users);
         }
         [HttpGet]
         public async Task<IActionResult> ProfileDetails()

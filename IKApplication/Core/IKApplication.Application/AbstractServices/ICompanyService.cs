@@ -7,6 +7,7 @@ namespace IKApplication.Application.AbstractServices
     {
         Task Create(CompanyCreateDTO createCompanyDTO);
         Task Update(CompanyUpdateDTO updateCompanyDTO);
+        Task Delete(Guid id);
         Task<List<CompanyVM>> GetAllCompanies();
         Task<CompanyUpdateDTO> GetById(Guid id);
     }

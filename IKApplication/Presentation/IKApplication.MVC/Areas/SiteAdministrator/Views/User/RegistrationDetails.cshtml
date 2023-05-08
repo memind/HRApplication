@@ -1,0 +1,121 @@
+﻿@{
+    AppUserUpdateDTO user = ViewBag.User;
+    CompanyUpdateDTO company = ViewBag.Company;
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <h5 class="card-header">User Info</h5>
+                <form>
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="@user.Email" class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.Email" type="text" class="form-control" placeholder="Email" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.Name" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.Name" type="text" class="form-control" placeholder="Name" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.SecondName" class="col-sm-3 col-form-label">Second Name</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.SecondName" type="text" class="form-control" placeholder="SecondName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.Surname" class="col-sm-3 col-form-label">Surname</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.Surname" type="text" class="form-control" placeholder="Surname" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.Title" class="col-sm-3 col-form-label">Title</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.Title" type="text" class="form-control" placeholder="Title" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.BloodGroup" class="col-sm-3 col-form-label">Blood Group</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.BloodGroup" type="text" class="form-control" placeholder="BloodGroup" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.Profession" class="col-sm-3 col-form-label">Profession</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.Profession" type="text" class="form-control" placeholder="Profession" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.BirthDate" class="col-sm-3 col-form-label">BirthDate</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.BirthDate" type="text" class="form-control" placeholder="BirthDate" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@user.IdentityId" class="col-sm-3 col-form-label">Identity Number</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@user.IdentityId" type="text" class="form-control" placeholder="IdentityId" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <h5 class="card-header">Company Info</h5>
+                <form>
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="@company.Name" class="col-sm-3 col-form-label">Company Name</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@company.Name" type="text" class="form-control" placeholder="Company Name" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@company.Email" class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@company.Email" type="text" class="form-control" placeholder="Email" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@company.PhoneNumber" class="col-sm-3 col-form-label">Phone Number</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@company.PhoneNumber" type="text" class="form-control" placeholder="Phone Number" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@company.SectorId" class="col-sm-3 col-form-label">Sector</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@company.SectorId" type="text" class="form-control" placeholder="SectorId" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="@company.NumberOfEmployees" class="col-sm-3 col-form-label">Number Of Employees</label>
+                            <div class="col-sm-9">
+                                <input asp-for="@company.NumberOfEmployees" type="text" class="form-control" placeholder="Number Of Employees" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a asp-controller="User" asp-action="AcceptRegistration" asp-route-userId="@user.Id" asp-route-companyId="@company.Id">
+                <button class="btn btn-success" type="button">Accept</button>
+            </a>
+            <a asp-controller="User" asp-action="DeclineRegistration" asp-route-userId="@user.Id" asp-route-companyId="@company.Id">
+                <button class="btn btn-danger" type="button">Decline</button>
+            </a>
+        </div>
+    </div>
+</div>
