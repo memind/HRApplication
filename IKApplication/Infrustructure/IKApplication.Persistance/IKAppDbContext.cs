@@ -3,8 +3,6 @@ using IKApplication.Persistance.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using System.Reflection;
 
 namespace IKApplication.Persistance
 {
@@ -21,6 +19,9 @@ namespace IKApplication.Persistance
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new AppUserConfig());
+            builder.ApplyConfiguration(new CompanyConfig());
+            builder.ApplyConfiguration(new SectorConfig());
+            builder.ApplyConfiguration(new TitleConfig());
 
             base.OnModelCreating(builder);
         }

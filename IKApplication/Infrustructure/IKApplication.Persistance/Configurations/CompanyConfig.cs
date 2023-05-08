@@ -13,8 +13,8 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.Name).IsRequired(true);
             builder.Property(x => x.Email).IsRequired(true);
             builder.Property(x => x.PhoneNumber).IsRequired(true);
-            builder.Property(x => x.Sector).IsRequired(true);
             builder.Property(x => x.NumberOfEmployees).IsRequired(true);
+            builder.Property(x => x.SectorId).IsRequired(true);
         }
     }
 }

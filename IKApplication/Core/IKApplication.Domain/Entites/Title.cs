@@ -13,9 +13,9 @@ namespace IKApplication.Domain.Entites
         // Entity properties
         public Guid Id { get; set; }
         public string TitleName { get; set; }
+        public Guid CompanyId { get; set; }
 
         // Navigation properties
-        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
     }
 }
