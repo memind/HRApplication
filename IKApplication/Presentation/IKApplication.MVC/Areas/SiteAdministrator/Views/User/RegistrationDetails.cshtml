@@ -36,15 +36,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="@user.Title" class="col-sm-3 col-form-label">Title</label>
+                            <label for="@user.TitleId" class="col-sm-3 col-form-label">Title</label>
                             <div class="col-sm-9">
-                                <input asp-for="@user.Title" type="text" class="form-control" placeholder="Title" disabled>
+                                <select asp-for="@user.TitleId" type="text" class="form-control" asp-items="@(new SelectList(Model.Titles,"Id","Name"))" disabled></select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="@user.BloodGroup" class="col-sm-3 col-form-label">Blood Group</label>
                             <div class="col-sm-9">
-                                <input asp-for="@user.BloodGroup" type="text" class="form-control" placeholder="BloodGroup" disabled>
+                                <select asp-for="@user.BloodGroup" type="text" class="form-control" asp-items="@Html.GetEnumSelectList<BloodGroup>()" disabled></select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -60,9 +60,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="@user.IdentityId" class="col-sm-3 col-form-label">Identity Number</label>
+                            <label for="@user.IdentityNumber" class="col-sm-3 col-form-label">Identity Number</label>
                             <div class="col-sm-9">
-                                <input asp-for="@user.IdentityId" type="text" class="form-control" placeholder="IdentityId" disabled>
+                                <input asp-for="@user.IdentityNumber" type="text" class="form-control" placeholder="Identity Number" disabled>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <div class="form-group row">
                             <label for="@company.SectorId" class="col-sm-3 col-form-label">Sector</label>
                             <div class="col-sm-9">
-                                <input asp-for="@company.SectorId" type="text" class="form-control" placeholder="SectorId" disabled>
+                                <select asp-for="@company.SectorId" type="text" class="form-control" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))" disabled></select>
                             </div>
                         </div>
                         <div class="form-group row">

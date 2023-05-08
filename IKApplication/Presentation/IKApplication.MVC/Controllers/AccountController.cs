@@ -52,42 +52,35 @@ namespace IKApplication.MVC.Controllers
             return View(loginDTO);
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> Register()
-        {
-            var sectors = await _appUserService.GetSectorsAsync();
-
-            List<SelectListItem> sectorsSelectList = (from s in sectors select new SelectListItem { Text = s.Name, Value = s.Id.ToString() }).ToList();
-            ViewBag.Sectors = sectorsSelectList;
-            return View(new RegisterDTO { SectorList = sectors });
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterDTO registerModel)
-        {
-
-            if (ModelState.IsValid)
-            {
-                await _appUserService.RegisterUserWithCompany(registerModel, "Company Administrator");
-                _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
-                // SendEmail(...);
-                return RedirectToAction("Index", "Home");
-            }
-
-            var sectors = await _appUserService.GetSectorsAsync();
-            registerModel.SectorList = sectors;
-
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Registration" });
-
-            return View(registerModel);
-        }
-
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _appUserService.LogOut();
             return RedirectToAction("Login");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Register()
+        {
+            return View(await _appUserService.CreateRegister());
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterDTO model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                await _appUserService.RegisterUserWithCompany(model, "Company Administrator");
+                _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
+                // SendEmail(...);
+                return RedirectToAction("Login", "Account");
+            }
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Registration" });
+
+            return View(model);
         }
     }
 }

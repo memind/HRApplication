@@ -9,15 +9,15 @@ namespace IKApplication.Application.AbstractServices
     {
         Task<AppUserUpdateDTO> GetByUserName(string userName);
         Task<AppUserUpdateDTO> GetById(Guid id);
+        Task<List<AppUserVM>> GetAllUsers();
+        Task<AppUserVM> GetCurrentUserInfo(string userName);
+        Task<List<RegisterVM>> GetAllRegistrations();
         Task<bool> Login(LoginDTO model);
         Task LogOut();
         Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role);
         Task UpdateUser(AppUserUpdateDTO model);
         Task Delete(Guid id);
+        Task<RegisterDTO> CreateRegister();
         Task RegisterUserWithCompany(RegisterDTO register, string role);
-        Task<List<Sector>> GetSectorsAsync();
-        Task<AppUserVM> GetCurrentUserInfo(string userName);
-        Task<List<AppUserVM>> GetAllUsers();
-        Task<List<RegisterVM>> GetAllRegistrations();
     }
 }

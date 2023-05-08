@@ -20,8 +20,8 @@ namespace IKApplication.Domain.Entites
 
         // Navigation Properties
         public Sector Sector { get; set; }
-        public List<AppUser> CompanyManagers { get; set; }
-        public List<Title> Titles { get; set; }
+        public List<AppUser>? CompanyManagers { get; set; }
+        public List<Title>? Titles { get; set; }
 
         // Create new Lists in constructor
         public Company()

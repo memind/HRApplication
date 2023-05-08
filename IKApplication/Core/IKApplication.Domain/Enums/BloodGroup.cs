@@ -5,20 +5,20 @@ namespace IKApplication.Domain.Enums
     public enum BloodGroup
     {
         [Display(Name = "A+")]
-        APositive,
+        APositive = 1,
         [Display(Name = "A-")]
-        ANegative,
+        ANegative = 2,
         [Display(Name = "B+")]
-        BPositive,
+        BPositive = 3,
         [Display(Name = "B-")]
-        BNegative,
+        BNegative = 4,
         [Display(Name = "AB+")]
-        ABPositive,
+        ABPositive = 5,
         [Display(Name = "AB-")]
-        ABNegative,
+        ABNegative = 6,
         [Display(Name = "O+")]
-        OPositive,
+        OPositive = 7,
         [Display(Name = "O-")]
-        ONegative
+        ONegative = 8
     }
 }

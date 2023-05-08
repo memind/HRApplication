@@ -64,15 +64,15 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label asp-for="UserTitle" class="form-label">Title</label><br />
-                                                <span asp-validation-for="UserTitle" class="text-danger"></span>
-                                                <input asp-for="UserTitle" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Title" aria-describedby="defaultFormControlHelp">
+                                                <label asp-for="UserTitleId" class="form-label">Title</label><br />
+                                                <span asp-validation-for="UserTitleId" class="text-danger"></span>
+                                                <select asp-for="UserTitleId" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" asp-items="@(new SelectList(Model.Titles,"Id","Name"))" aria-describedby="defaultFormControlHelp"></select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label asp-for="UserBloodGroup" class="form-label">Blood Group</label><br />
                                                 <span asp-validation-for="UserBloodGroup" class="text-danger"></span>
-                                                <input asp-for="UserBloodGroup" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Blood Group" aria-describedby="defaultFormControlHelp">
+                                                <select asp-for="UserBloodGroup" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" asp-items="@Html.GetEnumSelectList<BloodGroup>()" aria-describedby="defaultFormControlHelp"><</select>
                                             </div>
 
                                             <div class="form-group">
@@ -88,9 +88,9 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label asp-for="UserIdentityId" class="form-label">Identity Id</label><br />
-                                                <span asp-validation-for="UserIdentityId" class="text-danger"></span>
-                                                <input asp-for="UserIdentityId" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Identity ID" aria-describedby="defaultFormControlHelp">
+                                                <label asp-for="UserIdentityNumber" class="form-label">Identity Number</label><br />
+                                                <span asp-validation-for="UserIdentityNumber" class="text-danger"></span>
+                                                <input asp-for="UserIdentityNumber" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Identity Number" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
@@ -142,7 +142,7 @@
                                             <div class="form-group">
                                                 <label asp-for="CompanySectorId">Sector</label><br />
                                                 <span asp-validation-for="CompanySectorId" class="text-danger"></span>
-                                                <select class="form-control mb-3 auth-form-transparent" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.SectorList,"Id","Name"))"></select>
+                                                <select class="form-control mb-3 auth-form-transparent" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))"></select>
                                             </div>
 
                                             <div class="form-group">

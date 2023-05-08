@@ -8,7 +8,7 @@ namespace IKApplication.Persistance.Configurations
         public void Configure(EntityTypeBuilder<Title> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.TitleName).IsRequired(true).HasMaxLength(30);
+            builder.Property(x => x.Name).IsRequired(true).HasMaxLength(30);
             builder.Property(x => x.CompanyId).IsRequired(true);
         }
     }

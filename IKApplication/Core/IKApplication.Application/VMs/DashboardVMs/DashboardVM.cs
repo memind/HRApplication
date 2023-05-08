@@ -7,9 +7,5 @@ namespace IKApplication.Application.VMs.DashboardVMs
         public int TotalCompanyCount { get; set; }
         public int TotalCompanyManagerCount { get; set; }
         public List<SectorVM> Sectors { get; set; }
-        public DashboardVM()
-        {
-            Sectors = new List<SectorVM>();
-        }
     }
 }

@@ -178,7 +178,7 @@ namespace IKApplication.Persistance.Migrations
 
                     b.HasIndex("SectorId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>
@@ -205,7 +205,7 @@ namespace IKApplication.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sectors");
+                    b.ToTable("Sectors", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

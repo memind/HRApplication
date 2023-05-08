@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
-using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.SectorVMs;
+using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
-using IKApplication.Persistance.ConcreteRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -19,45 +19,118 @@ namespace IKApplication.Infrastructure.ConcreteServices
         private readonly IAppUserRepository _appUserRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly ISectorRepository _sectorRepository;
+        private readonly ITitleRepository _titleRepository;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
         //Dependency Injection
-        public AppUserService(IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper, ICompanyRepository companyRepository, ISectorRepository sectorRepository)
+        public AppUserService(IAppUserRepository appUserRepository, ICompanyRepository companyRepository, ISectorRepository sectorRepository, ITitleRepository titleRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper)
         {
             _appUserRepository = appUserRepository;
+            _companyRepository = companyRepository;
+            _sectorRepository = sectorRepository;
+            _titleRepository = titleRepository;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
-            _companyRepository = companyRepository;
-            _sectorRepository = sectorRepository;
         }
+
         //USerName ile AppUser tablosunda bulunan (eğer varsa) AppUser satrını çekeriz ve UpdateProfileDTO nesnesini doldururuz.
         public async Task<AppUserUpdateDTO> GetByUserName(string userName)
         {
-            AppUserUpdateDTO result = await _appUserRepository.GetFilteredFirstOrDefault(
+            AppUserUpdateDTO model = await _appUserRepository.GetFilteredFirstOrDefault(
                 select: x => new AppUserUpdateDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
                     SecondName = x.SecondName,
                     Surname = x.Surname,
-                    Title = x.Title,
                     BloodGroup = x.BloodGroup,
                     Profession = x.Profession,
                     BirthDate = x.BirthDate,
-                    IdentityId = x.IdentityId,
+                    IdentityNumber = x.IdentityNumber,
                     Email = x.Email,
                     ImagePath = x.ImagePath,
-                    CompanyId = x.CompanyId,
                     CreateDate = x.CreateDate,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
                 },
-                where: x => x.UserName == userName,
-                include: x => x.Include(x => x.Company));
+                where: x => x.UserName == userName);
 
-            return result;
+            if (model != null)
+            {
+                model.Companies = await _companyRepository.GetFilteredList(
+                        select: x => new CompanyVM
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Email = x.Email,
+                            PhoneNumber = x.PhoneNumber,
+                            SectorName = x.Sector.Name,
+                            NumberOfEmployees = x.NumberOfEmployees,
+                        },
+                        where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                        orderBy: x => x.OrderBy(x => x.CreateDate),
+                        include: x => x.Include(x => x.Sector));
+
+                model.Titles = await _titleRepository.GetFilteredList(
+                        select: x => new TitleVM
+                        {
+                            Id = x.Id,
+                            Name = x.Name
+                        },
+                        where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                        orderBy: x => x.OrderBy(x => x.CreateDate));
+
+                return model;
+            }
+
+            return null;
         }
+
+        public async Task<AppUserUpdateDTO> GetById(Guid id)
+        {
+            AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == id);
+
+            if (appUser != null)
+            {
+                var model = _mapper.Map<AppUserUpdateDTO>(appUser);
+
+                if (model != null)
+                {
+                    model.Companies = await _companyRepository.GetFilteredList(
+                            select: x => new CompanyVM
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Email = x.Email,
+                                PhoneNumber = x.PhoneNumber,
+                                SectorName = x.Sector.Name,
+                                NumberOfEmployees = x.NumberOfEmployees,
+                            },
+                            where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                            orderBy: x => x.OrderBy(x => x.CreateDate),
+                            include: x => x.Include(x => x.Sector));
+
+                    model.Titles = await _titleRepository.GetFilteredList(
+                            select: x => new TitleVM
+                            {
+                                Id = x.Id,
+                                Name = x.Name
+                            },
+                            where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                            orderBy: x => x.OrderBy(x => x.CreateDate));
+
+                    return model;
+                }
+
+                return null;
+            }
+
+            return null;
+        }
+
         public async Task<List<AppUserVM>> GetAllUsers()
         {
             var users = await _appUserRepository.GetFilteredList(
@@ -67,19 +140,20 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     Name = x.Name,
                     SecondName = x.SecondName,
                     Surname = x.Surname,
-                    Title = x.Title,
                     BloodGroup = x.BloodGroup,
                     Profession = x.Profession,
                     BirthDate = x.BirthDate,
-                    IdentityId = x.IdentityId,
-                    CompanyId = x.CompanyId,
-                    CompanyName = x.Company.Name,
+                    IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
                     UserName = x.UserName,
                     Email = x.Email,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
+                    CompanyName = x.Company.Name,
+                    Title = x.Title.Name,
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
-                include: x => x.Include(x => x.Company));
+                include: x => x.Include(x => x.Company).Include(x => x.Title));
 
             foreach (var user in users)
             {
@@ -88,9 +162,62 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             return users;
         }
+
+        public async Task<AppUserVM> GetCurrentUserInfo(string userName)
+        {
+            AppUserVM model = await _appUserRepository.GetFilteredFirstOrDefault(
+                select: x => new AppUserVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    BloodGroup = x.BloodGroup,
+                    Profession = x.Profession,
+                    BirthDate = x.BirthDate,
+                    IdentityNumber = x.IdentityNumber,
+                    ImagePath = x.ImagePath,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
+                    CompanyName = x.Company.Name,
+                    Title = x.Title.Name,
+                },
+                where: x => x.UserName == userName,
+                include: x => x.Include(x => x.Company).Include(x => x.Title));
+
+            model.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(userName));
+
+            return model;
+        }
+
+        public async Task<List<RegisterVM>> GetAllRegistrations()
+        {
+            var registers = await _appUserRepository.GetFilteredList(
+                select: x => new RegisterVM
+                {
+                    UserId = x.Id,
+                    UserName = x.Name,
+                    UserSecondName = x.SecondName,
+                    UserSurname = x.Surname,
+                    UserTitle = x.Title.Name,
+                    UserEmail = x.Email,
+                    CompanyId = x.CompanyId,
+                    CompanyName = x.Company.Name,
+                    CompanySector = x.Company.Sector.Name,
+                    NumberOfEmployees = x.Company.NumberOfEmployees
+                },
+                where: x => (x.Status == Status.Passive),
+                include: x => x.Include(x => x.Company).Include(x => x.Title));
+
+            return registers;
+        }
+
         public async Task<bool> Login(LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
+
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 await _signInManager.SignInAsync(user, true);
@@ -98,6 +225,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return false;
+        }
+
+        public async Task LogOut()
+        {
+            await _signInManager.SignOutAsync();
         }
 
         public async Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role)
@@ -114,25 +246,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return result;
-        }
-
-        public async Task Delete(Guid id)
-        {
-            AppUser user = await _userManager.FindByIdAsync(id.ToString());
-
-            if (user != null)
-            {
-                user.DeleteDate = DateTime.Now;
-                user.Status = Status.Deleted;
-
-                await _appUserRepository.Delete(user);
-            }
-        }
-
-        //sistemden çıkıç için kullanırız. User bilgileri sessiondan silinir.
-        public async Task LogOut()
-        {
-            await _signInManager.SignOutAsync();
         }
 
         public async Task UpdateUser(AppUserUpdateDTO model)
@@ -152,13 +265,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.Name = model.Name;
                 user.SecondName = model.SecondName;
                 user.Surname = model.Surname;
-                user.Title = model.Title;
                 user.BloodGroup = model.BloodGroup;
                 user.Profession = model.Profession;
                 user.BirthDate = model.BirthDate;
-                user.IdentityId = model.IdentityId;
+                user.IdentityNumber = model.IdentityNumber;
                 user.ImagePath = model.ImagePath;
                 user.CompanyId = model.CompanyId;
+                user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
                 user.UpdateDate = model.UpdateDate;
                 user.Status = model.Status;
@@ -167,23 +280,44 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
         }
 
-        public async Task<AppUserUpdateDTO> GetById(Guid id)
+        public async Task Delete(Guid id)
         {
-            AppUser appUser = await _appUserRepository.GetDefault(x => x.Id == id);
+            AppUser user = await _userManager.FindByIdAsync(id.ToString());
 
-            if (appUser != null)
+            if (user != null)
             {
-                var model = _mapper.Map<AppUserUpdateDTO>(appUser);
+                user.DeleteDate = DateTime.Now;
+                user.Status = Status.Deleted;
 
-                return model;
+                await _appUserRepository.Delete(user);
             }
-
-            return null;
         }
-
-        public async Task<List<Sector>> GetSectorsAsync()
+        
+        public async Task<RegisterDTO> CreateRegister()
         {
-            return await _sectorRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
+            RegisterDTO model = new RegisterDTO();
+
+            model.Titles = await _titleRepository.GetFilteredList(
+                    select: x => new TitleVM
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    },
+                    where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                    orderBy: x => x.OrderBy(x => x.CreateDate));
+
+            model.Sectors = await _sectorRepository.GetFilteredList(
+                    select: x => new SectorVM
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        CompanyCount = x.Companies.Count,
+                    },
+                    where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.Companies));
+
+            return model;
         }
 
         public async Task RegisterUserWithCompany(RegisterDTO register, string role)
@@ -194,10 +328,10 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 Name = register.CompanyName,
                 Email = register.CompanyEmail,
                 PhoneNumber = register.CompanyPhoneNumber,
-                SectorId = register.CompanySectorId,
                 NumberOfEmployees = register.CompanyNumberOfEmployees,
                 CreateDate = register.CompanyCreateDate,
-                Status = register.CompanyStatus
+                Status = register.CompanyStatus,
+                SectorId = register.CompanySectorId
             };
 
             AppUser newUser = new AppUser()
@@ -205,79 +339,30 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 Name = register.UserName,
                 SecondName = register.UserSecondName,
                 Surname = register.UserSurname,
-                Title = register.UserTitle,
                 BloodGroup = register.UserBloodGroup,
                 Profession = register.UserProfession,
                 BirthDate = register.UserBirthDate,
-                IdentityId = register.UserIdentityId,
-                Email = register.UserEmail,
+                IdentityNumber = register.UserIdentityNumber,
                 ImagePath = register.UserImagePath,
                 CreateDate = register.UserCreateDate,
                 Status = register.UserStatus,
+                Email = register.UserEmail,
                 CompanyId = newCompany.Id,
-                Company = newCompany
+                TitleId = register.UserTitleId,
             };
 
             newUser.UserName = register.UserEmail;
 
             if (register.UserPassword == register.UserConfirmPassword)
             {
-                await _companyRepository.Create(newCompany);
                 var result = await _userManager.CreateAsync(newUser, string.IsNullOrEmpty(register.UserPassword) ? "" : register.UserPassword);
 
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(newUser, role);
+                    await _companyRepository.Create(newCompany);
                 }
             }
-        }
-        public async Task<AppUserVM> GetCurrentUserInfo(string userName)
-        {
-            AppUserVM result = await _appUserRepository.GetFilteredFirstOrDefault(
-                select: x => new AppUserVM
-                {
-                    Name = x.Name,
-                    SecondName = x.SecondName,
-                    Surname = x.Surname,
-                    Title = x.Title,
-                    BloodGroup = x.BloodGroup,
-                    Profession = x.Profession,
-                    BirthDate = x.BirthDate,
-                    IdentityId = x.IdentityId,
-                    CompanyId = x.CompanyId,
-                    CompanyName = x.Company.Name,
-                    ImagePath = x.ImagePath,
-                    UserName = x.UserName,
-                    Email = x.Email,
-                },
-                where: x => x.UserName == userName,
-                include: x => x.Include(x => x.Company));
-
-            result.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(userName));
-
-            return result;
-        }
-
-        public async Task<List<RegisterVM>> GetAllRegistrations()
-        {
-            var registers = await _appUserRepository.GetFilteredList(
-                select: x => new RegisterVM
-                {
-                    UserId = x.Id,
-                    UserName = x.Name,
-                    UserSecondName = x.SecondName,
-                    UserSurname = x.Surname,
-                    UserTitle = x.Title,
-                    UserEmail = x.Email,
-                    CompanyId = x.CompanyId,
-                    CompanyName = x.Company.Name,
-                    CompanySector = x.Company.Sector.Name,
-                    NumberOfEmployees = x.Company.NumberOfEmployees
-                },
-                where: x => (x.Status == Status.Passive),
-                include: x => x.Include(x => x.Company));
-
-            return registers;
         }
     }
 }
