@@ -25,8 +25,8 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public IFormFile? UserUploadPath { get; set; }
         public DateTime UserCreateDate => DateTime.Now;
         public Status UserStatus => Status.Passive;
-        public Guid UserCompanyId { get; set; }
-        public Guid? UserTitleId { get; set; }
+        public Guid? UserCompanyId { get; set; }
+        public Guid UserTitleId { get; set; }
         public List<TitleVM>? Titles { get; set; }
 
 

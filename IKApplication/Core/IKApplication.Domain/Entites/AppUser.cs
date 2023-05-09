@@ -25,11 +25,11 @@ namespace IKApplication.Domain.Entites
         public string ImagePath { get; set; }  // Fotoğraf Yolu
         [NotMapped]   // DB ile bağlantı olmasın
         public IFormFile? UploadPath { get; set; }  // IFormFile usinglere eklendi.  (using Microsoft.AspNetCore.Http;)  bir tane resim seçeceğiz resmi tutabilmek için bunu kullanacağız. Veritabanı ile bağlantı olmadan.  ImagePath veritabanı ile bağlantılı olacak, resmin yolu
-        public Guid CompanyId { get; set; }
-        public Guid? TitleId { get; set; }   // Unvan
+        public Guid? CompanyId { get; set; }
+        public Guid TitleId { get; set; }   // Unvan
 
         // Navigation Properties
-        public Company Company { get; set; }
-        public Title? Title { get; set; }
+        public Company? Company { get; set; }
+        public Title Title { get; set; }
     }
 }

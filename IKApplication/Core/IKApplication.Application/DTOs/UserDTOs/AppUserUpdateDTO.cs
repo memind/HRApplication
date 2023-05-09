@@ -25,8 +25,8 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
-        public Guid CompanyId { get; set; }
-        public Guid? TitleId { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Guid TitleId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
     }

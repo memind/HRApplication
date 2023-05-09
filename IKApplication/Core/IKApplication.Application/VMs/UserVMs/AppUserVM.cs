@@ -18,10 +18,10 @@ namespace IKApplication.Application.VMs.UserVMs
         public string ImagePath { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public Guid CompanyId { get; set; }
-        public Guid? TitleId { get; set; }
-        public string CompanyName { get; set; }
-        public string? Title { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Guid TitleId { get; set; }
+        public string? CompanyName { get; set; }
+        public string Title { get; set; }
         public List<string> Roles { get; set; }
     }
 }
