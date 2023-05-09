@@ -8,6 +8,7 @@ namespace IKApplication.Persistance
 {
     public class IKAppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
+
         public IKAppDbContext(DbContextOptions<IKAppDbContext> options) : base(options) { }
 
         // DbSet
@@ -24,6 +25,8 @@ namespace IKApplication.Persistance
             builder.ApplyConfiguration(new TitleConfig());
 
             base.OnModelCreating(builder);
+
+            SeedData.Seed(builder);
         }
     }
 }

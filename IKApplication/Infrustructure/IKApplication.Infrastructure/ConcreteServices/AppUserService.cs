@@ -203,7 +203,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     UserSurname = x.Surname,
                     UserTitle = x.Title.Name,
                     UserEmail = x.Email,
-                    CompanyId = x.CompanyId,
+                    CompanyId = x.Company.Id,
                     CompanyName = x.Company.Name,
                     CompanySector = x.Company.Sector.Name,
                     NumberOfEmployees = x.Company.NumberOfEmployees

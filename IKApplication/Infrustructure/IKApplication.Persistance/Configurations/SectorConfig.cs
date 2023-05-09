@@ -10,7 +10,7 @@ namespace IKApplication.Persistance.Configurations
             base.Configure(builder);
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).IsRequired(true).HasMaxLength(30);
+            builder.Property(x => x.Name).IsRequired(true);
         }
     }
 }

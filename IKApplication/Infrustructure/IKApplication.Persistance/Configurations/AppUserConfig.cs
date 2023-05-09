@@ -11,8 +11,8 @@ namespace IKApplication.Persistance.Configurations
             base.Configure(builder);
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.UserName).IsRequired(true).HasMaxLength(30);
-            builder.Property(x => x.Email).IsRequired(true).HasMaxLength(30);
+            builder.Property(x => x.UserName).IsRequired(true).HasMaxLength(50);
+            builder.Property(x => x.Email).IsRequired(true).HasMaxLength(50);
             builder.Property(x => x.Name).IsRequired(true).HasMaxLength(30);
             builder.Property(x => x.SecondName).IsRequired(false).HasMaxLength(30);
             builder.Property(x => x.Surname).IsRequired(true).HasMaxLength(30);
