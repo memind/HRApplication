@@ -24,11 +24,12 @@ namespace IKApplication.MVC.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = "/")
+        public async Task<IActionResult> Login(string returnUrl = "/")
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                var model = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+                return RedirectToAction("Index", "Dashboard", new { area = model.Roles[0].Replace(" ", "") });
             }
 
             ViewData["ReturnURL"] = returnUrl;
