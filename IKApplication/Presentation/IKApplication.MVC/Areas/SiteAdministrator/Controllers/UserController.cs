@@ -19,11 +19,12 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         private readonly IToastNotification _toast;
         private readonly IEmailService _emailService;
 
-        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast)
+        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast, IEmailService emailService)
         {
             _appUserService = appUserSerives;
             _companyService = companyService;
             _toast = toast;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -55,18 +56,18 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             if (company != null)
             {
                 await _companyService.Update(company);
-                _toast.AddSuccessToastMessage(Messages.Company.Update(company.Name), new ToastrOptions { Title = "Updating Company" });
+                _toast.AddSuccessToastMessage(Messages.Company.Accept(company.Name), new ToastrOptions { Title = "Company Request" });
             }
 
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Company" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Company Request" });
 
             if (user != null)
             {
                 await _appUserService.UpdateUser(user);
-                _toast.AddSuccessToastMessage(Messages.User.Update(user.Email), new ToastrOptions { Title = "Updating User" });
+                _toast.AddSuccessToastMessage(Messages.User.Accept(user.Email), new ToastrOptions { Title = "User Request" });
             }
 
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "User Request" });
 
             var subject = "Registration Request Accepted";
             var body = "Your registration request has been accepted. To Login, click the link : ikapp.azurewebsites.net";

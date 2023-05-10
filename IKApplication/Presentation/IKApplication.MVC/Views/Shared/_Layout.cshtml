@@ -53,5 +53,6 @@
     <script src="~/assets/js/todolist.js"></script>
     <!-- endinject -->
     @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
 </body>
 </html>

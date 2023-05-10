@@ -294,7 +294,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 await _appUserRepository.Delete(user);
             }
         }
-        
+
         public async Task<RegisterDTO> CreateRegister()
         {
             RegisterDTO model = new RegisterDTO();
@@ -358,12 +358,12 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             if (register.UserPassword == register.UserConfirmPassword)
             {
+                await _companyRepository.Create(newCompany);
                 var result = await _userManager.CreateAsync(newUser, string.IsNullOrEmpty(register.UserPassword) ? "" : register.UserPassword);
 
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(newUser, role);
-                    await _companyRepository.Create(newCompany);
                 }
             }
         }

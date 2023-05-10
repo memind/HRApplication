@@ -15,7 +15,7 @@ builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptio
 {
     PositionClass = ToastPositions.TopRight,
     TimeOut = 3000
-}); ;
+});
 
 builder.Services.AddDbContext<IKAppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

@@ -18,6 +18,11 @@
             {
                 return $"User {email} deleted successfully!";
             }
+
+            public static string Accept(string mail)
+            {
+                return $"User {mail}'s request accepted successfully!";
+            }
         }
 
         public static class Personal
@@ -89,6 +94,11 @@
             public static string Delete(string name)
             {
                 return $"Company {name} deleted successfully!";
+            }
+
+            public static string Accept(string name)
+            {
+                return $"Company {name}'s request accepted successfully!";
             }
         }
 
