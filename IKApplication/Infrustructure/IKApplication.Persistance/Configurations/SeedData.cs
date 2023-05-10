@@ -84,7 +84,7 @@ namespace IKApplication.Persistance.Configurations
             {
                 var name = SeedDataConstantsandMethods.MaleNames[random.Next(SeedDataConstantsandMethods.MaleNames.Count)];
                 var surname = SeedDataConstantsandMethods.Surnames[random.Next(SeedDataConstantsandMethods.Surnames.Count)];
-                var email = (name + "." + surname + "@" + SeedDataConstantsandMethods.DomainNames[random.Next(SeedDataConstantsandMethods.DomainNames.Count)]).ToLower().Replace(" ", "").Replace('ğ', 'g').Replace('ü', 'u').Replace('ş', 's').Replace('ı', 'i').Replace('ö', 'o').Replace('ç', 'c');
+                var email = "test" + (i + 1) + "@test.com";
 
                 var user = new AppUser()
                 {
