@@ -17,6 +17,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         private readonly IAppUserService _appUserService;
         private readonly ICompanyService _companyService;
         private readonly IToastNotification _toast;
+        private readonly IEmailService _emailService;
 
         public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast)
         {
@@ -67,6 +68,10 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
 
+            var subject = "Registration Request Accepted";
+            var body = "Your registration request has been accepted. To Login, click the link : ikapp.azurewebsites.net";
+            _emailService.SendMail(user.Email, subject, body);
+
             return RedirectToAction("RegistrationList");
         }
 
@@ -74,6 +79,12 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         {
             await _appUserService.Delete(userId);
             await _companyService.Delete(companyId);
+
+            var user = await _appUserService.GetById(userId);
+
+            var subject = "Registration Request Declined";
+            var body = "We are sorry to tell you that your registration request has been declined. Check your information and register again";
+            _emailService.SendMail(user.Email, subject, body);
 
             return RedirectToAction("RegistrationList");
         }

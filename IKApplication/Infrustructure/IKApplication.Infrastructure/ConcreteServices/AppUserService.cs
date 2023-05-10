@@ -78,7 +78,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         select: x => new TitleVM
                         {
                             Id = x.Id,
-                            Name = x.Name
+                            Name = x.Name,
+                            CompanyId = x.CompanyId
                         },
                         where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                         orderBy: x => x.OrderBy(x => x.CreateDate));
@@ -117,7 +118,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                             select: x => new TitleVM
                             {
                                 Id = x.Id,
-                                Name = x.Name
+                                Name = x.Name,
+                                CompanyId = x.CompanyId
                             },
                             where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                             orderBy: x => x.OrderBy(x => x.CreateDate));
@@ -301,7 +303,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     select: x => new TitleVM
                     {
                         Id = x.Id,
-                        Name = x.Name
+                        Name = x.Name,
+                        CompanyId = x.CompanyId
                     },
                     where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                     orderBy: x => x.OrderBy(x => x.CreateDate));

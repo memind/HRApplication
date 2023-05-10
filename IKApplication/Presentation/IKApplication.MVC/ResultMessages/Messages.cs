@@ -92,12 +92,23 @@
             }
         }
 
-
         public static class Register
         {
             public static string Success()
             {
                 return $"Your registration application created successfully!";
+            }
+        }
+
+        public static class ResetPasswordMessage
+        {
+            public static string Success()
+            {
+                return $"Your password changed successfully!";
+            }
+            public static string Error()
+            {
+                return $"The email address you entered is not registered!";
             }
         }
 

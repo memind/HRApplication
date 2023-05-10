@@ -89,7 +89,7 @@
                                 <div class="form-group">
                                     <label asp-for="CompanyId" class="form-label">Company</label><br />
                                     <span asp-validation-for="CompanyId" class="text-danger"></span>
-                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
+                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))" onchange="changeTitleList()"></select>
                                 </div>
 
                                 <div class="form-group">

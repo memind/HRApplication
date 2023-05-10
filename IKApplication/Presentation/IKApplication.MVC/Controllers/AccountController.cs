@@ -1,12 +1,12 @@
-﻿using IKApplication.Application.AbstractRepositories;
-using IKApplication.Application.AbstractServices;
+﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NToastNotify;
 
 namespace IKApplication.MVC.Controllers
@@ -16,11 +16,18 @@ namespace IKApplication.MVC.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly IToastNotification _toast;
+        private readonly IEmailService _emailService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IAppUserService appUserService, IToastNotification toast)
+
+        public AccountController(IAppUserService appUserService, IToastNotification toast, IEmailService emailService, UserManager<AppUser> userManager, IConfiguration configuration)
         {
             _appUserService = appUserService;
             _toast = toast;
+            _emailService = emailService;
+            _userManager = userManager;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -75,13 +82,90 @@ namespace IKApplication.MVC.Controllers
             {
                 await _appUserService.RegisterUserWithCompany(model, "Company Administrator");
                 _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
-                // SendEmail(...);
+
+                string subject = "Registration Request Arrived";
+                string body = model.CompanyName + " sent a registration request. See request by clicking the link: ikapp.azurewebsites.net/SiteAdministrator/User/RegistrationList";
+
+                _emailService.SendMail(_configuration.GetSection("AdminEmails").GetSection("DefaultAdminEmail").Value, subject, body);
+
                 return RedirectToAction("Login", "Account");
             }
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Registration" });
 
             return View(model);
+        }
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    _toast.AddErrorToastMessage(Messages.ResetPasswordMessage.Error(), new ToastrOptions { Title = "Error" });
+                    return View(model); //yönlendirilecek view düzenle
+                }
+
+                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { email = user.Email, Code = code });
+                string subject = "Password Reset";
+                string body = "To reset your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
+
+                _emailService.SendMail(user.Email, subject, body);
+
+
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(string email, string Code)
+        {
+            var model = new ResetPasswordVM()
+            {
+                Code = Code,
+                Email = email
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+
+            if (result.Succeeded)
+            {
+                _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Success(), new ToastrOptions { Title = "Succes" });
+                return RedirectToAction("Login", "Account");
+
+            }
+            return View(model);
+
+        }
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
     }
 }

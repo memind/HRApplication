@@ -138,7 +138,7 @@ namespace IKApplication.Persistance.Configurations
                     Id = companyId,
                     CreateDate = DateTime.Now,
                     Status = Status.Passive,
-                    Name = userSurname + " " + SeedDataConstantsandMethods.CompanyTypes[random.Next(SeedDataConstantsandMethods.CompanyTypes.Count)],
+                    Name = companyName,
                     Email = companyEmail,
                     PhoneNumber = SeedDataConstantsandMethods.PhoneNumberGenerator(),
                     NumberOfEmployees = random.Next(100) + 1,

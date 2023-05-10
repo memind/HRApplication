@@ -38,7 +38,7 @@
                         <div class="form-group row">
                             <label for="@user.TitleId" class="col-sm-3 col-form-label">Title</label>
                             <div class="col-sm-9">
-                                <select asp-for="@user.TitleId" type="text" class="form-control" asp-items="@(new SelectList(user.Titles,"Id","Name"))" disabled></select>
+                                <select asp-for="@user.TitleId" type="text" class="form-control" asp-items="@(new SelectList(user.Titles.Where(x => x.CompanyId == user.CompanyId),"Id","Name"))" disabled></select>
                             </div>
                         </div>
                         <div class="form-group row">

@@ -44,6 +44,7 @@
                                         <div asp-validation-summary="ModelOnly"></div>
                                         <div class="card-body">
                                             <h4>Personal Info</h4>
+                                            <br />
 
                                             <div class="form-group">
                                                 <label asp-for="UserName" class="form-label">Name</label><br />
@@ -54,13 +55,13 @@
                                             <div class="form-group">
                                                 <label asp-for="UserSecondName" class="form-label">Second Name</label><br />
                                                 <span asp-validation-for="UserSecondName" class="text-danger"></span>
-                                                <input asp-for="UserSecondName" type="email" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Second Name" aria-describedby="defaultFormControlHelp">
+                                                <input asp-for="UserSecondName" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Second Name" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
                                                 <label asp-for="UserSurname" class="form-label">Surname</label><br />
                                                 <span asp-validation-for="UserSurname" class="text-danger"></span>
-                                                <input asp-for="UserSurname" type="tel" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Surname" aria-describedby="defaultFormControlHelp">
+                                                <input asp-for="UserSurname" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Surname" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
@@ -96,7 +97,7 @@
                                             <div class="form-group">
                                                 <label asp-for="UserEmail" class="form-label">Email</label><br />
                                                 <span asp-validation-for="UserEmail" class="text-danger"></span>
-                                                <input asp-for="UserEmail" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Email" aria-describedby="defaultFormControlHelp">
+                                                <input asp-for="UserEmail" type="email" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Your Email" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
@@ -114,7 +115,7 @@
 
                                         <div class="card-body">
                                             <h4>Company Info</h4>
-
+                                            <br />
                                             <div class="form-group">
                                                 <label asp-for="CompanyName" class="form-label">Company Name</label><br />
                                                 <span asp-validation-for="CompanyName" class="text-danger"></span>
@@ -124,13 +125,13 @@
                                             <div class="form-group">
                                                 <label asp-for="CompanyEmail" class="form-label">Company Email</label><br />
                                                 <span asp-validation-for="CompanyEmail" class="text-danger"></span>
-                                                <input asp-for="CompanyEmail" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Email" aria-describedby="defaultFormControlHelp">
+                                                <input asp-for="CompanyEmail" type="email" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Email" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
                                                 <label asp-for="CompanyPhoneNumber" class="form-label">Company Phone Number</label><br />
                                                 <span asp-validation-for="CompanyPhoneNumber" class="text-danger"></span>
-                                                <input asp-for="CompanyPhoneNumber" type="text" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Phone Number" aria-describedby="defaultFormControlHelp">
+                                                <input asp-for="CompanyPhoneNumber" type="tel" class="form-control mb-3 auth-form-transparent" id="defaultFormControlInput" placeholder="Enter Company Phone Number" aria-describedby="defaultFormControlHelp">
                                             </div>
 
                                             <div class="form-group">
@@ -145,9 +146,18 @@
                                                 <select class="form-control mb-3 auth-form-transparent" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))"></select>
                                             </div>
 
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-success btn-block">Register</button>
+                                            <div class="forgot-pass">
+                                                <a asp-action="ForgotPassword">Forgot Password</a>
                                             </div>
+                                            
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-outline-secondary btn-rounded btn-lg">Register</button>
+                                            </div>
+                                            
+                                            <p class="sign-up">
+                                                "Already have an Account?"
+                                                <a asp-action="Login">Sign In</a>
+                                            </p>
                                         </div>
                                     </form>
                                 </div>
