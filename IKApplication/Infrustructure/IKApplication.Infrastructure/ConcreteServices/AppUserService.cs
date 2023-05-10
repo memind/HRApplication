@@ -220,7 +220,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                await _signInManager.SignInAsync(user, true);
+                await _signInManager.SignInAsync(user, false);
                 return true;
             }
 
