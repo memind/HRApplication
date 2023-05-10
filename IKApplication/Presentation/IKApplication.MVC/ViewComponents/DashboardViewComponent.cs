@@ -6,7 +6,7 @@ namespace IKApplication.MVC.ViewComponents
 {
     public class DashboardViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(List<DashboardVM> dashboard)
+        public async Task<IViewComponentResult> InvokeAsync(DashboardVM dashboard)
         {
             return View(dashboard);
         }
