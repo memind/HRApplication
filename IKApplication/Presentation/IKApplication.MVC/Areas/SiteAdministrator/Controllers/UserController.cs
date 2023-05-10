@@ -50,10 +50,22 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         public async Task<IActionResult> AcceptRegistration(Guid userId, Guid companyId)
         {
             var company = await _companyService.GetById(companyId);
-            await _companyService.Update(company);
-
             var user = await _appUserService.GetById(userId);
-            await _appUserService.UpdateUser(user);
+            if (company != null)
+            {
+                await _companyService.Update(company);
+                _toast.AddSuccessToastMessage(Messages.Company.Update(company.Name), new ToastrOptions { Title = "Updating Company" });
+            }
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Company" });
+
+            if (user != null)
+            {
+                await _appUserService.UpdateUser(user);
+                _toast.AddSuccessToastMessage(Messages.User.Update(user.Email), new ToastrOptions { Title = "Updating User" });
+            }
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
 
             return RedirectToAction("RegistrationList");
         }

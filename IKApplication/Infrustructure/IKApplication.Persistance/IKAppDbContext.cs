@@ -3,13 +3,12 @@ using IKApplication.Persistance.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using System.Reflection;
 
 namespace IKApplication.Persistance
 {
     public class IKAppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
+
         public IKAppDbContext(DbContextOptions<IKAppDbContext> options) : base(options) { }
 
         // DbSet
@@ -21,8 +20,13 @@ namespace IKApplication.Persistance
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new AppUserConfig());
+            builder.ApplyConfiguration(new CompanyConfig());
+            builder.ApplyConfiguration(new SectorConfig());
+            builder.ApplyConfiguration(new TitleConfig());
 
             base.OnModelCreating(builder);
+
+            SeedData.Seed(builder);
         }
     }
 }

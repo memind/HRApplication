@@ -12,10 +12,17 @@ namespace IKApplication.Domain.Entites
 
         // Entity properties
         public Guid Id { get; set; }
-        public string TitleName { get; set; }
+        public string Name { get; set; }
+        public Guid CompanyId { get; set; }
 
         // Navigation properties
-        public Guid CompanyId { get; set; }
         public Company Company { get; set; }
+        public List<AppUser>? AppUsers { get; set; }
+
+        // Create new Lists in constructor
+        public Title()
+        {
+            AppUsers = new List<AppUser>();
+        }
     }
 }

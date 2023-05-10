@@ -16,18 +16,36 @@ namespace IKApplication.Infrastructure.ConcreteServices
         private readonly ISectorRepository _sectorRepository;
         private readonly IMapper _mapper;
 
-        public CompanyService(ICompanyRepository companyRepository, IMapper mapper, ISectorRepository sectorRepository)
+        public CompanyService(ICompanyRepository companyRepository, ISectorRepository sectorRepository, IMapper mapper)
         {
             _companyRepository = companyRepository;
-            _mapper = mapper;
             _sectorRepository = sectorRepository;
+            _mapper = mapper;
         }
 
-        public async Task Create(CompanyCreateDTO createCompanyDTO)
+        public async Task<CompanyUpdateDTO> GetById(Guid id)
         {
-            var model = _mapper.Map<Company>(createCompanyDTO);
-            await _companyRepository.Create(model);
+            Company company = await _companyRepository.GetDefault(x => x.Id == id);
 
+            if (company != null)
+            {
+                var model = _mapper.Map<CompanyUpdateDTO>(company);
+
+                model.Sectors = await _sectorRepository.GetFilteredList(
+                        select: x => new SectorVM
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            CompanyCount = x.Companies.Count,
+                        },
+                        where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                        orderBy: x => x.OrderBy(x => x.CreateDate),
+                        include: x => x.Include(x => x.Companies));
+
+                return model;
+            }
+
+            return null;
         }
 
         public async Task<List<CompanyVM>> GetAllCompanies()
@@ -42,10 +60,17 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     SectorName = x.Sector.Name,
                     NumberOfEmployees = x.NumberOfEmployees
                 },
-                where: x => x.Status != Status.Passive,
-                orderBy: x => x.OrderBy(x => x.Name),
+                where: x => (x.Status == Status.Active || x.Status == Status.Modified),
+                orderBy: x => x.OrderBy(x => x.CreateDate),
                 include: x => x.Include(x => x.Sector));
+
             return companies;
+        }
+
+        public async Task Create(CompanyCreateDTO createCompanyDTO)
+        {
+            var model = _mapper.Map<Company>(createCompanyDTO);
+            await _companyRepository.Create(model);
         }
 
         public async Task Update(CompanyUpdateDTO updateCompanyDTO)
@@ -65,31 +90,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
                 await _companyRepository.Delete(company);
             }
-        }
-
-        public async Task<CompanyUpdateDTO> GetById(Guid id)
-        {
-            Company company = await _companyRepository.GetDefault(x => x.Id == id);
-
-            if (company != null)
-            {
-                var model = _mapper.Map<CompanyUpdateDTO>(company);
-
-                model.Sectors = await _sectorRepository.GetFilteredList(
-                        select: x => new SectorVM
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            CompanyCount = x.Companies.Count,
-                        },
-                        where: x => x.Status != Status.Passive,
-                        orderBy: x => x.OrderBy(x => x.Name),
-                        include: x => x.Include(x => x.Companies));
-
-                return model;
-            }
-
-            return null;
         }
     }
 }

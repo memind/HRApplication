@@ -17,7 +17,8 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _dashboardService.GetDashboardInfos());
+            var model = await _dashboardService.GetDashboardInfos();
+            return View(model);
         }
     }
 }

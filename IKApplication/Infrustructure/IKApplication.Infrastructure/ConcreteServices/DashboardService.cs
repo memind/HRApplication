@@ -39,14 +39,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
             // 2) Group them by sector
             var result = companies.OrderBy(company => company.SectorName)
                 .GroupBy(company => company.SectorName)
-                .Select(x => new { Name = x.Key, CompanyCount = x.Count()});
+                .Select(x => new { Name = x.Key, CompanyCount = x.Count() });
 
             // 3) Convert them into DashboardCompaniesCountBySectorDto and add to list
             foreach (var item in result)
             {
                 SectorVM sector = new SectorVM
-                {   Name = item.Name, 
-                    CompanyCount = item.CompanyCount };
+                {
+                    Name = item.Name,
+                    CompanyCount = item.CompanyCount
+                };
 
                 Sectors.Add(sector);
             }

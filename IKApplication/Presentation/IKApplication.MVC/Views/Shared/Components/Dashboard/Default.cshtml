@@ -1,0 +1,50 @@
+﻿@model DashboardVM
+
+@*Company and company managers count cards*@
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyCount</h5></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Manager Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyManagerCount</h5></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+@*Company count by sector table*@
+<div class="card-body">
+    <h4 class="card-title">Sector Analysis</h4>
+    <div class="row">
+        <div class="table-sorter-wrapper col-lg-12 table-responsive">
+            <table id="sortable-table-1" class="table">
+                <thead>
+                    <tr>
+                        <th>Sector Name</th>
+                        <th>Company Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sectorInfo in Model.Sectors)
+                    {
+                        <tr>
+                            <td><p>@sectorInfo.Name</p></td>
+                            <td><p>@sectorInfo.CompanyCount</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

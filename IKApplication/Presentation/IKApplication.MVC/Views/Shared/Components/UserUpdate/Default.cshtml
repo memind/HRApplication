@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">@ViewBag.Title</h5>
-                <form asp-controller="User" asp-action="Update" method="post">
+                <form asp-controller="User" asp-action="Update" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
@@ -29,6 +29,9 @@
                                 <input type="hidden" asp-for="UpdateDate" />
                                 <input type="hidden" asp-for="Status" />
                                 <input type="hidden" asp-for="Email" />
+                                <input type="hidden" asp-for="Titles" />
+                                <input type="hidden" asp-for="Companies" />
+
                                 <div class="form-group">
                                     <label asp-for="Name" class="form-label">Name</label><br />
                                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -48,15 +51,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="Title" class="form-label">Title</label><br />
-                                    <span asp-validation-for="Title" class="text-danger"></span>
-                                    <input asp-for="Title" type="text" class="form-control mb-3" placeholder="Enter Title">
+                                    <label asp-for="TitleId" class="form-label">Title</label><br />
+                                    <span asp-validation-for="TitleId" class="text-danger"></span>
+                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles,"Id","Name"))"></select>
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
                                     <span asp-validation-for="BloodGroup" class="text-danger"></span>
-                                    <input asp-for="BloodGroup" type="text" class="form-control mb-3" placeholder="Enter Blood Group">
+                                    <select asp-for="BloodGroup" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
                                 </div>
 
                                 <div class="form-group">
@@ -72,15 +75,21 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="IdentityId" class="form-label">Identity Number</label><br />
-                                    <span asp-validation-for="IdentityId" class="text-danger"></span>
-                                    <input asp-for="IdentityId" type="text" class="form-control mb-3" placeholder="Enter Identity Number">
+                                    <label asp-for="IdentityNumber" class="form-label">Identity Number</label><br />
+                                    <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                                    <input asp-for="IdentityNumber" type="text" class="form-control mb-3" placeholder="Enter Identity Number">
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Email" class="form-label">Email</label><br />
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                     <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email" disabled>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CompanyId" class="form-label">Company</label><br />
+                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
                                 </div>
 
                                 <div class="form-group">
