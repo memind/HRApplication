@@ -24,7 +24,6 @@
                             <div class="col-md-8">
                                 <input type="hidden" asp-for="Id" />
                                 <input type="hidden" asp-for="ImagePath" />
-                                <input type="hidden" asp-for="CompanyId" />
                                 <input type="hidden" asp-for="CreateDate" />
                                 <input type="hidden" asp-for="UpdateDate" />
                                 <input type="hidden" asp-for="Status" />
@@ -51,9 +50,15 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label asp-for="CompanyId" class="form-label">Company</label><br />
+                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
+                                </div>
+
+                                <div class="form-group">
                                     <label asp-for="TitleId" class="form-label">Title</label><br />
                                     <span asp-validation-for="TitleId" class="text-danger"></span>
-                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles,"Id","Name"))"></select>
+                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))"></select>
                                 </div>
 
                                 <div class="form-group">
@@ -87,12 +92,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="CompanyId" class="form-label">Company</label><br />
-                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
-                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))" onchange="changeTitleList()"></select>
-                                </div>
-
-                                <div class="form-group">
                                     <label asp-for="Password" class="form-label">Password</label><br />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                     <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
@@ -115,3 +114,20 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#CompanyId').change(function () {
+            var companyId = $(this).val();
+            var options = "";
+            @foreach (var title in Model.Titles)
+            {
+                <text>
+                    if (companyId == "@title.CompanyId")
+                        options += "<option value='@title.Id'>@title.Name</option>";
+                </text>
+            }
+            document.getElementById("TitleId").innerHTML = options;
+        });
+    })
+</script>
