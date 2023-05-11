@@ -1,5 +1,6 @@
 ﻿using IKApplication.Domain.Entites;
 using IKApplication.Persistance.Configurations;
+using IKApplication.Persistance.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

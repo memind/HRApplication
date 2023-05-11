@@ -12,7 +12,7 @@ namespace IKApplication.Application.DTOs.CompanyDTOs
         public int NumberOfEmployees { get; set; }
         public Guid SectorId { get; set; }
         public DateTime CreateDate => DateTime.Now;
-        public Status Status => Status.Active;
+        public Status Status => Status.Passive;
         public List<SectorVM>? Sectors { get; set; }
     }
 }

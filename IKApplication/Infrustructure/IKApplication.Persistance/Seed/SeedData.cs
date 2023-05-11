@@ -2,9 +2,8 @@
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
-namespace IKApplication.Persistance.Configurations
+namespace IKApplication.Persistance.Seed
 {
     public static class SeedData
     {

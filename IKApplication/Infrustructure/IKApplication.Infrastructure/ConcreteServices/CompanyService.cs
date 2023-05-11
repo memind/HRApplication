@@ -13,14 +13,14 @@ namespace IKApplication.Infrastructure.ConcreteServices
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
-        private readonly ISectorRepository _sectorRepository;
         private readonly IMapper _mapper;
+        private readonly ISectorService _sectorService;
 
-        public CompanyService(ICompanyRepository companyRepository, ISectorRepository sectorRepository, IMapper mapper)
+        public CompanyService(ICompanyRepository companyRepository, IMapper mapper, ISectorService sectorService)
         {
             _companyRepository = companyRepository;
-            _sectorRepository = sectorRepository;
             _mapper = mapper;
+            _sectorService = sectorService;
         }
 
         public async Task<CompanyUpdateDTO> GetById(Guid id)
@@ -31,26 +31,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
             {
                 var model = _mapper.Map<CompanyUpdateDTO>(company);
 
-                model.Sectors = await _sectorRepository.GetFilteredList(
-                        select: x => new SectorVM
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            CompanyCount = x.Companies.Count,
-                        },
-                        where: x => (x.Status == Status.Active || x.Status == Status.Modified),
-                        orderBy: x => x.OrderBy(x => x.CreateDate),
-                        include: x => x.Include(x => x.Companies));
+                model.Sectors = await _sectorService.GetAllSectors();
 
                 return model;
             }
-
             return null;
         }
 
         public async Task<List<CompanyVM>> GetAllCompanies()
         {
-            var companies = await _companyRepository.GetFilteredList(
+            return await _companyRepository.GetFilteredList(
                 select: x => new CompanyVM
                 {
                     Id = x.Id,
@@ -63,8 +53,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
                 include: x => x.Include(x => x.Sector));
-
-            return companies;
         }
 
         public async Task Create(CompanyCreateDTO createCompanyDTO)

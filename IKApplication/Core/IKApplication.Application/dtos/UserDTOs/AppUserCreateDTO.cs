@@ -23,7 +23,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         [NotMapped]
         public IFormFile? UploadPath { get; set; }
         public DateTime CreateDate => DateTime.Now;
-        public Status Status => Status.Active;
+        public Status Status => Status.Passive;
         public Guid? CompanyId { get; set; }
         public Guid TitleId { get; set; }
         public List<CompanyVM>? Companies { get; set; }

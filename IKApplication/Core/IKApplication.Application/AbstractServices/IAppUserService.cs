@@ -1,6 +1,5 @@
 ﻿using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
-using IKApplication.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
 
 namespace IKApplication.Application.AbstractServices
@@ -10,6 +9,7 @@ namespace IKApplication.Application.AbstractServices
         Task<AppUserUpdateDTO> GetByUserName(string userName);
         Task<AppUserUpdateDTO> GetById(Guid id);
         Task<List<AppUserVM>> GetAllUsers();
+        Task<List<AppUserVM>> GetUsersByRole(string role);
         Task<AppUserVM> GetCurrentUserInfo(string userName);
         Task<List<RegisterVM>> GetAllRegistrations();
         Task<bool> Login(LoginDTO model);

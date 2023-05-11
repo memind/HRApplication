@@ -23,8 +23,6 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string UserImagePath { get; set; } = $"/images/defaultuser.jpg";
         [NotMapped]
         public IFormFile? UserUploadPath { get; set; }
-        public DateTime UserCreateDate => DateTime.Now;
-        public Status UserStatus => Status.Passive;
         public Guid? UserCompanyId { get; set; }
         public Guid UserTitleId { get; set; }
         public List<TitleVM>? Titles { get; set; }

@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace IKApplication.Persistance
+﻿namespace IKApplication.Persistance.Seed
 {
     public static class SeedDataConstantsandMethods
     {
@@ -241,7 +239,7 @@ namespace IKApplication.Persistance
             }
 
             IdNumber += (oddSum * 7 + evenSum * 9) % 10;
-            IdNumber += (oddSum * 8) % 10;
+            IdNumber += oddSum * 8 % 10;
 
             return IdNumber;
         }
@@ -267,7 +265,7 @@ namespace IKApplication.Persistance
             for (int i = 0; i < length; i++)
             {
                 int x = _random.Next(str.Length);
-                result += str[x]; 
+                result += str[x];
             }
 
             return result;
