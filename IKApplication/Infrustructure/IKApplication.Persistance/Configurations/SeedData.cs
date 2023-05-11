@@ -37,7 +37,7 @@ namespace IKApplication.Persistance.Configurations
             {
                 Id = Guid.NewGuid(),
                 Name = "Site Administrator",
-                NormalizedName = "SITE ADMINITRATOR",
+                NormalizedName = "SITE ADMINISTRATOR",
                 ConcurrencyStamp = SeedDataConstantsandMethods.StringGenerator(32)
             });
 
@@ -45,7 +45,7 @@ namespace IKApplication.Persistance.Configurations
             {
                 Id = Guid.NewGuid(),
                 Name = "Company Administrator",
-                NormalizedName = "COMPANY ADMINITRATOR",
+                NormalizedName = "COMPANY ADMINISTRATOR",
                 ConcurrencyStamp = SeedDataConstantsandMethods.StringGenerator(32)
             });
 

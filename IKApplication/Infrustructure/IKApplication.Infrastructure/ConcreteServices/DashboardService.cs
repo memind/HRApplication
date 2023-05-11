@@ -3,6 +3,7 @@ using IKApplication.Application.AbstractServices;
 using IKApplication.Application.VMs.DashboardVMs;
 using IKApplication.Application.VMs.SectorVMs;
 using IKApplication.Domain.Entites;
+using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace IKApplication.Infrastructure.ConcreteServices
@@ -27,7 +28,15 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task<int> GetCompanyManagersCount()
         {
             var companyManagers = await _userManager.GetUsersInRoleAsync("Company Administrator");
-            return companyManagers.Count();
+            var companyCount = 0;
+
+            foreach (var companyManager in companyManagers)
+            {
+                if (companyManager.Status == Status.Active || companyManager.Status == Status.Modified)
+                    companyCount++;
+            }
+
+            return companyCount;
         }
 
         public async Task<List<SectorVM>> GetSectorList()
