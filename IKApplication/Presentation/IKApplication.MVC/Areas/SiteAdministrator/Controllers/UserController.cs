@@ -58,16 +58,20 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
                 await _companyService.Update(company);
                 _toast.AddSuccessToastMessage(Messages.Company.Accept(company.Name), new ToastrOptions { Title = "Company Request" });
             }
-
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Company Request" });
+            else
+            {
+                _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Company Request" });
+            }
 
             if (user != null)
             {
                 await _appUserService.UpdateUser(user);
                 _toast.AddSuccessToastMessage(Messages.User.Accept(user.Email), new ToastrOptions { Title = "User Request" });
             }
-
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "User Request" });
+            else
+            {
+                _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "User Request" });
+            }
 
             var subject = "Registration Request Accepted";
             var body = "Your registration request has been accepted. To Login, click the link : ikapp.azurewebsites.net";

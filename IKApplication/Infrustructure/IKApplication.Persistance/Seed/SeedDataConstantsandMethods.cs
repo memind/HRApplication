@@ -228,7 +228,7 @@
             oddSum += _random.Next(8) + 1;
             IdNumber += oddSum;
 
-            for (int i = 2; i < 9; i++)
+            for (int i = 2; i < 10; i++)
             {
                 int number = _random.Next(9);
                 IdNumber += number;
