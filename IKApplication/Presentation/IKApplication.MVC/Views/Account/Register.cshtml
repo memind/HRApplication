@@ -11,8 +11,6 @@
                 <h2 class="card-header">Register </h2>
                 <form asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly"></div>
-                    <input asp-for="Titles" type="hidden" />
-                    <input asp-for="Sectors" type="hidden" />
                     <div class="card-body">
                         <h4>Personal Info</h4>
                         <br />
@@ -36,9 +34,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="UserTitleId" class="form-label">Title</label><br />
-                            <span asp-validation-for="UserTitleId" class="text-danger"></span>
-                            <select asp-for="UserTitleId" type="text" class="form-control mb-3 auth-form-transparent" asp-items="@(new SelectList(Model.Titles,"Id","Name"))"></select>
+                            <label asp-for="UserTitle" class="form-label">Title</label><br />
+                            <span asp-validation-for="UserTitle" class="text-danger"></span>
+                            <input asp-for="UserTitle" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Title"></input>
                         </div>
 
                         <div class="form-group">

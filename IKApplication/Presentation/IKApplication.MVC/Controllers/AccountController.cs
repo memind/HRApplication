@@ -19,15 +19,16 @@ namespace IKApplication.MVC.Controllers
         private readonly IEmailService _emailService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ISectorService _sectorService;
 
-
-        public AccountController(IAppUserService appUserService, IToastNotification toast, IEmailService emailService, UserManager<AppUser> userManager, IConfiguration configuration)
+        public AccountController(IAppUserService appUserService, IToastNotification toast, IEmailService emailService, UserManager<AppUser> userManager, IConfiguration configuration, ISectorService sectorService)
         {
             _appUserService = appUserService;
             _toast = toast;
             _emailService = emailService;
             _userManager = userManager;
             _configuration = configuration;
+            _sectorService = sectorService;
         }
 
         [AllowAnonymous]
@@ -88,10 +89,17 @@ namespace IKApplication.MVC.Controllers
 
                 _emailService.SendMail(_configuration.GetSection("AdminEmails").GetSection("DefaultAdminEmail").Value, subject, body);
 
+                subject = "Registration Request Sent";
+                body = " Your registration request has been arrived. We will send you the result via Email.";
+
+                _emailService.SendMail(model.UserEmail, subject, body);
+
                 return RedirectToAction("Login", "Account");
             }
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Registration" });
+
+            model.Sectors = await _sectorService.GetAllSectors();
 
             return View(model);
         }
@@ -113,7 +121,7 @@ namespace IKApplication.MVC.Controllers
                 if (user == null)
                 {
                     _toast.AddErrorToastMessage(Messages.ResetPasswordMessage.Error(), new ToastrOptions { Title = "Error" });
-                    return View(model); //yönlendirilecek view düzenle
+                    return View(model);
                 }
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -132,18 +140,20 @@ namespace IKApplication.MVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(string email, string Code)
         {
-            var model = new ResetPasswordVM()
+            var model = new ResetPasswordVM();
+
+            if (email != null &&  Code != null)
             {
-                Code = Code,
-                Email = email
-            };
+                model.Code = Code;
+                model.Email = email;
+            }
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-
         public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
         {
             if (!ModelState.IsValid)
@@ -151,17 +161,23 @@ namespace IKApplication.MVC.Controllers
                 return View(model);
             }
             var user = await _userManager.FindByEmailAsync(model.Email);
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
 
-            if (result.Succeeded)
+            if (user != null)
             {
-                _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Success(), new ToastrOptions { Title = "Succes" });
-                return RedirectToAction("Login", "Account");
+                var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
 
+                if (result.Succeeded)
+                {
+                    _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Success(), new ToastrOptions { Title = "Succes" });
+                    return RedirectToAction("Login", "Account");
+                }
             }
-            return View(model);
 
+            _toast.AddErrorToastMessage(Messages.ResetPasswordMessage.Error(), new ToastrOptions { Title = "Error" });
+            
+            return View(model);
         }
+
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {

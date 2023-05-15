@@ -9,6 +9,7 @@ namespace IKApplication.Application.AbstractServices
         Task<AppUserUpdateDTO> GetByUserName(string userName);
         Task<AppUserUpdateDTO> GetById(Guid id);
         Task<List<AppUserVM>> GetAllUsers();
+        Task<List<AppUserVM>> GetUsersByCompany(Guid companyId);
         Task<List<AppUserVM>> GetUsersByRole(string role);
         Task<AppUserVM> GetCurrentUserInfo(string userName);
         Task<List<RegisterVM>> GetAllRegistrations();

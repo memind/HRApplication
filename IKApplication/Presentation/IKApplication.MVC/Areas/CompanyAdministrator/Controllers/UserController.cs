@@ -24,8 +24,9 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
             //Todo: Get all users and send to view
-            var users = await _appUserService.GetAllUsers();
+            var users = await _appUserService.GetUsersByCompany(user.CompanyId);
             return View(users);
         }
         [HttpGet]
