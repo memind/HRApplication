@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
@@ -114,6 +115,39 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             return users;
         }
+
+        public async Task<List<AppUserVM>> GetUsersByCompany(Guid companyId)
+        {
+            var users = await _appUserRepository.GetFilteredList(
+                select: x => new AppUserVM
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    BloodGroup = x.BloodGroup,
+                    Profession = x.Profession,
+                    BirthDate = x.BirthDate,
+                    IdentityNumber = x.IdentityNumber,
+                    ImagePath = x.ImagePath,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
+                    CompanyName = x.Company.Name,
+                    Title = x.Title.Name,
+                },
+                where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
+                include: x => x.Include(x => x.Company).Include(x => x.Title));
+
+            foreach (var user in users)
+            {
+                user.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(user.UserName));
+            }
+
+            return users;
+        }
+
         public async Task<List<AppUserVM>> GetUsersByRole(string role)
         {
             List<AppUserVM> model = new List<AppUserVM>();
@@ -263,8 +297,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
         {
             RegisterDTO model = new RegisterDTO();
 
-            model.Titles = await _titleService.GetAllTitles();
-
             model.Sectors = await _sectorService.GetAllSectors();
 
             return model;
@@ -284,6 +316,15 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             await _companyService.Create(company);
 
+            TitleCreateDTO title = new TitleCreateDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = register.UserTitle,
+                CompanyId = company.Id
+            };
+
+            await _titleService.Create(title);
+
             AppUserCreateDTO user = new AppUserCreateDTO()
             {
                 Name = register.UserName,
@@ -298,7 +339,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 ConfirmPassword = register.UserConfirmPassword,
                 ImagePath = register.UserImagePath,
                 CompanyId = company.Id,
-                TitleId = register.UserTitleId,
+                TitleId = title.Id,
             };
             await CreateUser(user, role);
         }

@@ -28,7 +28,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Update(updateCompanyDTO);
-                _toast.AddSuccessToastMessage(Messages.Company.Create(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
+                _toast.AddSuccessToastMessage(Messages.Company.Update(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
                 return RedirectToAction("Index", "Dashboard");
             }
 

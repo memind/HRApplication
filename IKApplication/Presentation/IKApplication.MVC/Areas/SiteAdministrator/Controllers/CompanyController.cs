@@ -37,11 +37,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _companyService.Update(updateCompanyDTO);
-                _toast.AddSuccessToastMessage(Messages.Company.Update(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
+                _toast.AddSuccessToastMessage(Company.Update(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Company" });
+            _toast.AddErrorToastMessage(Errors.Error(), new ToastrOptions { Title = "Updating Company" });
             return View(updateCompanyDTO);
         }
     }
