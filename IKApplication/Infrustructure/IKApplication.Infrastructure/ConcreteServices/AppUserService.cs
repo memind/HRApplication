@@ -240,6 +240,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             {
                 var appUser = _mapper.Map<AppUser>(model);
                 appUser.UserName = model.Email;
+                appUser.Id = Guid.NewGuid();
 
                 var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
                 if (result.Succeeded)

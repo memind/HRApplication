@@ -47,17 +47,17 @@
         {
             public static string Create(string email)
             {
-                return $"Company admin {email} created successfully!";
+                return $"Company manager {email} created successfully!";
             }
 
             public static string Update(string email)
             {
-                return $"Company admin {email} updated successfully!";
+                return $"Company manager {email} updated successfully!";
             }
 
             public static string Delete(string email)
             {
-                return $"Company admin {email} deleted successfully!";
+                return $"Company manager {email} deleted successfully!";
             }
         }
 
