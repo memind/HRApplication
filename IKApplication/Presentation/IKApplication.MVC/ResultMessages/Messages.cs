@@ -122,6 +122,21 @@
             }
         }
 
+        public static class Expense
+        {
+            public static string Create()
+            {
+                return $"Expense created successfully!";
+            }
+            public static string Update()
+            {
+                return $"Expense updated successfully!";
+            }
+            public static string Delete()
+            {
+                return $"Expense deleted successfully!";
+            }
+        }
         public static class Errors
         {
             public static string Error()

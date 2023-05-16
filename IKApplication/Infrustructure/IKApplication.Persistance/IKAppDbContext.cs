@@ -17,6 +17,7 @@ namespace IKApplication.Persistance
         public DbSet<Company> Companies { get; set; }
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<Title> Titles { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -24,6 +25,7 @@ namespace IKApplication.Persistance
             builder.ApplyConfiguration(new CompanyConfig());
             builder.ApplyConfiguration(new SectorConfig());
             builder.ApplyConfiguration(new TitleConfig());
+            builder.ApplyConfiguration(new ExpenseConfig());
 
             base.OnModelCreating(builder);
 

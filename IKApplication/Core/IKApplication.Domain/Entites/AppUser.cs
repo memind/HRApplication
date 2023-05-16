@@ -29,9 +29,16 @@ namespace IKApplication.Domain.Entites
         public IFormFile? UploadPath { get; set; }  // IFormFile usinglere eklendi.  (using Microsoft.AspNetCore.Http;)  bir tane resim seçeceğiz resmi tutabilmek için bunu kullanacağız. Veritabanı ile bağlantı olmadan.  ImagePath veritabanı ile bağlantılı olacak, resmin yolu
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }   // Unvan
+        //public Guid? ExpenseId { get; set; }
 
         // Navigation Properties
         public Company Company { get; set; }
         public Title Title { get; set; }
+        public List<Expense>? Expenses { get; set; }
+
+        public AppUser()
+        {
+            Expenses = new List<Expense>();
+        }
     }
 }

@@ -1,0 +1,90 @@
+﻿@model List<ExpenseVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">User List</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Short Description</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Expense Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.ShortDescription</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.Type</td>
+                                        <td>@item.ExpenseDate</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete<i class="mdi mdi-play-circle ms-1"></i></button>
+                                           @* <button class="btn btn-outline-warning" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Modal*@
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Deleting Expense</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <p>Are you sure you want to delete this expense?</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button class="btn btn-outline-warning" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal demo-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Expense</h5>
+                <button type="button" class="close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this expense?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-warning" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                <button type="button" class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -23,6 +23,9 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.ImagePath).IsRequired(true);
             builder.Property(x => x.CompanyId).IsRequired(true);
             builder.Property(x => x.TitleId).IsRequired(true);
+            //builder.Property(x => x.ExpenseId).IsRequired(false);
+
+            //builder.HasMany(x => x.Expenses).WithOne(x => x.ExpenseBy).HasForeignKey(x => x.ExpenseById);
         }
     }
 }
