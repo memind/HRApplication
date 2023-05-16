@@ -24,10 +24,12 @@ namespace IKApplication.Domain.Entites
         [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }  // TC Kimlik No - Pasaport no vb.
+        public DateTime JobStartDate { get; set; }  // işe başlama tarihi
         public string ImagePath { get; set; }  // Fotoğraf Yolu
         [NotMapped]   // DB ile bağlantı olmasın
         public IFormFile? UploadPath { get; set; }  // IFormFile usinglere eklendi.  (using Microsoft.AspNetCore.Http;)  bir tane resim seçeceğiz resmi tutabilmek için bunu kullanacağız. Veritabanı ile bağlantı olmadan.  ImagePath veritabanı ile bağlantılı olacak, resmin yolu
         public Guid CompanyId { get; set; }
+        public Guid? AddressId { get; set; }
         public Guid TitleId { get; set; }   // Unvan
         //public Guid? ExpenseId { get; set; }
 
@@ -35,10 +37,15 @@ namespace IKApplication.Domain.Entites
         public Company Company { get; set; }
         public Title Title { get; set; }
         public List<Expense>? Expenses { get; set; }
+        public List<CashAdvance>? CashAdvances { get; set; }
+        public Address? Address { get; set; }
+        public List<Leave>? Leaves { get; set; }
 
         public AppUser()
         {
+            CashAdvances = new List<CashAdvance>();
             Expenses = new List<Expense>();
+            Leaves = new List<Leave>();
         }
     }
 }

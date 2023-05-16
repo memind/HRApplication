@@ -18,6 +18,9 @@ namespace IKApplication.Persistance
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<Title> Titles { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Leave> Leaves { get; set; }
+        public DbSet<CashAdvance> CashAdvances { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,10 +29,13 @@ namespace IKApplication.Persistance
             builder.ApplyConfiguration(new SectorConfig());
             builder.ApplyConfiguration(new TitleConfig());
             builder.ApplyConfiguration(new ExpenseConfig());
-
-            base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new AddressConfig());
+            builder.ApplyConfiguration(new LeaveConfig());
+            builder.ApplyConfiguration(new CashAdvanceConfig());
 
             SeedData.Seed(builder);
+            base.OnModelCreating(builder);
+
         }
     }
 }

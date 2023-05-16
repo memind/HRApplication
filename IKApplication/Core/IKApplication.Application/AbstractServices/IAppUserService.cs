@@ -1,4 +1,5 @@
-﻿using IKApplication.Application.DTOs.UserDTOs;
+﻿using IKApplication.Application.DTOs.PersonalDTO;
+using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,5 +21,7 @@ namespace IKApplication.Application.AbstractServices
         Task Delete(Guid id);
         Task<RegisterDTO> CreateRegister();
         Task RegisterUserWithCompany(RegisterDTO register, string role);
+        Task<IdentityResult> CreatePersonal(PersonalCreateDTO model, string role);
+        Task UpdatePersonal(PersonalUpdateDTO model);
     }
 }
