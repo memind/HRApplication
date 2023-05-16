@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
@@ -343,6 +344,58 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 TitleId = title.Id,
             };
             await CreateUser(user, role);
+        }
+
+        public async Task<IdentityResult> CreatePersonal(PersonalCreateDTO model, string role)
+        {
+            var personal = await _userManager.FindByNameAsync(model.Email);
+
+            if (personal == null && model.Password != null && model.Password == model.ConfirmPassword)
+            {
+                var appPersonal = _mapper.Map<AppUser>(model);
+                appPersonal.UserName = model.Email;
+
+                var result = await _userManager.CreateAsync(appPersonal, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(appPersonal, role);
+                }
+                return result;
+            }
+            return IdentityResult.Failed(new IdentityError() { Code = "Create Error", Description = "User could not created. Check your information." });
+        }
+
+
+        public async Task UpdatePersonal(PersonalUpdateDTO model)
+        {
+            AppUser personal = await _userManager.FindByNameAsync(model.Email);
+
+            if (personal != null)
+            {
+                if (model.Password != null)
+                {
+                    personal.PasswordHash = _userManager.PasswordHasher.HashPassword(personal, model.Password);
+                }
+
+                personal.Name = model.Name;
+                personal.SecondName = model.SecondName;
+                personal.Surname = model.Surname;
+                personal.Email = model.Email;
+                personal.PhoneNumber = model.PhoneNumber;
+                personal.BloodGroup = model.BloodGroup;
+                personal.TitleId = model.TitleId;
+                personal.BirthDate = model.BirthDate;
+                personal.CreateDate = model.CreateDate;
+                personal.JobStartDate = model.JobStartDate;
+                personal.CompanyId = model.CompanyId;
+                personal.IdentityNumber = model.IdentityNumber;
+                personal.ImagePath = model.ImagePath;
+                personal.Status = model.Status;
+
+
+                await _userManager.UpdateAsync(personal);
+            }
         }
     }
 }

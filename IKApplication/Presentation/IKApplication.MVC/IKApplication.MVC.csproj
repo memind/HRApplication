@@ -1,61 +1,59 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Areas\CompanyAdministrator\Data\**" />
-    <Compile Remove="Areas\CompanyAdministrator\Models\**" />
-    <Compile Remove="Areas\SiteAdministrator\Data\**" />
-    <Compile Remove="Areas\SiteAdministrator\Models\**" />
-    <Content Remove="Areas\CompanyAdministrator\Data\**" />
-    <Content Remove="Areas\CompanyAdministrator\Models\**" />
-    <Content Remove="Areas\SiteAdministrator\Data\**" />
-    <Content Remove="Areas\SiteAdministrator\Models\**" />
-    <EmbeddedResource Remove="Areas\CompanyAdministrator\Data\**" />
-    <EmbeddedResource Remove="Areas\CompanyAdministrator\Models\**" />
-    <EmbeddedResource Remove="Areas\SiteAdministrator\Data\**" />
-    <EmbeddedResource Remove="Areas\SiteAdministrator\Models\**" />
-    <None Remove="Areas\CompanyAdministrator\Data\**" />
-    <None Remove="Areas\CompanyAdministrator\Models\**" />
-    <None Remove="Areas\SiteAdministrator\Data\**" />
-    <None Remove="Areas\SiteAdministrator\Models\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Areas\CompanyAdministrator\Data\**" />
+		<Compile Remove="Areas\CompanyAdministrator\Models\**" />
+		<Compile Remove="Areas\SiteAdministrator\Data\**" />
+		<Compile Remove="Areas\SiteAdministrator\Models\**" />
+		<Content Remove="Areas\CompanyAdministrator\Data\**" />
+		<Content Remove="Areas\CompanyAdministrator\Models\**" />
+		<Content Remove="Areas\SiteAdministrator\Data\**" />
+		<Content Remove="Areas\SiteAdministrator\Models\**" />
+		<EmbeddedResource Remove="Areas\CompanyAdministrator\Data\**" />
+		<EmbeddedResource Remove="Areas\CompanyAdministrator\Models\**" />
+		<EmbeddedResource Remove="Areas\SiteAdministrator\Data\**" />
+		<EmbeddedResource Remove="Areas\SiteAdministrator\Models\**" />
+		<None Remove="Areas\CompanyAdministrator\Data\**" />
+		<None Remove="Areas\CompanyAdministrator\Models\**" />
+		<None Remove="Areas\SiteAdministrator\Data\**" />
+		<None Remove="Areas\SiteAdministrator\Models\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Chart.js" Version="3.7.1" />
-    <PackageReference Include="DotNetOpenAuth.OAuth.Core" Version="4.3.4.13329" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
-    <PackageReference Include="NToastNotify" Version="8.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Chart.js" Version="3.7.1" />
+		<PackageReference Include="DotNetOpenAuth.OAuth.Core" Version="4.3.4.13329" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+		<PackageReference Include="NToastNotify" Version="8.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
-    <ProjectReference Include="..\..\Infrustructure\IKApplication.Infrastructure\IKApplication.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Infrustructure\IKApplication.Persistance\IKApplication.Persistance.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
+		<ProjectReference Include="..\..\Infrustructure\IKApplication.Infrastructure\IKApplication.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Infrustructure\IKApplication.Persistance\IKApplication.Persistance.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Personal\Controllers\" />
-    <Folder Include="Areas\Personal\Data\" />
-    <Folder Include="Areas\Personal\Models\" />
-    <Folder Include="Areas\Personal\Views\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Areas\Personal\Data\" />
+		<Folder Include="Areas\Personal\Models\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Areas\SiteAdministrator\Views\Company\Update.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Update="Areas\SiteAdministrator\Views\Company\Update.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>
