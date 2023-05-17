@@ -1,0 +1,57 @@
+﻿@model ExpenseVM
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Expense Details</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="Status" />
+                            <input type="hidden" asp-for="ApprovedById" />
+                            <input type="hidden" asp-for="ExpenseById" />
+
+                            <div class="form-group">
+                                <label asp-for="ShortDescription" class="form-label">Short Description</label><br />
+
+                                <input asp-for="ShortDescription" type="text" class="form-control mb-3" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LongDescription" class="form-label">Long Description</label><br />
+                                <input asp-for="LongDescription" type="text" class="form-control mb-3" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Amount" class="form-label">Amount</label><br />
+                                <input asp-for="Amount" type="text" class="form-control mb-3" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ExpenseDate" class="form-label">Expense Date</label><br />
+                                <input asp-for="ExpenseDate" type="date" class="form-control mb-3" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Type" class="form-label">Type</label><br />
+                                <select asp-for="Type" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<ExpenseType>()" disabled></select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <a asp-controller="Expense" asp-action="AcceptExpense" asp-route-id="@Model.Id">
+                        <button class="btn btn-outline-primary">Accept Expense</button>
+                    </a>
+                    <a asp-controller="Expense" asp-action="RefuseExpense" asp-route-id="@Model.Id">
+                        <button class="btn btn-outline-danger">Refuse Expense</button>
+                    </a>
+                    <a asp-controller="Expense" asp-action="ExpenseRequests">
+                        <button class="btn btn-outline-info">Back to List</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

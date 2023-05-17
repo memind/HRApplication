@@ -18,6 +18,7 @@ namespace IKApplication.Domain.Entites
         public DateTime ExpenseDate { get; set; }
         public Guid ApprovedById { get; set; }
         public Guid ExpenseById { get; set; }
+        public Guid CompanyId { get; set; }
         public ExpenseType Type { get; set; }
         // Navigation Properties
         [NotMapped]

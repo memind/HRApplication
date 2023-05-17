@@ -1,4 +1,5 @@
 ﻿using IKApplication.Application.VMs.SectorVMs;
+using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 
 namespace IKApplication.Application.DTOs.CompanyDTOs
@@ -15,5 +16,10 @@ namespace IKApplication.Application.DTOs.CompanyDTOs
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
         public List<SectorVM>? Sectors { get; set; }
+        public List<AppUser>? CompanyManagers { get; set; }
+        public CompanyUpdateDTO()
+        {
+            CompanyManagers = new List<AppUser>();
+        }
     }
 }

@@ -18,67 +18,67 @@
                         <div class="form-group">
                             <label asp-for="UserName" class="form-label">Name</label><br />
                             <span asp-validation-for="UserName" class="text-danger"></span>
-                            <input asp-for="UserName" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Name" />
+                            <input asp-for="UserName" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Name" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserSecondName" class="form-label">Second Name</label><br />
                             <span asp-validation-for="UserSecondName" class="text-danger"></span>
-                            <input asp-for="UserSecondName" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Second Name" />
+                            <input asp-for="UserSecondName" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Second Name" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserSurname" class="form-label">Surname</label><br />
                             <span asp-validation-for="UserSurname" class="text-danger"></span>
-                            <input asp-for="UserSurname" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Surname" />
+                            <input asp-for="UserSurname" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Surname" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserTitle" class="form-label">Title</label><br />
                             <span asp-validation-for="UserTitle" class="text-danger"></span>
-                            <input asp-for="UserTitle" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Title"></input>
+                            <input asp-for="UserTitle" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Title"></input>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserBloodGroup" class="form-label">Blood Group</label><br />
                             <span asp-validation-for="UserBloodGroup" class="text-danger"></span>
-                            <select asp-for="UserBloodGroup" type="text" class="form-control mb-3 auth-form-transparent" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
+                            <select asp-for="UserBloodGroup" type="text" class="form-control mb-3 auth-form-dark" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserProfession" class="form-label">Profession</label><br />
                             <span asp-validation-for="UserProfession" class="text-danger"></span>
-                            <input asp-for="UserProfession" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Profession" />
+                            <input asp-for="UserProfession" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Profession" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserBirthDate" class="form-label">Birth Date</label><br />
                             <span asp-validation-for="UserBirthDate" class="text-danger"></span>
-                            <input asp-for="UserBirthDate" type="date" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Birth Date" />
+                            <input asp-for="UserBirthDate" type="date" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Birth Date" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserIdentityNumber" class="form-label">Identity Number</label><br />
                             <span asp-validation-for="UserIdentityNumber" class="text-danger"></span>
-                            <input asp-for="UserIdentityNumber" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Your Identity Number" />
+                            <input asp-for="UserIdentityNumber" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Your Identity Number" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserEmail" class="form-label">Email</label><br />
                             <span asp-validation-for="UserEmail" class="text-danger"></span>
-                            <input asp-for="UserEmail" type="email" class="form-control mb-3 auth-form-transparent" />
+                            <input asp-for="UserEmail" type="email" class="form-control mb-3 auth-form-dark" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserPassword" class="form-label">Password</label><br />
                             <span asp-validation-for="UserPassword" class="text-danger"></span>
-                            <input asp-for="UserPassword" type="password" class="form-control mb-3 auth-form-transparent" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <input asp-for="UserPassword" type="password" class="form-control mb-3 auth-form-dark" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="UserConfirmPassword" class="form-label">Confirm Your Password</label><br />
                             <span asp-validation-for="UserConfirmPassword" class="text-danger"></span>
-                            <input asp-for="UserConfirmPassword" type="password" class="form-control mb-3 auth-form-transparent" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <input asp-for="UserConfirmPassword" type="password" class="form-control mb-3 auth-form-dark" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                         </div>
                     </div>
 
@@ -88,31 +88,31 @@
                         <div class="form-group">
                             <label asp-for="CompanyName" class="form-label">Company Name</label><br />
                             <span asp-validation-for="CompanyName" class="text-danger"></span>
-                            <input asp-for="CompanyName" type="text" class="form-control mb-3 auth-form-transparent" placeholder="Enter Company Name" />
+                            <input asp-for="CompanyName" type="text" class="form-control mb-3 auth-form-dark" placeholder="Enter Company Name" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="CompanyEmail" class="form-label">Company Email</label><br />
                             <span asp-validation-for="CompanyEmail" class="text-danger"></span>
-                            <input asp-for="CompanyEmail" type="email" class="form-control mb-3 auth-form-transparent" placeholder="Enter Company Email" />
+                            <input asp-for="CompanyEmail" type="email" class="form-control mb-3 auth-form-dark" placeholder="Enter Company Email" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="CompanyPhoneNumber" class="form-label">Company Phone Number</label><br />
                             <span asp-validation-for="CompanyPhoneNumber" class="text-danger"></span>
-                            <input asp-for="CompanyPhoneNumber" type="tel" class="form-control mb-3 auth-form-transparent" placeholder="Enter Company Phone Number" />
+                            <input asp-for="CompanyPhoneNumber" type="tel" class="form-control mb-3 auth-form-dark" placeholder="Enter Company Phone Number" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="CompanyNumberOfEmployees" class="form-label">Number of Employees</label><br />
                             <span asp-validation-for="CompanyNumberOfEmployees" class="text-danger"></span>
-                            <input asp-for="CompanyNumberOfEmployees" type="number" class="form-control mb-3 auth-form-transparent" placeholder="Enter Number of Employees" />
+                            <input asp-for="CompanyNumberOfEmployees" type="number" class="form-control mb-3 auth-form-dark" placeholder="Enter Number of Employees" />
                         </div>
 
                         <div class="form-group">
                             <label asp-for="CompanySectorId">Sector</label><br />
                             <span asp-validation-for="CompanySectorId" class="text-danger"></span>
-                            <select class="form-control mb-3 auth-form-transparent" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))"></select>
+                            <select class="form-control mb-3 auth-form-dark" asp-for="CompanySectorId" asp-items="@(new SelectList(Model.Sectors,"Id","Name"))"></select>
                         </div>
 
                         <div class="forgot-pass">

@@ -68,5 +68,30 @@
                 </a>
             }
         </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-credit-card"></i>
+                    </span>
+                    <span class="menu-title">Expenses</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="ExpenseRequests">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-credit-card-clock"></i>
+                    </span>
+                    <span class="menu-title">Expense Requests</span>
+                </a>
+            }
+        </li>
+
     </ul>
 </nav>

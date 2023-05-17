@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using System.Data;
+using static IKApplication.MVC.ResultMessages.Messages;
+
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
     [Area("CompanyAdministrator")]
@@ -32,10 +34,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> Index()
         {
             // 1) Mevcut kullaniciyi bul
-            var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             // 2) Mevcut kullanicinin CompanyId'sini kullanarak ilgili sirketin expense'lerini getir
-            var expenses = await _expenseService.GetAllExpenses(expenseBy.CompanyId);
+            var expenses = await _expenseService.GetAllExpenses(user.CompanyId);
 
             return View(expenses);
         }
@@ -52,11 +54,16 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var company = await _companyService.GetById(expenseBy.CompanyId);
-            var companyMap = _mapper.Map<Company>(company);
-            var companyManager = companyMap.CompanyManagers.First();
+            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
 
-            model.ApprovedById = companyManager.Id;
+            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
+            var companyManager = companyManagers.Where(x => x.CompanyId == expenseBy.CompanyId).First();
+
+            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
+
+            model.ApprovedById = companyManagerMap.Id;
             model.ExpenseById = expenseBy.Id;
+            model.CompanyId = expenseBy.CompanyId;
 
             if (ModelState.IsValid)
             {
@@ -90,10 +97,47 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet] 
-        public async Task Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var expense = _expenseService.GetById(id);
             await _expenseService.DeleteExpense(id);
+            _toast.AddSuccessToastMessage(Messages.Expense.Delete(), new ToastrOptions { Title = "Deleting Expense" });
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExpenseRequests()
+        {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var expenseRequests = await _expenseService.GetExpenseRequests(user.CompanyId);
+
+            return View(expenseRequests);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExpenseRequestDetails(Guid id)
+        {
+            var expense = await _expenseService.GetVMById(id);
+            return View(expense);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AcceptExpense(Guid id)
+        {
+            var expense = await _expenseService.GetById(id);
+            await _expenseService.UpdateExpense(expense);
+
+            _toast.AddSuccessToastMessage(Messages.Expense.Accept(expense.ShortDescription), new ToastrOptions { Title = "Accepting Expense" });
+            return RedirectToAction("ExpenseRequests");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RefuseExpense(Guid id)
+        {
+            var expense = await _expenseService.GetById(id);
+            await _expenseService.DeleteExpense(id);
+
+            _toast.AddSuccessToastMessage(Messages.Expense.Refuse(expense.ShortDescription), new ToastrOptions { Title = "Refusing Expense" });
+            return RedirectToAction("ExpenseRequests");
         }
     }
 }
