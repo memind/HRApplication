@@ -9,18 +9,6 @@
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
-                            @*<div class="col-md-4">
-                                <label asp-for="UploadPath" class="form-label">Photo</label>
-                                <div class="form-group">
-                                    <img src="@Model.ImagePath" width="200" />
-                                </div>
-
-                                <div class="form-group">
-                                    <span asp-validation-for="UploadPath" class="text-danger"></span>
-                                    <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
-                                </div>
-                            </div>*@
-
                             <div class="col-md-8">
                                 <input type="hidden" asp-for="Id" />
                                 <input type="hidden" asp-for="ImagePath" />
@@ -29,6 +17,8 @@
                                 <input type="hidden" asp-for="Titles" />
                                 <input type="hidden" asp-for="CompanyId" />
                                 <input type="hidden" asp-for="Companies" />
+                                <input type="hidden" asp-for="Password" />
+                                <input type="hidden" asp-for="ConfirmPassword" />
 
                                 <div class="form-group">
                                     <label asp-for="Name" class="form-label">Name</label><br />
@@ -91,6 +81,12 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
+                                </div>
+
+                                @*<div class="form-group">
                                     <label asp-for="Password" class="form-label">Password</label><br />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                     <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
@@ -100,7 +96,7 @@
                                     <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
                                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
-                                </div>
+                                </div>*@
 
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-block">Create Company Manager</button>

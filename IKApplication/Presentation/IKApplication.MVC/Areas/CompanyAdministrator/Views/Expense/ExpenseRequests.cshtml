@@ -1,11 +1,7 @@
 ﻿@model List<ExpenseVM>
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Expense List</h4>
-        <a asp-controller="Expense" asp-action="Create">
-            <button class="btn btn-outline-primary">Add Expense</button>
-        </a>
-
+        <h4 class="card-title">Expense Requests</h4>
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
@@ -15,7 +11,7 @@
                                 <tr>
                                     <th>Short Description</th>
                                     <th>Amount</th>
-                                    <th>Expense Type</th>
+                                    <th>Type</th>
                                     <th>Expense Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -29,8 +25,8 @@
                                         <td>@item.Type</td>
                                         <td>@item.ExpenseDate</td>
                                         <td>
-                                            <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                            <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                            <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="ExpenseRequestDetails" asp-route-id="@item.Id">Details</button>
+                                            <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Refuse</button>
                                         </td>
                                     </tr>
                                 }

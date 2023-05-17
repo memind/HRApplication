@@ -136,6 +136,14 @@
             {
                 return $"Expense deleted successfully!";
             }
+            public static string Accept(string description)
+            {
+                return $"Expense {description} accepted successfully!";
+            }
+            public static string Refuse(string description)
+            {
+                return $"Expense {description} refuse successfully!";
+            }
         }
         public static class Errors
         {

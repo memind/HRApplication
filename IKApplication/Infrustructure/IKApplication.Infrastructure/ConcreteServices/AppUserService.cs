@@ -397,5 +397,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 await _userManager.UpdateAsync(personal);
             }
         }
+
+        public async Task AddCompanyManager(AppUserCreateDTO user, CompanyUpdateDTO company)
+        {
+            var companyMap = _mapper.Map<Company>(company);
+            var userMap = _mapper.Map<AppUser>(user);
+            companyMap.CompanyManagers.Add(userMap);
+
+            var companyUpdate = _mapper.Map<CompanyUpdateDTO>(companyMap);
+
+            await _companyService.Update(companyUpdate);
+        }
     }
 }
