@@ -68,16 +68,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var companyManagerMap = _mapper.Map<AppUser>(companyManager);
 
             model.DirectorId = companyManagerMap.Id;
-            model.Director = companyManagerMap;
             model.AdvanceToId = advanceTo.Id;
-            model.AdvanceTo = advanceToMap;
             model.CompanyId = advanceTo.CompanyId;
 
             if (ModelState.IsValid)
             {
                 await _cashAdvanceServices.Create(model);
                 _toast.AddSuccessToastMessage(Messages.Advance.Create(), new ToastrOptions { Title = "Creating Advance" });
-                return RedirectToAction("Index", "Advance");
+                return RedirectToAction("Index", "CashAdvance");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Advance" });
             return View(model);
@@ -88,6 +86,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var advance = await _cashAdvanceServices.GetById(id);
             var map = _mapper.Map<CashAdvanceUpdateDTO>(advance);
+            map.RequestedAmount = Convert.ToInt32(advance.RequestedAmount);
             return View(map);
         }
 
@@ -98,7 +97,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 await _cashAdvanceServices.Update(model);
                 _toast.AddSuccessToastMessage(Messages.Advance.Update(), new ToastrOptions { Title = "Updating Advance" });
-                return RedirectToAction("Index", "Advance");
+                return RedirectToAction("Index", "CashAdvance");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Advance" });
             return View(model);
@@ -132,7 +131,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var expense = await _cashAdvanceServices.GetVMById(id);
             expense.FullName = await _cashAdvanceServices.GetPersonalName(expense.AdvanceToId);
-
+            expense.RequestedAmount = Convert.ToInt32(expense.RequestedAmount);
             return View(expense);
         }
 

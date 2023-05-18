@@ -1,4 +1,5 @@
-﻿using IKApplication.Domain.Enums;
+﻿using IKApplication.Domain.Entites;
+using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,7 +22,7 @@ namespace IKApplication.Application.VMs.UserVMs
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
         public string CompanyName { get; set; }
-        public string Title { get; set; }
+        public Title Title { get; set; }
         public List<string> Roles { get; set; }
     }
 }

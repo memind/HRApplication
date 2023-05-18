@@ -14,9 +14,9 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(c => c.FinalDateRequest).HasColumnType("date");
 
             // Configure relationships
-            builder.HasOne(c => c.Director)
-                .WithMany(d => d.CashAdvances).HasForeignKey(c => c.DirectorId) //Todo: Director ile olan ilişkiyi düzelt
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(c => c.Director)
+            //    .WithMany(d => d.CashAdvances).HasForeignKey(c => c.DirectorId) //Todo: Director ile olan ilişkiyi düzelt
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             // Configure table name
             builder.ToTable("CashAdvances");
