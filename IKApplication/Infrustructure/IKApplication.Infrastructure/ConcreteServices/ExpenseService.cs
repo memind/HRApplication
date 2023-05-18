@@ -12,11 +12,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
+        private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
-        public ExpenseService(IMapper mapper, IExpenseRepository expenseRepository)
+        public ExpenseService(IMapper mapper, IExpenseRepository expenseRepository, IAppUserService appUserService)
         {
             _mapper = mapper;
             _expenseRepository = expenseRepository;
+            _appUserService = appUserService;
         }
         public async Task CreateExpense(ExpenseCreateDTO expenseCreateDTO)
         {
@@ -30,11 +32,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
             expense.Status = Status.Deleted;
             await _expenseRepository.Delete(expense);
         }
-
-
-        // company 5e6c2342-a590-4013-a6bb-136808e2c4c9
-        // approve e4a69843-c78b-4a13-a103-1ec47b9e1122    mehmet.aydin@google.com
-        // expense ea3f5836-171c-4f0b-b26b-43f0597979f3
 
         public async Task<List<ExpenseVM>> GetExpenseRequests(Guid companyId)
         {
@@ -103,6 +100,33 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 return map;
             }
             return null;
+        }
+
+        public async Task<string> GetPersonalName(Guid id)
+        {
+            var user = await _appUserService.GetById(id);
+            var name = $"{user.Name} {user.SecondName} {user.Surname}";
+
+            return name;
+        }
+
+        public async Task<List<ExpenseVM>> GetPersonalExpenses(Guid id)
+        {
+            var user = await _appUserService.GetById(id);
+            var expenses = await _expenseRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
+            var userExpenses = expenses.Where(x => x.ExpenseById == user.Id);
+
+            List<ExpenseVM> companyExpenses = new List<ExpenseVM>();
+
+            foreach (var expense in userExpenses)
+            {
+                if (expense.CompanyId == user.CompanyId)
+                {
+                    var expenseMap = _mapper.Map<ExpenseVM>(expense);
+                    companyExpenses.Add(expenseMap);
+                }
+            }
+            return (companyExpenses);
         }
     }
 }

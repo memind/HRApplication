@@ -13,5 +13,6 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
         public int Amount { get; set; }
         public DateTime ExpenseDate { get; set; }
         public ExpenseType Type { get; set; }
+        public string? FullName { get; set; }
     }
 }

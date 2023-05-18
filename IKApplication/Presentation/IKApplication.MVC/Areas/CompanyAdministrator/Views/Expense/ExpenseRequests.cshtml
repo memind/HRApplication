@@ -9,6 +9,7 @@
                         <table id="order-listing" class="table">
                             <thead>
                                 <tr>
+                                    <th>Expense By</th>
                                     <th>Short Description</th>
                                     <th>Amount</th>
                                     <th>Type</th>
@@ -20,6 +21,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
+                                        <td>@item.FullName</td>
                                         <td>@item.ShortDescription</td>
                                         <td>@item.Amount</td>
                                         <td>@item.Type</td>

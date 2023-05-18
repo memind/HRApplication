@@ -25,9 +25,9 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.TitleId).IsRequired(true);
             builder.Property(x => x.PhoneNumber).IsRequired(true);
             builder.Property(x => x.AddressId).IsRequired(false);
-            //builder.Property(x => x.ExpenseId).IsRequired(false);
 
             builder.HasMany(x => x.Expenses).WithOne(x => x.ExpenseBy).HasForeignKey(x => x.ExpenseById).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(x => x.Leaves).WithOne(x => x.AppUser).HasForeignKey(x => x.AppUserId).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.Address).WithOne(x => x.AppUser).HasForeignKey<Address>(x => x.AppUserId).OnDelete(DeleteBehavior.Restrict);
         }
     }
