@@ -144,7 +144,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 try
                 {
-                    model.AppUserId = employee.Id;
                     await _leaveService.Update(model);
                     _toast.AddSuccessToastMessage(Messages.Leaves.Update(), new ToastrOptions { Title = "Updating Leave" });
 
