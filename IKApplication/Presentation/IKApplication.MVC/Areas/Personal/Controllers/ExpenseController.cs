@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.ExpenseDTOs;
-using IKApplication.Application.VMs.ExpenseVMs;
-using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
@@ -10,26 +8,26 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using System.Data;
-using static IKApplication.MVC.ResultMessages.Messages;
 
-namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
+namespace IKApplication.MVC.Areas.Personal.Controllers
 {
-    [Area("CompanyAdministrator")]
-    [Authorize(Roles = "Company Administrator")]
+    [Area("Personal")]
+    [Authorize(Roles = "Personal")]
     public class ExpenseController : Controller
     {
+        private readonly IAppUserService _appUserService;
         private readonly IExpenseService _expenseService;
         private readonly ICompanyService _companyService;
-        private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
         private readonly IToastNotification _toast;
-        public ExpenseController(IExpenseService expenseService, IMapper mapper, IToastNotification toast, IAppUserService appUserService, ICompanyService companyService)
+
+        public ExpenseController(IAppUserService appUserService, IExpenseService expenseService, ICompanyService companyService, IMapper mapper, IToastNotification toast)
         {
+            _appUserService = appUserService;
             _expenseService = expenseService;
+            _companyService = companyService;
             _mapper = mapper;
             _toast = toast;
-            _appUserService = appUserService;
-            _companyService = companyService;
         }
 
         [HttpGet]
@@ -39,7 +37,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             // 2) Mevcut kullanicinin CompanyId'sini kullanarak ilgili sirketin expense'lerini getir
-            var expenses = await _expenseService.GetAllExpenses(user.CompanyId);
+            var expenses = await _expenseService.GetPersonalExpenses(user.Id);
 
             foreach (var expense in expenses)
             {
@@ -103,56 +101,12 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             return View(model);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _expenseService.DeleteExpense(id);
             _toast.AddSuccessToastMessage(Messages.Expense.Delete(), new ToastrOptions { Title = "Deleting Expense" });
             return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ExpenseRequests()
-        {
-            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            var expenseRequests = await _expenseService.GetExpenseRequests(user.CompanyId);
-
-            foreach (var expense in expenseRequests)
-            {
-                expense.FullName = await _expenseService.GetPersonalName(expense.ExpenseById);
-            }
-
-
-            return View(expenseRequests);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ExpenseRequestDetails(Guid id)
-        {
-            var expense = await _expenseService.GetVMById(id);
-            expense.FullName = await _expenseService.GetPersonalName(expense.ExpenseById);
-
-            return View(expense);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> AcceptExpense(Guid id)
-        {
-            var expense = await _expenseService.GetById(id);
-            await _expenseService.UpdateExpense(expense);
-
-            _toast.AddSuccessToastMessage(Messages.Expense.Accept(expense.ShortDescription), new ToastrOptions { Title = "Accepting Expense" });
-            return RedirectToAction("ExpenseRequests");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> RefuseExpense(Guid id)
-        {
-            var expense = await _expenseService.GetById(id);
-            await _expenseService.DeleteExpense(id);
-
-            _toast.AddSuccessToastMessage(Messages.Expense.Refuse(expense.ShortDescription), new ToastrOptions { Title = "Refusing Expense" });
-            return RedirectToAction("ExpenseRequests");
         }
     }
 }

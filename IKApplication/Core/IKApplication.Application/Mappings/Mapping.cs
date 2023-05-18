@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using IKApplication.Application.dtos.ExpenseDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.LeaveDTOs;
 using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.ExpenseVMs;
+using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Application.VMs.PersonalVM;
 using IKApplication.Application.VMs.SectorVMs;
 using IKApplication.Application.VMs.UserVMs;
@@ -35,6 +37,10 @@ namespace IKApplication.Application.Mappings
             CreateMap<AppUser, PersonalCreateDTO>().ReverseMap();
             CreateMap<AppUser, PersonalUpdateDTO>().ReverseMap();
             CreateMap<AppUser, PersonalVM>().ReverseMap();
+
+            CreateMap<Leave, LeaveVM>().ReverseMap();
+            CreateMap<Leave, CreateLeaveDTO>().ReverseMap();
+            CreateMap<Leave, UpdateLeaveDTO>().ReverseMap();
         }
     }
 }

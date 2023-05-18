@@ -14,6 +14,6 @@ namespace IKApplication.Application.VMs.ExpenseVMs
         public Guid ApprovedById { get; set; }
         public Guid ExpenseById { get; set; }
         public ExpenseType Type { get; set; }
-
+        public string? FullName { get; set; }
     }
 }

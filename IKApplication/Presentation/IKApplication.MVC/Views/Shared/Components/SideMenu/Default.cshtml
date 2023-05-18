@@ -76,7 +76,7 @@
                     <span class="menu-icon">
                         <i class="mdi mdi-credit-card"></i>
                     </span>
-                    <span class="menu-title">Expenses</span>
+                    <span class="menu-title">Company Expenses</span>
                 </a>
             }
         </li>
@@ -89,6 +89,53 @@
                         <i class="mdi mdi-credit-card-clock"></i>
                     </span>
                     <span class="menu-title">Expense Requests</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-calendar-clock"></i>
+                    </span>
+                    <span class="menu-title">Company Leaves</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "Personal")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="ListLeave">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-calendar-clock"></i>
+                    </span>
+                    <span class="menu-title">My Leaves</span>
+                </a>
+            }
+        </li>
+        <li class="nav-item menu-items">
+            @if (area == "Personal")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-credit-card-clock"></i>
+                    </span>
+                    <span class="menu-title">My Expenses</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="LeaveRequests">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-calendar-check-outline"></i>
+                    </span>
+                    <span class="menu-title">Leave Requests</span>
                 </a>
             }
         </li>

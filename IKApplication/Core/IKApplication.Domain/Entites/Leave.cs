@@ -11,8 +11,10 @@ namespace IKApplication.Domain.Entites
 
         public Guid AppUserId { get; set; }
         public Guid Id { get; set; }
+        public Guid CompanyId { get; set; }
         public string Explanation { get; set; }
         public LeaveType LeaveType { get; set; }
+        public LeaveStatus LeaveStatus { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 

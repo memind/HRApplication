@@ -408,5 +408,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             await _companyService.Update(companyUpdate);
         }
+
+        public async Task<Guid> GetUserId(string userName)
+        {
+            AppUser user = await _userManager.FindByNameAsync(userName);
+            return user.Id;
+        }
     }
 }

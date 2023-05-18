@@ -14,6 +14,8 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.StartDate).IsRequired();
             builder.Property(x => x.EndDate).IsRequired();
             builder.Property(x => x.Explanation).IsRequired();
+            builder.Property(x => x.LeaveStatus).IsRequired();
+            builder.Property(x => x.CompanyId).IsRequired();
         }
     }
 }

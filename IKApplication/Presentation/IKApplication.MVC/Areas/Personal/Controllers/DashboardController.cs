@@ -5,8 +5,8 @@ using System.Data;
 
 namespace IKApplication.MVC.Areas.Personal.Controllers
 {
-    [Area("PersonalAdministrator")]
-    [Authorize(Roles = "Personal Administrator")]
+    [Area("Personal")]
+    [Authorize(Roles = "Personal")]
     public class DashboardController : Controller
     {
         private readonly IDashboardService _dashboardService;

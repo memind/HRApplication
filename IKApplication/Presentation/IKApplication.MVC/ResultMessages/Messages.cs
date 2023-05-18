@@ -142,9 +142,34 @@
             }
             public static string Refuse(string description)
             {
-                return $"Expense {description} refuse successfully!";
+                return $"Expense {description} refused successfully!";
             }
         }
+
+        public static class Leaves
+        {
+            public static string Create()
+            {
+                return $"Leave created successfully!";
+            }
+            public static string Update()
+            {
+                return $"Leave updated successfully!";
+            }
+            public static string Delete()
+            {
+                return $"Leave deleted successfully!";
+            }
+            public static string Accept()
+            {
+                return $"Leave accepted successfully!";
+            }
+            public static string Refuse()
+            {
+                return $"Leave refused successfully!";
+            }
+        }
+
         public static class Errors
         {
             public static string Error()
