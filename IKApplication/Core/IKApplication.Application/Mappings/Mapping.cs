@@ -37,6 +37,7 @@ namespace IKApplication.Application.Mappings
             CreateMap<AppUser, PersonalCreateDTO>().ReverseMap();
             CreateMap<AppUser, PersonalUpdateDTO>().ReverseMap();
             CreateMap<AppUser, PersonalVM>().ReverseMap();
+            CreateMap<AppUserCreateDTO, PersonalCreateDTO>().ReverseMap();
 
             CreateMap<Leave, LeaveVM>().ReverseMap();
             CreateMap<Leave, CreateLeaveDTO>().ReverseMap();

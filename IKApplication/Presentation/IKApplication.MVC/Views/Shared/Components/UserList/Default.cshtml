@@ -18,7 +18,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                @*<div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
+                                    </div>
+                                </div>*@
+
+                                <div class="d-flex justify-content-center mb-2">
+                                    <div class="col-md-3 m-3">
+                                        <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                    </div>
+                                    <div class="col-md-3 m-3">
+                                        <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
+                                    </div>
+                                </div>
+
                                 @foreach (var item in Model)
                                 {
                                     <tr>
@@ -28,6 +45,7 @@
                                         <td>@item.CompanyName</td>
                                         <td>
                                             <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                            <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
                                         </td>
                                     </tr>
                                 }

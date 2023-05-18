@@ -1,34 +1,33 @@
-﻿@model PersonalUpdateDTO
+﻿@model PersonalCreateDTO
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">@ViewBag.Title</h5>
-                <form asp-controller="Personal" asp-action="Update" method="post" enctype="multipart/form-data">
+                <form asp-controller="User" asp-action="CreatePersonal" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <label asp-for="UploadPath" class="form-label">Photo</label>
-                                <div class="form-group">
-                                    <img src="@Model.ImagePath" width="200" />
-                                </div>
-
-                                <div class="form-group">
-                                    <span asp-validation-for="UploadPath" class="text-danger"></span>
-                                    <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
-                                </div>
+                            @*<div class="col-md-4">
+                            <label asp-for="UploadPath" class="form-label">Photo</label>
+                            <div class="form-group">
+                            <img src="@Model.ImagePath" width="200" />
                             </div>
+
+                            <div class="form-group">
+                            <span asp-validation-for="UploadPath" class="text-danger"></span>
+                            <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
+                            </div>
+                            </div>*@
 
                             <div class="col-md-8">
                                 <input type="hidden" asp-for="Id" />
                                 <input type="hidden" asp-for="ImagePath" />
                                 <input type="hidden" asp-for="CreateDate" />
-                                <input type="hidden" asp-for="UpdateDate" />
                                 <input type="hidden" asp-for="Status" />
-                                <input type="hidden" asp-for="Email" />
                                 <input type="hidden" asp-for="Titles" />
+                                <input type="hidden" asp-for="CompanyId" />
                                 <input type="hidden" asp-for="Companies" />
                                 <input type="hidden" asp-for="Password" />
                                 <input type="hidden" asp-for="ConfirmPassword" />
@@ -54,7 +53,7 @@
                                 <div class="form-group">
                                     <label asp-for="CompanyId" class="form-label">Company</label><br />
                                     <span asp-validation-for="CompanyId" class="text-danger"></span>
-                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
+                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))" disabled></select>
                                 </div>
 
                                 <div class="form-group">
@@ -70,21 +69,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="Position" class="form-label">Position</label><br />
-                                    <span asp-validation-for="Position" class="text-danger"></span>
-                                    <input asp-for="Position" type="text" class="form-control mb-3" placeholder="Enter Position">
+                                    <label asp-for="Profession" class="form-label">Profession</label><br />
+                                    <span asp-validation-for="Profession" class="text-danger"></span>
+                                    <input asp-for="Profession" type="text" class="form-control mb-3" placeholder="Enter Profession">
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
                                     <span asp-validation-for="BirthDate" class="text-danger"></span>
                                     <input asp-for="BirthDate" type="date" class="form-control mb-3" placeholder="Enter Birth Date">
-                                </div>
-
-                                <div class="form-group">
-                                    <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
-                                    <span asp-validation-for="JobStartDate" class="text-danger"></span>
-                                    <input asp-for="JobStartDate" type="date" class="form-control mb-3">
                                 </div>
 
                                 <div class="form-group">
@@ -96,7 +89,7 @@
                                 <div class="form-group">
                                     <label asp-for="Email" class="form-label">Email</label><br />
                                     <span asp-validation-for="Email" class="text-danger"></span>
-                                    <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email" disabled>
+                                    <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email">
                                 </div>
 
                                 <div class="form-group">
@@ -105,50 +98,23 @@
                                     <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
                                 </div>
 
-                                @*<div class="form-group">
-                                    <label asp-for="Password" class="form-label">Password</label><br />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
+                                <div class="form-group">
+                                    <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
+                                    <span asp-validation-for="JobStartDate" class="text-danger"></span>
+                                    <input asp-for="JobStartDate" type="date" class="form-control mb-3" placeholder="Enter Personal Job Start Date">
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
-                                </div>*@
-
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-block">Add Personal</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-                <div class="d-flex justify-content-center mb-2">
-                    <div class="col-md-2">
-                        <a asp-controller="User" asp-action="Index">
-                            <button class="btn btn-outline-info">Back to List</button>
-                        </a>
-                    </div>
-                </div>
+                <a asp-controller="User" asp-action="Index" class="ms-4 mb-2 mt-0">
+                    <button class="btn btn-outline-info">Back to List</button>
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        $('#CompanyId').change(function () {
-            var companyId = $(this).val();
-            var options = "";
-    @foreach (var title in Model.Titles)
-    {
-        <text>
-                                if (companyId == "@title.CompanyId")
-                        options += "<option value='@title.Id'>@title.Name</option>";
-        </text>
-    }
-                document.getElementById("TitleId").innerHTML = options;
-        });
-    })
-</script>

@@ -122,5 +122,14 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
             return View(user);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var user = await _appUserService.GetById(id);
+            await _appUserService.Delete(id);
+            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string? Profession { get; set; }
         [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime BirthDate { get; set; }
+        public DateTime JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
