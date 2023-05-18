@@ -140,6 +140,42 @@
         </li>
 
         <li class="nav-item menu-items">
+            @if (area == "Personal")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-cash-check"></i>
+                    </span>
+                    <span class="menu-title">My Cash Advances</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-cash-check"></i>
+                    </span>
+                    <span class="menu-title">Company Cash Advances</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="CashAdvanceRequests">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-cash-clock"></i>
+                    </span>
+                    <span class="menu-title">Cash Advance Requests</span>
+                </a>
+            }
+        </li>
+
+        <li class="nav-item menu-items">
             @if (area == "CompanyAdministrator")
             {
                 <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="LeaveRequests">
