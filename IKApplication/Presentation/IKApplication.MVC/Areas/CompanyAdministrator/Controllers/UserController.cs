@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Application.VMs.UserVMs;
@@ -70,7 +71,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 {
                     await _appUserService.UpdateUser(user);
                     _toast.AddSuccessToastMessage(Messages.User.Update(user.Email), new ToastrOptions { Title = "Updating User" });
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -133,6 +134,66 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             model.ConfirmPassword = "123";
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreatePersonal()
+        {
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
+            var companies = await _companyService.GetAllCompanies();
+            var titles = await _titleService.GetAllTitles();
+            var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
+
+            var model = new PersonalCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePersonal(PersonalCreateDTO model)
+        {
+            model.Id = Guid.NewGuid();
+            if (ModelState.IsValid)
+            {
+                var modelMap = _mapper.Map<AppUserCreateDTO>(model);
+                await _appUserService.CreateUser(modelMap, "Personal");
+
+                var user = await _appUserService.GetByUserName(model.Email);
+                user.Password = "123";
+
+                await _appUserService.UpdateUser(user);
+
+                string subject = "Get Your Password";
+                string body = "To set your password, please click the link below: https://ikapp.azurewebsites.net/Account/ForgotPassword";
+                _emailService.SendMail(model.Email, subject, body);
+
+
+                _toast.AddSuccessToastMessage(Messages.Personal.Create(model.Email), new ToastrOptions { Title = "Creating Personal" });
+                return RedirectToAction("Index");
+            }
+
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Personal" });
+
+            var currentUser = await _appUserService.GetByUserName(User.Identity.Name);
+            var companies = await _companyService.GetAllCompanies();
+            var titles = await _titleService.GetAllTitles();
+            var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
+
+            model.CompanyId = currentUser.CompanyId;
+            model.Companies = companies;
+            model.Titles = titles;
+            model.Password = "123";
+            model.ConfirmPassword = "123";
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var user = await _appUserService.GetById(id);
+            await _appUserService.Delete(id);
+            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
+            return RedirectToAction("Index");
         }
     }
 }

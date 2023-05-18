@@ -270,9 +270,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.BloodGroup = model.BloodGroup;
                 user.Profession = model.Profession;
                 user.BirthDate = model.BirthDate;
+                user.JobStartDate = model.JobStartDate;
                 user.IdentityNumber = model.IdentityNumber;
                 user.ImagePath = model.ImagePath;
-                user.CompanyId = model.CompanyId;
                 user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
                 user.UpdateDate = model.UpdateDate;

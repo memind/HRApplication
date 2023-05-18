@@ -30,6 +30,9 @@
                                 <input type="hidden" asp-for="Email" />
                                 <input type="hidden" asp-for="Titles" />
                                 <input type="hidden" asp-for="Companies" />
+                                <input type="hidden" asp-for="Password" />
+                                <input type="hidden" asp-for="ConfirmPassword" />
+                                <input type="hidden" asp-for="CompanyId" />
 
                                 <div class="form-group">
                                     <label asp-for="Name" class="form-label">Name</label><br />
@@ -47,12 +50,6 @@
                                     <label asp-for="Surname" class="form-label">Surname</label><br />
                                     <span asp-validation-for="Surname" class="text-danger"></span>
                                     <input asp-for="Surname" type="text" class="form-control mb-3" placeholder="Enter Surname">
-                                </div>
-
-                                <div class="form-group">
-                                    <label asp-for="CompanyId" class="form-label">Company</label><br />
-                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
-                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
                                 </div>
 
                                 <div class="form-group">
@@ -76,7 +73,13 @@
                                 <div class="form-group">
                                     <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
                                     <span asp-validation-for="BirthDate" class="text-danger"></span>
-                                    <input asp-for="BirthDate" type="date" class="form-control mb-3" placeholder="Enter Birth Date">
+                                    <input asp-for="BirthDate" type="date" class="form-control mb-3">
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
+                                    <span asp-validation-for="JobStartDate" class="text-danger"></span>
+                                    <input asp-for="JobStartDate" type="date" class="form-control mb-3">
                                 </div>
 
                                 <div class="form-group">
@@ -92,24 +95,37 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="Password" class="form-label">Password</label><br />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
+                                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
+                                </div>
+
+                                @*<div class="form-group">
+                                <label asp-for="Password" class="form-label">Password</label><br />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
-                                </div>
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
+                                </div>*@
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-block">Update</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+                <div class="d-flex justify-content-center mb-2">
+                    <div class="col-md-2">
+                        <a asp-controller="User" asp-action="Index">
+                            <button class="btn btn-outline-info">Back to List</button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -120,14 +136,14 @@
         $('#CompanyId').change(function () {
             var companyId = $(this).val();
             var options = "";
-            @foreach (var title in Model.Titles)
-            {
-                <text>
-                    if (companyId == "@title.CompanyId")
-                        options += "<option value='@title.Id'>@title.Name</option>";
-                </text>
-            }
-            document.getElementById("TitleId").innerHTML = options;
+    @foreach (var title in Model.Titles)
+    {
+        <text>
+                            if (companyId == "@title.CompanyId")
+                    options += "<option value='@title.Id'>@title.Name</option>";
+        </text>
+    }
+                document.getElementById("TitleId").innerHTML = options;
         });
     })
 </script>

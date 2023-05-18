@@ -44,12 +44,15 @@
                                     <input asp-for="Explanation" type="text" class="form-control mb-3" placeholder="Enter Explanation">
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-block">Update</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+                <a asp-controller="Leave" asp-action="Index" class="ms-4 mb-2 mt-0">
+                    <button class="btn btn-outline-info">Back to List</button>
+                </a>
             </div>
         </div>
     </div>
