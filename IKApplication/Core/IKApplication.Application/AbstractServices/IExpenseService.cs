@@ -10,7 +10,7 @@ namespace IKApplication.Application.AbstractServices
         Task UpdateExpense(ExpenseUpdateDTO expenseUpdateDTO);
         Task DeleteExpense(Guid id);
         Task<List<ExpenseVM>> GetAllExpenses(Guid companyId);
-        Task<List<ExpenseVM>> GetPersonalExpenses(Guid userName);
+        Task<List<ExpenseVM>> GetPersonalExpenses(Guid id);
         Task<List<ExpenseVM>> GetExpenseRequests(Guid companyId);
         Task<ExpenseVM> GetVMById(Guid id);
         Task<ExpenseUpdateDTO> GetById(Guid id);
