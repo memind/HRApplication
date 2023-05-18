@@ -11,8 +11,8 @@ namespace IKApplication.Domain.Entites
         public AppUser Director { get; set; } //Who will approve the advance
         public Guid DirectorId { get; set; } //Who will approve the advance
         public PaymentStatus IsPaymentProcessed { get; set; } //İs the advance paid
-        public DateTime FinalDateRequest { get; set; } //The last date to request cashadvance
-
+        public DateTime? FinalDateRequest { get; set; } //The last date to request cashadvance
+        public Guid CompanyId { get; set; }
 
 
         // Implement IBaseEntity
@@ -20,5 +20,9 @@ namespace IKApplication.Domain.Entites
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; }
+
+        // Navigation Properties
+        public AppUser AdvanceTo { get; set; }
+        public Guid AdvanceToId { get; set; }
     }
 }

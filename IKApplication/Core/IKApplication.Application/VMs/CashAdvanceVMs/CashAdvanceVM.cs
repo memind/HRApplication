@@ -10,10 +10,13 @@ namespace IKApplication.Application.VMs.CashAdvanceVMs
         public decimal RequestedAmount { get; set; }
         public AppUser Director { get; set; }
         public PaymentStatus IsPaymentProcessed { get; set; }
-        public DateTime FinalDateRequest { get; set; }
+        public DateTime? FinalDateRequest { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; }
+        public Guid CompanyId { get; set; }
+        public Guid AdvanceToId { get; set; }
+        public string? FullName { get; set; }
     }
 }

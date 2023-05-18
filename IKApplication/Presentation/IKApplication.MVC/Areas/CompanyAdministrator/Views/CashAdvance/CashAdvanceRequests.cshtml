@@ -1,0 +1,38 @@
+﻿@model List<CashAdvanceVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Cash Advance Requests</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Advance To</th>
+                                    <th>Description</th>
+                                    <th>Requested Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.FullName</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.RequestedAmount</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="CashAdvanceRequestDetails" asp-route-id="@item.Id">Details</button>
+                                            <button class="btn btn-outline-danger" asp-controller="CashAdvance" asp-action="Delete" asp-route-id="@item.Id">Refuse</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

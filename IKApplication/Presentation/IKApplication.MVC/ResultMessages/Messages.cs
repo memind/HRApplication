@@ -146,6 +146,30 @@
             }
         }
 
+        public static class Advance
+        {
+            public static string Create()
+            {
+                return $"Advance created successfully!";
+            }
+            public static string Update()
+            {
+                return $"Advance updated successfully!";
+            }
+            public static string Delete()
+            {
+                return $"Advance deleted successfully!";
+            }
+            public static string Accept(string fullname)
+            {
+                return $"Advance {fullname} accepted successfully!";
+            }
+            public static string Refuse(string fullname)
+            {
+                return $"Advance {fullname} refused successfully!";
+            }
+        }
+
         public static class Leaves
         {
             public static string Create()
