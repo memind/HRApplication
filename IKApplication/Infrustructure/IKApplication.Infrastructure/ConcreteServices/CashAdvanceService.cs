@@ -27,9 +27,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task Create(CashAdvanceCreateDTO createCashAdvanceDTO)
         {
             var cashAdvance = _mapper.Map<CashAdvance>(createCashAdvanceDTO);
-            cashAdvance.Id = Guid.NewGuid();
             cashAdvance.CreateDate = DateTime.Now;
-            cashAdvance.Status = Status.Active;
+            cashAdvance.Status = Status.Passive;
 
             await _cashAdvanceRepository.Create(cashAdvance);
         }
@@ -42,7 +41,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             {
                 cashAdvance.Description = updateCashAdvanceDTO.Description;
                 cashAdvance.RequestedAmount = updateCashAdvanceDTO.RequestedAmount;
-                cashAdvance.Director = updateCashAdvanceDTO.Director;
+                //cashAdvance.Director = updateCashAdvanceDTO.Director;
                 cashAdvance.UpdateDate = DateTime.Now;
                 cashAdvance.Status = updateCashAdvanceDTO.Status;
 

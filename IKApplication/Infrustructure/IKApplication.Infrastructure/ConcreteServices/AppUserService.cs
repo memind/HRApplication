@@ -104,7 +104,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
-                    Title = x.Title.Name,
+                    Title = x.Title,
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 include: x => x.Include(x => x.Company).Include(x => x.Title));
@@ -136,7 +136,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
-                    Title = x.Title.Name,
+                    Title = x.Title,
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
                 include: x => x.Include(x => x.Company).Include(x => x.Title));
@@ -185,7 +185,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
-                    Title = x.Title.Name,
+                    Title = x.Title,
                 },
                 where: x => x.UserName == userName,
                 include: x => x.Include(x => x.Company).Include(x => x.Title));

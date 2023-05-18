@@ -8,8 +8,8 @@ namespace IKApplication.Domain.Entites
         public Guid Id { get; set; }
         public string Description { get; set; } //Advance Description
         public decimal RequestedAmount { get; set; } //How much the personel asked for
-        public AppUser Director { get; set; } //Who will approve the advance
-        public Guid DirectorId { get; set; } //Who will approve the advance
+        //public AppUser? Director { get; set; } //Who will approve the advance
+        public Guid? DirectorId { get; set; } //Who will approve the advance
         public PaymentStatus IsPaymentProcessed { get; set; } //İs the advance paid
         public DateTime? FinalDateRequest { get; set; } //The last date to request cashadvance
         public Guid CompanyId { get; set; }
@@ -22,7 +22,7 @@ namespace IKApplication.Domain.Entites
         public Status Status { get; set; }
 
         // Navigation Properties
-        public AppUser AdvanceTo { get; set; }
+        public AppUser? AdvanceTo { get; set; }
         public Guid AdvanceToId { get; set; }
     }
 }

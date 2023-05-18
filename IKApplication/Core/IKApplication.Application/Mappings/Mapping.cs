@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using IKApplication.Application.dtos.CashAdvanceDTOs;
 using IKApplication.Application.dtos.ExpenseDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.LeaveDTOs;
 using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Application.VMs.CashAdvanceVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Application.VMs.PersonalVM;
@@ -32,6 +34,10 @@ namespace IKApplication.Application.Mappings
             CreateMap<Expense, ExpenseVM>().ReverseMap();
             CreateMap<Expense, ExpenseCreateDTO>().ReverseMap();
             CreateMap<Expense, ExpenseUpdateDTO>().ReverseMap();
+
+            CreateMap<CashAdvance, CashAdvanceVM>().ReverseMap();
+            CreateMap<CashAdvance, CashAdvanceCreateDTO>().ReverseMap();
+            CreateMap<CashAdvance, CashAdvanceUpdateDTO>().ReverseMap();
 
             // Personel için aşağıdakiler eklendi
             CreateMap<AppUser, PersonalCreateDTO>().ReverseMap();
