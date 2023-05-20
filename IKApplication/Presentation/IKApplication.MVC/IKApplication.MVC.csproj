@@ -9,18 +9,26 @@
 	<ItemGroup>
 		<Compile Remove="Areas\CompanyAdministrator\Data\**" />
 		<Compile Remove="Areas\CompanyAdministrator\Models\**" />
+		<Compile Remove="Areas\Personal\Data\**" />
+		<Compile Remove="Areas\Personal\Models\**" />
 		<Compile Remove="Areas\SiteAdministrator\Data\**" />
 		<Compile Remove="Areas\SiteAdministrator\Models\**" />
 		<Content Remove="Areas\CompanyAdministrator\Data\**" />
 		<Content Remove="Areas\CompanyAdministrator\Models\**" />
+		<Content Remove="Areas\Personal\Data\**" />
+		<Content Remove="Areas\Personal\Models\**" />
 		<Content Remove="Areas\SiteAdministrator\Data\**" />
 		<Content Remove="Areas\SiteAdministrator\Models\**" />
 		<EmbeddedResource Remove="Areas\CompanyAdministrator\Data\**" />
 		<EmbeddedResource Remove="Areas\CompanyAdministrator\Models\**" />
+		<EmbeddedResource Remove="Areas\Personal\Data\**" />
+		<EmbeddedResource Remove="Areas\Personal\Models\**" />
 		<EmbeddedResource Remove="Areas\SiteAdministrator\Data\**" />
 		<EmbeddedResource Remove="Areas\SiteAdministrator\Models\**" />
 		<None Remove="Areas\CompanyAdministrator\Data\**" />
 		<None Remove="Areas\CompanyAdministrator\Models\**" />
+		<None Remove="Areas\Personal\Data\**" />
+		<None Remove="Areas\Personal\Models\**" />
 		<None Remove="Areas\SiteAdministrator\Data\**" />
 		<None Remove="Areas\SiteAdministrator\Models\**" />
 	</ItemGroup>
@@ -42,11 +50,6 @@
 		<ProjectReference Include="..\..\Core\IKApplication.Application\IKApplication.Application.csproj" />
 		<ProjectReference Include="..\..\Infrustructure\IKApplication.Infrastructure\IKApplication.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\Infrustructure\IKApplication.Persistance\IKApplication.Persistance.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Areas\Personal\Data\" />
-		<Folder Include="Areas\Personal\Models\" />
 	</ItemGroup>
 
 	<ItemGroup>
