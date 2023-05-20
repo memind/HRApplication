@@ -10,8 +10,9 @@
                             <thead>
                                 <tr>
                                     <th>Advance To</th>
-                                    <th>Description</th>
+                                    <th>Approved By</th>
                                     <th>Requested Amount</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -20,8 +21,20 @@
                                 {
                                     <tr>
                                         <td>@item.FullName</td>
-                                        <td>@item.Description</td>
+                                        <td>@item.Director.Name @item.Director.SecondName @item.Director.Surname</td>
                                         <td>@item.RequestedAmount</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Approved
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                In Pending
+                                            </td>
+                                        }
                                         <td>
                                             <button class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="CashAdvanceRequestDetails" asp-route-id="@item.Id">Details</button>
                                         </td>

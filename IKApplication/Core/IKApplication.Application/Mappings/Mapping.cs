@@ -34,6 +34,7 @@ namespace IKApplication.Application.Mappings
             CreateMap<Expense, ExpenseVM>().ReverseMap();
             CreateMap<Expense, ExpenseCreateDTO>().ReverseMap();
             CreateMap<Expense, ExpenseUpdateDTO>().ReverseMap();
+            CreateMap<ExpenseUpdateDTO, ExpenseVM>().ReverseMap();
 
             CreateMap<CashAdvance, CashAdvanceVM>().ReverseMap();
             CreateMap<CashAdvance, CashAdvanceCreateDTO>().ReverseMap();

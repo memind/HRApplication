@@ -21,8 +21,8 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.StartDate</td>
-                                        <td>@item.EndDate</td>
+                                        <td>@item.StartDate.ToShortDateString()</td>
+                                        <td>@item.EndDate.ToShortDateString()</td>
                                         <td>@item.Explanation</td>
                                         <td>
                                             <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>

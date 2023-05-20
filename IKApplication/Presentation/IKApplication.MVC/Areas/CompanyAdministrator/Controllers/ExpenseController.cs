@@ -20,16 +20,18 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
     {
         private readonly IExpenseService _expenseService;
         private readonly ICompanyService _companyService;
+        private readonly IEmailService _emailService;
         private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
         private readonly IToastNotification _toast;
-        public ExpenseController(IExpenseService expenseService, IMapper mapper, IToastNotification toast, IAppUserService appUserService, ICompanyService companyService)
+        public ExpenseController(IExpenseService expenseService, IMapper mapper, IToastNotification toast, IAppUserService appUserService, ICompanyService companyService, IEmailService emailService)
         {
             _expenseService = expenseService;
             _mapper = mapper;
             _toast = toast;
             _appUserService = appUserService;
             _companyService = companyService;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -44,6 +46,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             foreach (var expense in expenses)
             {
                 expense.FullName = await _expenseService.GetPersonalName(expense.ExpenseById);
+                expense.CurrentUserId = user.Id;
             }
 
             return View(expenses);
@@ -74,8 +77,15 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Amount = Convert.ToDecimal(model.AmountString);
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
+
+                string subject = "New Expense Request Arrived";
+                string body = $"The user {expenseBy.Name} {expenseBy.SecondName} {expenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(companyManagerMap.Email, subject, body);
+
                 return RedirectToAction("Index", "Expense");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Expense" });
@@ -95,6 +105,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Amount = Convert.ToDecimal(model.AmountString);
                 await _expenseService.UpdateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Update(), new ToastrOptions { Title = "Updating Expense" });
                 return RedirectToAction("Index", "Expense");
@@ -138,10 +149,19 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpGet]
         public async Task<IActionResult> AcceptExpense(Guid id)
         {
-            var expense = await _expenseService.GetById(id);
-            await _expenseService.UpdateExpense(expense);
+            var expense = await _expenseService.GetVMById(id);
+            await _expenseService.AcceptExpense(expense);
 
             _toast.AddSuccessToastMessage(Messages.Expense.Accept(expense.ShortDescription), new ToastrOptions { Title = "Accepting Expense" });
+
+            string subject = "Your Expense Request Accepted";
+            string body = $"Your expense request for '{expense.ShortDescription}' accepted.";
+
+            var expenseVM = await _expenseService.GetVMById(expense.Id);
+            var expenseBy = await _appUserService.GetById(expenseVM.ExpenseById);
+
+            _emailService.SendMail(expenseBy.Email, subject, body);
+
             return RedirectToAction("ExpenseRequests");
         }
 
@@ -152,6 +172,15 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             await _expenseService.DeleteExpense(id);
 
             _toast.AddSuccessToastMessage(Messages.Expense.Refuse(expense.ShortDescription), new ToastrOptions { Title = "Refusing Expense" });
+
+            string subject = "Your Expense Request Refused";
+            string body = $"Your expense request for '{expense.ShortDescription}' refused.";
+
+            var expenseVM = await _expenseService.GetVMById(expense.Id);
+            var expenseBy = await _appUserService.GetById(expenseVM.ExpenseById);
+
+            _emailService.SendMail(expenseBy.Email, subject, body);
+
             return RedirectToAction("ExpenseRequests");
         }
     }

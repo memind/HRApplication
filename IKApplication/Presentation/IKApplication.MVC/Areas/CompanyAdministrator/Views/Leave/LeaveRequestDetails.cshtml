@@ -12,6 +12,7 @@
                             <input type="hidden" asp-for="Status" />
                             <input type="hidden" asp-for="CreateDate" />
                             <input type="hidden" asp-for="UpdateDate" />
+                            <input type="hidden" asp-for="CompanyId" />
 
                             <div class="form-group">
                                 <label asp-for="PersonalFullName" class="form-label">Personal Name</label><br />
@@ -34,8 +35,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label asp-for="LeaveTypes">Leave Type</label><br />
-                                <select class="form-control mb-3 auth-form-dark" asp-for="LeaveTypes" asp-items="@Html.GetEnumSelectList<LeaveType>()" disabled></select>
+                                <label asp-for="LeaveType">Leave Type</label><br />
+                                <select class="form-control mb-3 auth-form-dark" asp-for="LeaveType" asp-items="@Html.GetEnumSelectList<LeaveType>()" disabled></select>
                             </div>
 
                         </div>

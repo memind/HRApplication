@@ -13,6 +13,7 @@ namespace IKApplication.Application.AbstractServices
         Task<List<ExpenseVM>> GetPersonalExpenses(Guid id);
         Task<List<ExpenseVM>> GetExpenseRequests(Guid companyId);
         Task<ExpenseVM> GetVMById(Guid id);
+        Task AcceptExpense(ExpenseVM model);
         Task<ExpenseUpdateDTO> GetById(Guid id);
         Task<string> GetPersonalName(Guid id);
     }

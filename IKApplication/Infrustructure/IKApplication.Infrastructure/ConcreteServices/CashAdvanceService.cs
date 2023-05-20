@@ -8,10 +8,12 @@ using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using IKApplication.Persistance.ConcreteRepositories;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.Xml;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
-    public class CashAdvanceService : ICashAdvanceServices
+    public class CashAdvanceService : ICashAdvanceService
     {
         private readonly ICashAdvanceRepository _cashAdvanceRepository;
         private readonly IMapper _mapper;
@@ -26,115 +28,135 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task Create(CashAdvanceCreateDTO createCashAdvanceDTO)
         {
-            var cashAdvance = _mapper.Map<CashAdvance>(createCashAdvanceDTO);
-            cashAdvance.CreateDate = DateTime.Now;
-            cashAdvance.Status = Status.Passive;
-
-            await _cashAdvanceRepository.Create(cashAdvance);
+            var map = _mapper.Map<CashAdvance>(createCashAdvanceDTO);
+            await _cashAdvanceRepository.Create(map);
         }
 
         public async Task Update(CashAdvanceUpdateDTO updateCashAdvanceDTO)
         {
-            var cashAdvance = await _cashAdvanceRepository.GetDefault(x => x.Id == updateCashAdvanceDTO.Id);
-
-            if (cashAdvance != null)
+            var advance = await _cashAdvanceRepository.GetDefault(x => x.Id == updateCashAdvanceDTO.Id);
+            if (advance != null)
             {
-                cashAdvance.Description = updateCashAdvanceDTO.Description;
-                cashAdvance.RequestedAmount = updateCashAdvanceDTO.RequestedAmount;
-                //cashAdvance.Director = updateCashAdvanceDTO.Director;
-                cashAdvance.UpdateDate = DateTime.Now;
-                cashAdvance.Status = updateCashAdvanceDTO.Status;
-
-                await _cashAdvanceRepository.Update(cashAdvance);
+                advance.Status = Status.Passive;
+                //advance.AdvanceToId = updateCashAdvanceDTO.AdvanceToId;
+                advance.Description = updateCashAdvanceDTO.Description;
+                advance.RequestedAmount = updateCashAdvanceDTO.RequestedAmount;
+                await _cashAdvanceRepository.Update(advance);
             }
         }
 
         public async Task Delete(Guid id)
         {
-            var cashAdvance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
-
-            if (cashAdvance != null)
-            {
-                cashAdvance.DeleteDate = DateTime.Now;
-                cashAdvance.Status = Status.Deleted;
-
-                await _cashAdvanceRepository.Delete(cashAdvance);
-            }
-        }
-
-        public async Task<List<CashAdvanceVM>> GetAllAdvances(Guid companyId)
-        {
-            var advances = await _cashAdvanceRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
-            List<CashAdvanceVM> companyAdvances = new List<CashAdvanceVM>();
-
-            foreach (var advance in advances)
-            {
-                if (advance.CompanyId == companyId)
-                {
-                    var advanceMap = _mapper.Map<CashAdvanceVM>(advance);
-                    companyAdvances.Add(advanceMap);
-                }
-            }
-            return (companyAdvances);
-        }
-
-        public async Task<CashAdvanceUpdateDTO> GetById(Guid id)
-        {
-            var cashAdvance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
-
-            if (cashAdvance != null)
-            {
-                var cashAdvanceDTO = _mapper.Map<CashAdvanceUpdateDTO>(cashAdvance);
-                return cashAdvanceDTO;
-            }
-
-            return null;
-        }
-
-        public async Task<List<CashAdvanceVM>> GetPersonalAdvances(Guid id)
-        {
-            var user = await _appUserService.GetById(id);
-            var advances = await _cashAdvanceRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
-            var userAdvances = advances.Where(x => x.AdvanceToId == user.Id);
-
-            List<CashAdvanceVM> companyAdvances = new List<CashAdvanceVM>();
-
-            foreach (var advance in userAdvances)
-            {
-                if (advance.CompanyId == user.CompanyId)
-                {
-                    var advanceMap = _mapper.Map<CashAdvanceVM>(advance);
-                    companyAdvances.Add(advanceMap);
-                }
-            }
-            return (companyAdvances);
+            var advance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
+            advance.DeleteDate = DateTime.Now;
+            advance.Status = Status.Deleted;
+            await _cashAdvanceRepository.Delete(advance);
         }
 
         public async Task<List<CashAdvanceVM>> GetAdvanceRequests(Guid companyId)
         {
-            var advances = await _cashAdvanceRepository.GetDefaults(x => x.Status == Status.Passive);
-            List<CashAdvanceVM> companyAdvances = new List<CashAdvanceVM>();
+            var companyExpenses = await _cashAdvanceRepository.GetFilteredList
+                (
+                    select: x => new CashAdvanceVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        Description = x.Description,
+                        RequestedAmount = x.RequestedAmount,
+                        Director = x.Director,
+                        AdvanceTo = x.AdvanceTo,
+                        IsPaymentProcessed = x.IsPaymentProcessed,
+                        FinalDateRequest = x.FinalDateRequest,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        DeleteDate = x.DeleteDate,
+                        CompanyId = x.CompanyId,
+                        AdvanceToId = x.AdvanceToId,
+                        DirectorId = x.DirectorId
+                    },
+                    where: x => x.Status == Status.Passive && x.AdvanceTo.CompanyId == companyId,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AdvanceTo).Include(x => x.Director)
+                );
 
-            foreach (var advance in advances)
-            {
-                if (advance.CompanyId == companyId)
-                {
-                    var advanceMap = _mapper.Map<CashAdvanceVM>(advance);
-                    companyAdvances.Add(advanceMap);
-                }
-            }
-            return (companyAdvances);
+            return companyExpenses;
         }
 
-        public async Task<CashAdvanceVM> GetVMById(Guid id)
+        public async Task<List<CashAdvanceVM>> GetAllAdvances(Guid companyId)
         {
-            var advance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
-            if (advance != null)
-            {
-                var map = _mapper.Map<CashAdvanceVM>(advance);
-                return map;
-            }
-            return null;
+            var companyAdvances = await _cashAdvanceRepository.GetFilteredList
+                (
+                    select: x => new CashAdvanceVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        Description = x.Description,
+                        RequestedAmount = x.RequestedAmount,
+                        Director = x.Director,
+                        AdvanceTo = x.AdvanceTo,
+                        IsPaymentProcessed = x.IsPaymentProcessed,
+                        FinalDateRequest = x.FinalDateRequest,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        DeleteDate = x.DeleteDate,
+                        CompanyId = x.CompanyId,
+                        AdvanceToId = x.AdvanceToId,
+                        DirectorId = x.DirectorId
+                    },
+                    where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.Director).Include(x => x.AdvanceTo)
+                );
+
+            return companyAdvances;
+        }
+
+        public async Task<CashAdvanceUpdateDTO> GetById(Guid id)
+        {
+            var advance = await _cashAdvanceRepository.GetFilteredFirstOrDefault
+                (
+                    select: x => new CashAdvanceUpdateDTO()
+                    {
+                        Id = x.Id,
+                        Description = x.Description,
+                        RequestedAmount = x.RequestedAmount,
+                        AdvanceToId = x.AdvanceToId
+                    },
+                    where: x => x.Id == id && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AdvanceTo).Include(x => x.Director)
+                );
+
+            return advance;
+        }
+
+        public async Task<List<CashAdvanceVM>> GetPersonalAdvances(Guid id)
+        {
+            var companyAdvances = await _cashAdvanceRepository.GetFilteredList
+                (
+                    select: x => new CashAdvanceVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        Description = x.Description,
+                        RequestedAmount = x.RequestedAmount,
+                        Director = x.Director,
+                        AdvanceTo = x.AdvanceTo,
+                        IsPaymentProcessed = x.IsPaymentProcessed,
+                        FinalDateRequest = x.FinalDateRequest,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        DeleteDate = x.DeleteDate,
+                        CompanyId = x.CompanyId,
+                        AdvanceToId = x.AdvanceToId,
+                        DirectorId = x.DirectorId
+                    },
+                    where: x => x.AdvanceTo.Id == id && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AdvanceTo).Include(x => x.Director)
+                );
+
+            return companyAdvances;
         }
 
         public async Task<string> GetPersonalName(Guid id)
@@ -143,6 +165,23 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var name = $"{user.Name} {user.SecondName} {user.Surname}";
 
             return name;
+        }
+
+        public async Task<CashAdvanceVM> GetVMById(Guid id)
+        {
+            var advance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
+            var map = _mapper.Map<CashAdvanceVM>(advance);
+            map.AdvanceTo = advance.AdvanceTo;
+            map.Director = advance.Director;
+
+            return map;
+        }
+
+        public async Task AcceptAdvance(CashAdvanceVM model)
+        {
+            var map = _mapper.Map<CashAdvance>(model);
+            map.Status = Status.Active;
+            await _cashAdvanceRepository.Update(map);
         }
     }
 }

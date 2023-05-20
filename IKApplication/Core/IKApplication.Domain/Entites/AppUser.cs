@@ -35,16 +35,22 @@ namespace IKApplication.Domain.Entites
 
         // Navigation Properties
         public Company Company { get; set; }
+        public Address? Address { get; set; }
         public Title Title { get; set; }
         public List<Expense>? Expenses { get; set; }
         public List<CashAdvance>? CashAdvances { get; set; }
-        public Address? Address { get; set; }
         public List<Leave>? Leaves { get; set; }
+        public List<Leave>? ApproveLeaves { get; set; }
+        public List<Expense>? ApproveExpenses { get; set; }
+        public List<CashAdvance>? ApproveCashAdvances { get; set; }
 
         public AppUser()
         {
+            ApproveCashAdvances = new List<CashAdvance>();
             CashAdvances = new List<CashAdvance>();
+            ApproveExpenses = new List<Expense>();
             Expenses = new List<Expense>();
+            ApproveLeaves = new List<Leave>();
             Leaves = new List<Leave>();
         }
     }

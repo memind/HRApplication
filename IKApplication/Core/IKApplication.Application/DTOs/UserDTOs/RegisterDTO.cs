@@ -22,6 +22,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string UserTitle { get; set; }
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
+        public string UserPhoneNumber { get; set; }
         public string UserConfirmPassword { get; set; }
         public string UserImagePath { get; set; } = $"/images/defaultuser.jpg";
         [NotMapped]

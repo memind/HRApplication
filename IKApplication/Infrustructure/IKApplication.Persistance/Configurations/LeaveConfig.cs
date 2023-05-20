@@ -1,4 +1,5 @@
 ﻿using IKApplication.Domain.Entites;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IKApplication.Persistance.Configurations
@@ -16,6 +17,9 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.Explanation).IsRequired();
             builder.Property(x => x.LeaveStatus).IsRequired();
             builder.Property(x => x.CompanyId).IsRequired();
+
+            builder.HasOne(x => x.AppUser).WithMany(x => x.Leaves).HasForeignKey(x => x.AppUserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.ApprovedBy).WithMany(x => x.ApproveLeaves).HasForeignKey(x => x.ApprovedById).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -3,6 +3,7 @@ using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -20,6 +21,7 @@ namespace IKApplication.Application.DTOs.PersonalDTO
         public BloodGroup BloodGroup { get; set; }
         public string Position { get; set; }
         public Guid TitleId { get; set; }
+        [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "Personal must be older than 18.")]
         public DateTime BirthDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate => DateTime.Now;

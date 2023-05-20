@@ -1,4 +1,5 @@
 ﻿using IKApplication.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IKApplication.Domain.Entites
@@ -14,14 +15,15 @@ namespace IKApplication.Domain.Entites
         // Entity Properties
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
+
+        [Range(typeof(DateTime), "2022-01-01", "2024-01-01", ErrorMessage = "You can't enter a date 1 year ago or later than today.")]
         public DateTime ExpenseDate { get; set; }
         public Guid ApprovedById { get; set; }
         public Guid ExpenseById { get; set; }
         public Guid CompanyId { get; set; }
         public ExpenseType Type { get; set; }
         // Navigation Properties
-        [NotMapped]
         public AppUser ApprovedBy { get; set; }
         public AppUser ExpenseBy { get; set; }
     }

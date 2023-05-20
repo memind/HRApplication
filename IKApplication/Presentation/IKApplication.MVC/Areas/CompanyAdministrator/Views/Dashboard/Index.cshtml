@@ -1,1 +1,165 @@
-﻿@await Component.InvokeAsync("Dashboard", Model)
+﻿@*@await Component.InvokeAsync("Dashboard", Model)*@
+
+@model DashboardVM
+
+
+@*Expense counts cards*@
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Expense Requests Count</h4>
+                <p class="card-description"><h5>@Model.CompanyExpenseRequestsCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Expense" asp-action="ExpenseRequests" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Expenses Count</h4>
+                <p class="card-description"><h5>@Model.CompanyExpensesCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Expense" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Cash advance counts cards*@
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Cash Advance Requests Count</h4>
+                <p class="card-description"><h5>@Model.CompanyCashAdvanceRequestsCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="CashAdvance" asp-action="CashAdvanceRequests" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Cash Advances Count</h4>
+                <p class="card-description"><h5>@Model.CompanyCashAdvancesCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="CashAdvance" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Leave counts cards*@
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Leave Requests Count</h4>
+                <p class="card-description"><h5>@Model.CompanyLeaveRequestsCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Leave" asp-action="LeaveRequests" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Leaves Count</h4>
+                <p class="card-description"><h5>@Model.CompanyLeavesCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Leave" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+@*Company and company managers count cards*@
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyCount</h5></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Manager Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyManagerCount</h5></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+@*Company counts by Sector*@
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Company Counts By Sector</h4>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/vendors/chart.js/Chart.min.js"></script>
+
+<script>
+    labels = [];
+    data = [];
+    backgroundColor = ["#ff0000","#ff8000","#ffff00","#80ff00","#00ff00","#00ff80","#00ffff","#0080ff","#0000ff","#8000ff"];
+    @for (var i = 0; i < 10; i++) {
+        <text>labels[@i] = "@Html.Raw(Model.Sectors[i].Name)";</text>
+        <text>data[@i] ="@Html.Raw(Model.Sectors[i].CompanyCount)";</text>
+    }
+
+    var areaData = {
+        labels,
+        datasets: [{
+            data,
+            backgroundColor
+        }
+        ]
+    };
+    var areaOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        segmentShowStroke: false,
+        cutoutPercentage: 70,
+        elements: {
+            arc: {
+                borderWidth: 0
+            }
+        },
+        legend: {
+            display: false
+        },
+        tooltips: {
+            enabled: true
+        }
+    }
+    var transactionhistoryChartCanvas = document.getElementById('myChart');
+    var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+        type: 'doughnut',
+        data: areaData,
+        options: areaOptions
+    });
+</script>

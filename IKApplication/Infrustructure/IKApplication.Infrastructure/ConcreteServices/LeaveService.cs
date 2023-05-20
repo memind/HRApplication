@@ -26,143 +26,144 @@ namespace IKApplication.Infrastructure.ConcreteServices
             _appUserRepository = appUserRepository;
             _appUserService = appUserService;
         }
-
         public async Task Create(CreateLeaveDTO model, string userName)
         {
-            Leave leaveRequest = _mapper.Map<Leave>(model);
-            leaveRequest.AppUserId = await _appUserService.GetUserId(userName);
-            await _leaveRepository.Create(leaveRequest);
-        }
-
-        public async Task Delete(Guid id)
-        {
-            Leave leave = await _leaveRepository.GetDefault(x => x.Id == id);
-            leave.Status = Status.Deleted;
-            leave.DeleteDate = DateTime.Now;
-            await _leaveRepository.Delete(leave);
-        }
-
-        public async Task<UpdateLeaveDTO> GetByID(Guid id)
-        {
-            Leave leaveRequest = await _leaveRepository.GetDefault(x => x.Id == id);
-
-            var model = _mapper.Map<UpdateLeaveDTO>(leaveRequest);
-
-            return model;
-        }
-
-        public async Task<List<LeaveVM>> GetLeaves()
-        {
-            List<LeaveVM> leaves = (List<LeaveVM>)await _leaveRepository.GetFilteredList(
-
-              select: x => new LeaveVM()
-              {
-                  Id = x.Id,
-                  StartDate = x.StartDate,
-                  EndDate = x.EndDate,
-                  Explanation = x.Explanation,
-                  Status = x.Status,
-                  CreateDate = x.CreateDate.ToShortDateString(),
-                  AppUserId = x.AppUser.Id
-              },
-            where: null,
-            orderBy: x => x.OrderByDescending(x => x.CreateDate),
-            include: x => x.Include(x => x.AppUser)
-              );
-            return leaves;
-        }
-
-
-
-        public async Task<List<LeaveVM>> GetPersonelLeaves(string userName)
-        {
-            var user = await _appUserService.GetByUserName(userName);
-            var leaves = await _leaveRepository.GetFilteredList(
-            select: x => new LeaveVM()
-            {
-                Id = x.Id,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Explanation = x.Explanation,
-                Status = x.Status,
-                CreateDate = x.CreateDate.ToShortDateString(),
-                AppUserId = x.AppUser.Id,
-            },
-                where: x => x.AppUserId == user.Id && x.Status != Status.Passive && x.Status != Status.Deleted,
-                orderBy: x => x.OrderByDescending(x => x.CreateDate),
-                include: x => x.Include(x => x.AppUser));
-
-            return leaves;
+            var map = _mapper.Map<Leave>(model);
+            //map.AppUserId = await _appUserService.GetUserId(userName);
+            await _leaveRepository.Create(map);
         }
 
         public async Task Update(UpdateLeaveDTO model)
         {
-            //Leave leaveRequest = _mapper.Map<Leave>(model);
-            //leaveRequest.UpdateDate = DateTime.Now;
-            //leaveRequest.Status = Status.Modified;
-            //if (leaveRequest != null)
-            //{
-            //    await _leaveRepository.Update(leaveRequest);
-            //}
-
-
             var leave = await _leaveRepository.GetDefault(x => x.Id == model.Id);
             if (leave != null)
             {
+                leave.Status = Status.Passive;
                 leave.UpdateDate = model.UpdateDate;
-                leave.CreateDate = model.CreateDate;
                 leave.DeleteDate = model.DeleteDate;
-                leave.Status = model.Status;
-                leave.StartDate = model.StartDate;
-                leave.EndDate = model.EndDate;
                 leave.Explanation = model.Explanation;
                 leave.LeaveStatus = model.LeaveStatus;
-                leave.AppUserId = model.AppUserId;
+                leave.StartDate = model.StartDate;
+                leave.EndDate = model.EndDate;
                 await _leaveRepository.Update(leave);
             }
         }
 
-        public async Task<List<LeaveVM>> GetLeaveRequests(Guid companyId)
-        {
-            var leaves = await _leaveRepository.GetDefaults(x => x.Status == Status.Passive);
-            List<LeaveVM> companyLeaves = new List<LeaveVM>();
-
-            foreach (var leave in leaves)
-            {
-                if (leave.CompanyId == companyId)
-                {
-                    var leaveMap = _mapper.Map<LeaveVM>(leave);
-                    companyLeaves.Add(leaveMap);
-                }
-            }
-            return (companyLeaves);
-        }
-
-        public async Task<LeaveVM> GetVMById(Guid id)
+        public async Task Delete(Guid id)
         {
             var leave = await _leaveRepository.GetDefault(x => x.Id == id);
-            if (leave != null)
-            {
-                var map = _mapper.Map<LeaveVM>(leave);
-                return map;
-            }
-            return null;
+            leave.DeleteDate = DateTime.Now;
+            leave.Status = Status.Deleted;
+            await _leaveRepository.Delete(leave);
         }
 
         public async Task<List<LeaveVM>> GetAllLeaves(Guid companyId)
         {
-            var leaves = await _leaveRepository.GetDefaults(x => x.Status == Status.Active || x.Status == Status.Modified);
-            List<LeaveVM> companyLeaves = new List<LeaveVM>();
+            var companyLeaves = await _leaveRepository.GetFilteredList
+                (
+                    select: x => new LeaveVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        AppUserId = x.AppUserId,
+                        CompanyId = x.CompanyId,
+                        AppUser = x.AppUser,
+                        LeaveType = x.LeaveType,
+                        ApprovedBy = x.ApprovedBy,
+                        ApprovedById = x.ApprovedById
+                    },
+                    where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
+                ) ;
 
-            foreach (var leave in leaves)
-            {
-                if (leave.CompanyId == companyId)
-                {
-                    var leaveMap = _mapper.Map<LeaveVM>(leave);
-                    companyLeaves.Add(leaveMap);
-                }
-            }
-            return (companyLeaves);
+            return companyLeaves;
+        }
+
+        public async Task<UpdateLeaveDTO> GetByID(Guid id)
+        {
+            var leave = await _leaveRepository.GetFilteredFirstOrDefault
+                (
+                    select: x => new UpdateLeaveDTO()
+                    {
+                        Id = x.Id,
+                        StartDate = x.StartDate,
+                        AppUserId = x.AppUserId,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        LeaveType = x.LeaveType
+                    },
+                    where: x => x.Id == id && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
+                );
+
+            return leave;
+        }
+
+        public async Task<List<LeaveVM>> GetLeaveRequests(Guid companyId)
+        {
+            var companyLeaves = await _leaveRepository.GetFilteredList
+                (
+                    select: x => new LeaveVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        AppUserId = x.AppUserId,
+                        AppUser = x.AppUser,
+                        CompanyId = x.CompanyId,
+                        LeaveType = x.LeaveType,
+                        ApprovedBy = x.ApprovedBy,
+                        ApprovedById = x.ApprovedById
+                    },
+                    where: x => x.Status == Status.Passive && x.AppUser.CompanyId == companyId,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
+                );
+
+            return companyLeaves;
+        }
+
+        public async Task<List<LeaveVM>> GetPersonelLeaves(string userName)
+        {
+            var companyLeaves = await _leaveRepository.GetFilteredList
+                (
+                    select: x => new LeaveVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        AppUserId = x.AppUserId,
+                        AppUser = x.AppUser,
+                        LeaveType = x.LeaveType,
+                        CompanyId = x.CompanyId,
+                        ApprovedBy = x.ApprovedBy,
+                        ApprovedById = x.ApprovedById
+                    },
+                    where: x => x.AppUser.UserName == userName && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
+                );
+
+            return companyLeaves;
         }
 
         public async Task<string> GetPersonalName(Guid id)
@@ -171,6 +172,23 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var name = $"{user.Name} {user.SecondName} {user.Surname}";
 
             return name;
+        }
+
+        public async Task<LeaveVM> GetVMById(Guid id)
+        {
+            var leave = await _leaveRepository.GetDefault(x => x.Id == id);
+            var map = _mapper.Map<LeaveVM>(leave);
+            map.ApprovedBy = leave.ApprovedBy;
+            map.AppUser = leave.AppUser;
+           
+            return map;
+        }
+
+        public async Task AcceptLeave(LeaveVM model)
+        {
+            var map = _mapper.Map<Leave>(model);
+            map.Status = Status.Active;
+            await _leaveRepository.Update(map);
         }
     }
 }
