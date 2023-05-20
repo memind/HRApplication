@@ -18,17 +18,19 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly ICompanyService _companyService;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly ILeaveService _leaveService;
         private readonly IToastNotification _toast;
 
-        public LeaveController(IAppUserService appUserService, IMapper mapper, ILeaveService leaveService, ICompanyService companyService, IToastNotification toast)
+        public LeaveController(IAppUserService appUserService, IMapper mapper, ILeaveService leaveService, ICompanyService companyService, IToastNotification toast, IEmailService emailService)
         {
             _appUserService = appUserService;
             _mapper = mapper;
             _leaveService = leaveService;
             _companyService = companyService;
             _toast = toast;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> ListLeave()
@@ -51,7 +53,16 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             var leaveFor = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var company = await _companyService.GetById(leaveFor.CompanyId);
+            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
+
+            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
+            var companyManager = companyManagers.Where(x => x.CompanyId == leaveFor.CompanyId).First();
+
+            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
+
             model.CompanyId = company.Id;
+            model.ApprovedById = companyManagerMap.Id;
+            model.AppUserId = leaveFor.Id;
 
             if (DateTime.Compare(model.StartDate, model.EndDate) > 0)
             {
@@ -65,6 +76,12 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 await _leaveService.Create(model, User.Identity.Name);
 
                 _toast.AddSuccessToastMessage(Messages.Leaves.Create(), new ToastrOptions { Title = "Creating Leave" });
+
+                string subject = "New Leave Request Arrived";
+                string body = $"The user {leaveFor.Name} {leaveFor.SecondName} {leaveFor.Surname} requested a leave. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(companyManagerMap.Email, subject, body);
+
                 return RedirectToAction("ListLeave", "Leave", new { Area = "Personal" });
             }
 

@@ -162,11 +162,11 @@
             }
             public static string Accept(string fullname)
             {
-                return $"Advance {fullname} accepted successfully!";
+                return $"{fullname}'s advance request accepted successfully!";
             }
             public static string Refuse(string fullname)
             {
-                return $"Advance {fullname} refused successfully!";
+                return $"{fullname}'s advance request refused successfully!";
             }
         }
 

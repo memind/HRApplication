@@ -29,6 +29,6 @@ namespace IKApplication.Application.DTOs.LeaveDTOs
         public Guid AppUserId { get; set; }
 
         public string? FullName { get; set; }
-        public virtual ICollection<LeaveType>? LeaveTypes { get; set; }
+        public virtual LeaveType LeaveType { get; set; }
     }
 }

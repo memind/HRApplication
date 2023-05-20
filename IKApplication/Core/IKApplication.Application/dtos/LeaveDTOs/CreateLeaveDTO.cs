@@ -5,6 +5,7 @@ namespace IKApplication.Application.DTOs.LeaveDTOs
 {
     public class CreateLeaveDTO
     {
+        public Guid Id => Guid.NewGuid();
         [Required(ErrorMessage = "Start Date area cannot be empty!")]
         public DateTime StartDate { get; set; }
 
@@ -18,6 +19,7 @@ namespace IKApplication.Application.DTOs.LeaveDTOs
         public DateTime CreateDate => DateTime.Now;
         public Status Status => Status.Passive;
         public Guid? AppUserId { get; set; }
+        public Guid? ApprovedById { get; set; }
         public Guid CompanyId { get; set; }
         public LeaveType? LeaveTypes { get; set; }
     }

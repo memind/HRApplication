@@ -1,4 +1,11 @@
-﻿@model List<ExpenseVM>
+﻿@*
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ŞİRKET YÖNETİCİSİ EXPENSE LIST
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*@
+
+
+@model List<ExpenseVM>
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Expense List</h4>
@@ -18,6 +25,7 @@
                                     <th>Amount</th>
                                     <th>Expense Type</th>
                                     <th>Expense Date</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -25,13 +33,28 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.FullName</td>
+                                        <td>@item.ExpenseBy.Name @item.ExpenseBy.SecondName @item.ExpenseBy.Surname</td>
                                         <td>@item.ShortDescription</td>
                                         <td>@item.Amount</td>
                                         <td>@item.Type</td>
-                                        <td>@item.ExpenseDate</td>
+                                        <td>@item.ExpenseDate.ToShortDateString()</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Approved
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                In Pending
+                                            </td>
+                                        }
                                         <td>
-                                            <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                            @if ((item.Status == Status.Passive || item.Status == Status.Deleted) && item.CurrentUserId == item.ExpenseById)
+                                            {
+                                                <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                            }
                                             <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
                                         </td>
                                     </tr>

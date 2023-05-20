@@ -13,6 +13,7 @@
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Explanation</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -24,8 +25,23 @@
                                         <td>@item.StartDate.ToShortDateString()</td>
                                         <td>@item.EndDate.ToShortDateString()</td>
                                         <td>@item.Explanation</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Approved
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                In Pending
+                                            </td>
+                                        }
                                         <td>
-                                            <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
+                                            @if (item.Status == Status.Passive || item.Status == Status.Deleted)
+                                            {
+                                                <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
+                                            }
                                             <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
                                         </td>
                                     </tr>

@@ -275,6 +275,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.ImagePath = model.ImagePath;
                 user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
+                user.JobStartDate = model.JobStartDate;
+                user.PhoneNumber = model.PhoneNumber;
                 user.UpdateDate = model.UpdateDate;
                 user.Status = model.Status;
 
@@ -337,6 +339,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 BirthDate = register.UserBirthDate,
                 IdentityNumber = register.UserIdentityNumber,
                 Email = register.UserEmail,
+                PhoneNumber = register.UserPhoneNumber,
                 Password = register.UserPassword,
                 ConfirmPassword = register.UserConfirmPassword,
                 ImagePath = register.UserImagePath,

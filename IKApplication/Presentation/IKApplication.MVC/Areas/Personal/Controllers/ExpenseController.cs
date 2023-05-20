@@ -17,17 +17,19 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly IExpenseService _expenseService;
+        private readonly IEmailService _emailService;
         private readonly ICompanyService _companyService;
         private readonly IMapper _mapper;
         private readonly IToastNotification _toast;
 
-        public ExpenseController(IAppUserService appUserService, IExpenseService expenseService, ICompanyService companyService, IMapper mapper, IToastNotification toast)
+        public ExpenseController(IAppUserService appUserService, IExpenseService expenseService, ICompanyService companyService, IMapper mapper, IToastNotification toast, IEmailService emailService)
         {
             _appUserService = appUserService;
             _expenseService = expenseService;
             _companyService = companyService;
             _mapper = mapper;
             _toast = toast;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -72,8 +74,15 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Amount = decimal.Parse(model.AmountString);
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
+
+                string subject = "New Expense Request Arrived";
+                string body = $"The user {expenseBy.Name} {expenseBy.SecondName} {expenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(companyManagerMap.Email, subject, body);
+
                 return RedirectToAction("Index", "Expense");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Expense" });
@@ -93,6 +102,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Amount = Convert.ToDecimal(model.AmountString);
                 await _expenseService.UpdateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Update(), new ToastrOptions { Title = "Updating Expense" });
                 return RedirectToAction("Index", "Expense");

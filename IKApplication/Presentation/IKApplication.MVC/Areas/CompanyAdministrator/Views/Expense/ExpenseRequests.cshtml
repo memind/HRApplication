@@ -12,8 +12,9 @@
                                     <th>Expense By</th>
                                     <th>Short Description</th>
                                     <th>Amount</th>
-                                    <th>Type</th>
+                                    <th>Expense Type</th>
                                     <th>Expense Date</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -25,7 +26,19 @@
                                         <td>@item.ShortDescription</td>
                                         <td>@item.Amount</td>
                                         <td>@item.Type</td>
-                                        <td>@item.ExpenseDate</td>
+                                        <td>@item.ExpenseDate.ToShortDateString()</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Approved
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                In Pending
+                                            </td>
+                                        }
                                         <td>
                                             <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="ExpenseRequestDetails" asp-route-id="@item.Id">Details</button>
                                         </td>

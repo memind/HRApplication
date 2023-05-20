@@ -9,9 +9,12 @@
                         <table id="order-listing" class="table">
                             <thead>
                                 <tr>
+                                    <th>Personal</th>
+                                    <th>Approved By</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
-                                    <th>Personal</th>
+                                    <th>Explanation</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -19,9 +22,23 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.StartDate</td>
-                                        <td>@item.EndDate</td>
                                         <td>@item.PersonalFullName</td>
+                                        <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
+                                        <td>@item.StartDate.ToShortDateString()</td>
+                                        <td>@item.EndDate.ToShortDateString()</td>
+                                        <td>@item.Explanation</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Approved
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                In Pending
+                                            </td>
+                                        }
                                         <td>
                                             <button class="btn btn-outline-primary" asp-controller="Leave" asp-action="LeaveRequestDetails" asp-route-id="@item.Id">Details</button>
                                         </td>

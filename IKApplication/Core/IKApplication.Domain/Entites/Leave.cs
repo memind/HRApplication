@@ -10,6 +10,7 @@ namespace IKApplication.Domain.Entites
         public Status Status { get; set; }
 
         public Guid AppUserId { get; set; }
+        public Guid ApprovedById { get; set; }
         public Guid Id { get; set; }
         public Guid CompanyId { get; set; }
         public string Explanation { get; set; }
@@ -19,5 +20,6 @@ namespace IKApplication.Domain.Entites
         public DateTime EndDate { get; set; }
 
         public AppUser AppUser { get; set; }
+        public AppUser ApprovedBy { get; set; }
     }
 }

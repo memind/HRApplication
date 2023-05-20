@@ -7,6 +7,8 @@ namespace IKApplication.Application.VMs.LeaveVMs
     public class LeaveVM
     {
         public Guid Id { get; set; }
+        public Guid? CurrentUserId { get; set; }
+        public Guid CompanyId { get; set; }
 
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; }
@@ -19,15 +21,17 @@ namespace IKApplication.Application.VMs.LeaveVMs
         public LeaveStatus? LeaveStatus { get; set; }
 
         [DisplayName("Create Date")]
-        public string CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
         [DisplayName("Update Date")]
-        public string? UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
         public Status? Status { get; set; }
 
         public Guid AppUserId { get; set; }
-        public AppUser? AppUser { get; set; }
-        public LeaveType? LeaveTypes { get; set; }
+        public AppUser AppUser { get; set; }
+        public Guid ApprovedById { get; set; }
+        public AppUser ApprovedBy { get; set; }
+        public LeaveType LeaveType { get; set; }
         public string PersonalFullName { get; set; }
     }
 }

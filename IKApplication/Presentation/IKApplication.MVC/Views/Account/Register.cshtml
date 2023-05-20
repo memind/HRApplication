@@ -70,6 +70,12 @@
                         </div>
 
                         <div class="form-group">
+                            <label asp-for="UserPhoneNumber" class="form-label">Phone Number</label><br />
+                            <span asp-validation-for="UserPhoneNumber" class="text-danger"></span>
+                            <input asp-for="UserPhoneNumber" type="tel" class="form-control mb-3 auth-form-dark" />
+                        </div>
+
+                        <div class="form-group">
                             <label asp-for="UserPassword" class="form-label">Password</label><br />
                             <span asp-validation-for="UserPassword" class="text-danger"></span>
                             <input asp-for="UserPassword" type="password" class="form-control mb-3 auth-form-dark" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
