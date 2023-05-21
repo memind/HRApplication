@@ -6,6 +6,7 @@ using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
@@ -60,6 +61,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Status = x.Status,
+                        CreateDate = x.CreateDate,
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
@@ -108,6 +110,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Status = x.Status,
+                        CreateDate = x.CreateDate,
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
@@ -135,6 +138,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Status = x.Status,
+                        CreateDate = x.CreateDate,
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
