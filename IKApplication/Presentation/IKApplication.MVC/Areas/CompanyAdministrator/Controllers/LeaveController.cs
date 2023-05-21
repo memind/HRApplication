@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.LeaveDTOs;
 using IKApplication.Application.VMs.ExpenseVMs;
+using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using IKApplication.Infrastructure.ConcreteServices;
@@ -9,7 +10,9 @@ using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using OfficeOpenXml;
 using System.Data;
+using System.Drawing;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
@@ -198,6 +201,116 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Leave" });
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LeaveExcel()
+        {
+            var stream = new MemoryStream();
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+
+            var date = DateTime.Now;
+            var startDate = new DateTime(date.Year, date.Month, 1);
+            var endDate = new DateTime(date.Year, date.Month + 1, 1);
+
+            List<LeaveVM> allLeaveList = await _leaveService.GetAllLeaves(user.CompanyId);
+            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate > startDate && x.CreateDate < endDate).ToList();
+
+            ExcelPackage pck = new ExcelPackage(stream);
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
+
+            ws.Cells["A1"].Value = "Monthly Report";
+            ws.Cells["B1"].Value = "Leave";
+
+            ws.Cells["A2"].Value = "Date";
+            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+
+            ws.Cells["A4"].Value = "Leave For";
+            ws.Cells["B4"].Value = "Approved By";
+            ws.Cells["C4"].Value = "Start Date";
+            ws.Cells["D4"].Value = "End Date";
+            ws.Cells["E4"].Value = "Explanation";
+            ws.Cells["F4"].Value = "Leave Type";
+            ws.Cells["G4"].Value = "Status";
+
+            ws.Cells["A4:G4"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A4:G4"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A4:G4"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A4:G4"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A4:G4"].Style.Font.Bold = true;
+
+            int rowStart = 5;
+
+            foreach (var leave in leaveList)
+            {
+                if (leave.Status == Domain.Enums.Status.Passive)
+                {
+                    ws.Cells[string.Format("A{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("B{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("C{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("D{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("E{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+
+                    ws.Cells[string.Format("A{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("B{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("C{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("D{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("E{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                }
+
+                ws.Cells[string.Format("A{0}", rowStart)].Value = $"{leave.AppUser.Name} {leave.AppUser.SecondName} {leave.AppUser.Surname}";
+                ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("B{0}", rowStart)].Value = $"{leave.ApprovedBy.Name} {leave.ApprovedBy.SecondName} {leave.ApprovedBy.Surname}";
+                ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("C{0}", rowStart)].Value = leave.StartDate.ToShortDateString();
+                ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("D{0}", rowStart)].Value = leave.EndDate.ToShortDateString();
+                ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("E{0}", rowStart)].Value = leave.Explanation;
+                ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("F{0}", rowStart)].Value = leave.LeaveType.ToString();
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("G{0}", rowStart)].Value = leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+
+                rowStart++;
+            }
+            ws.Cells["A:AZ"].AutoFitColumns();
+            pck.Save();
+            stream.Position = 0;
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Monthly_Leave_Report_{date.Month}/{date.Year}.xlsx");
         }
     }
 }

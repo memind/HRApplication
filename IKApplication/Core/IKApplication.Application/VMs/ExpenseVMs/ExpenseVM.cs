@@ -19,5 +19,6 @@ namespace IKApplication.Application.VMs.ExpenseVMs
         public AppUser ExpenseBy { get; set; }
         public ExpenseType Type { get; set; }
         public string? FullName { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }
