@@ -8,6 +8,6 @@ namespace IKApplication.Application.DTOs.TitleDTOs
         public string Name { get; set; }
         public Guid CompanyId { get; set; }
         public DateTime CreateDate => DateTime.Now;
-        public Status Status => Status.Passive;
+        public Status Status => Status.Active;
     }
 }

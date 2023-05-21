@@ -214,7 +214,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var endDate = new DateTime(date.Year, date.Month + 1, 1);
 
             List<LeaveVM> allLeaveList = await _leaveService.GetAllLeaves(user.CompanyId);
-            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate > startDate && x.CreateDate < endDate).ToList();
+            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList();
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");

@@ -197,7 +197,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var endDate = new DateTime(date.Year, date.Month + 1, 1);
 
             List<ExpenseVM> allExpenseList = await _expenseService.GetAllExpenses(user.CompanyId);
-            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate > startDate && x.CreateDate < endDate).ToList() ;
+            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList() ;
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
