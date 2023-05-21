@@ -99,6 +99,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var expense = await _expenseService.GetById(id);
             var map = _mapper.Map<ExpenseUpdateDTO>(expense);
+            map.AmountString = map.Amount.ToString();
             return View(map);
         }
 
