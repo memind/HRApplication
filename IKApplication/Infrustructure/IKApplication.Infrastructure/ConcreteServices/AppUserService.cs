@@ -2,7 +2,6 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
-using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
@@ -54,6 +53,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CreateDate = x.CreateDate,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber
                 },
                 where: x => x.UserName == userName);
 
@@ -105,6 +106,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
                     Title = x.Title,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 include: x => x.Include(x => x.Company).Include(x => x.Title));
@@ -137,6 +140,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
                     Title = x.Title,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
                 include: x => x.Include(x => x.Company).Include(x => x.Title));
@@ -186,6 +191,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     CompanyName = x.Company.Name,
                     Title = x.Title,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber
                 },
                 where: x => x.UserName == userName,
                 include: x => x.Include(x => x.Company).Include(x => x.Title));
@@ -275,7 +282,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.ImagePath = model.ImagePath;
                 user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
-                user.JobStartDate = model.JobStartDate;
                 user.PhoneNumber = model.PhoneNumber;
                 user.UpdateDate = model.UpdateDate;
                 user.Status = model.Status;
@@ -347,58 +353,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 TitleId = title.Id,
             };
             await CreateUser(user, role);
-        }
-
-        public async Task<IdentityResult> CreatePersonal(PersonalCreateDTO model, string role)
-        {
-            var personal = await _userManager.FindByNameAsync(model.Email);
-
-            if (personal == null && model.Password != null && model.Password == model.ConfirmPassword)
-            {
-                var appPersonal = _mapper.Map<AppUser>(model);
-                appPersonal.UserName = model.Email;
-
-                var result = await _userManager.CreateAsync(appPersonal, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
-
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(appPersonal, role);
-                }
-                return result;
-            }
-            return IdentityResult.Failed(new IdentityError() { Code = "Create Error", Description = "User could not created. Check your information." });
-        }
-
-
-        public async Task UpdatePersonal(PersonalUpdateDTO model)
-        {
-            AppUser personal = await _userManager.FindByNameAsync(model.Email);
-
-            if (personal != null)
-            {
-                if (model.Password != null)
-                {
-                    personal.PasswordHash = _userManager.PasswordHasher.HashPassword(personal, model.Password);
-                }
-
-                personal.Name = model.Name;
-                personal.SecondName = model.SecondName;
-                personal.Surname = model.Surname;
-                personal.Email = model.Email;
-                personal.PhoneNumber = model.PhoneNumber;
-                personal.BloodGroup = model.BloodGroup;
-                personal.TitleId = model.TitleId;
-                personal.BirthDate = model.BirthDate;
-                personal.CreateDate = model.CreateDate;
-                personal.JobStartDate = model.JobStartDate;
-                personal.CompanyId = model.CompanyId;
-                personal.IdentityNumber = model.IdentityNumber;
-                personal.ImagePath = model.ImagePath;
-                personal.Status = model.Status;
-
-
-                await _userManager.UpdateAsync(personal);
-            }
         }
 
         public async Task AddCompanyManager(AppUserCreateDTO user, CompanyUpdateDTO company)

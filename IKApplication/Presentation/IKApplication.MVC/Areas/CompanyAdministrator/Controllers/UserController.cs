@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
-using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Application.VMs.UserVMs;
@@ -145,18 +144,17 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
 
-            var model = new PersonalCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
+            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonal(PersonalCreateDTO model)
+        public async Task<IActionResult> CreatePersonal(AppUserCreateDTO model)
         {
-            model.Id = Guid.NewGuid();
             if (ModelState.IsValid)
             {
-                var modelMap = _mapper.Map<AppUserCreateDTO>(model);
-                await _appUserService.CreateUser(modelMap, "Personal");
+                model.Id = Guid.NewGuid();
+                await _appUserService.CreateUser(model, "Personal");
 
                 var user = await _appUserService.GetByUserName(model.Email);
                 user.Password = "123";

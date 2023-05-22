@@ -15,7 +15,9 @@ namespace IKApplication.Application.VMs.UserVMs
         public BloodGroup? BloodGroup { get; set; }
         public string? Profession { get; set; }
         public DateTime BirthDate { get; set; }
+        public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string ImagePath { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
