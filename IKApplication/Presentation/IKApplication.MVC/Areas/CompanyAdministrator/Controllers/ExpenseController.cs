@@ -80,6 +80,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 model.Amount = Convert.ToDecimal(model.AmountString);
+                model.Id = Guid.NewGuid();
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
 

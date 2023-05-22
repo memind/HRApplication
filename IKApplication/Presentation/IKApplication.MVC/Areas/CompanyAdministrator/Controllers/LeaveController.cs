@@ -153,6 +153,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 await _leaveService.Create(model, User.Identity.Name);
 
                 _toast.AddSuccessToastMessage(Messages.Leaves.Create(), new ToastrOptions { Title = "Creating Leave" });

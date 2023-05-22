@@ -6,7 +6,7 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
 {
     public class ExpenseCreateDTO
     {
-        public Guid Id => Guid.NewGuid();
+        public Guid Id { get; set; }
         public DateTime CreateDate => DateTime.Now;
         public Status Status => Status.Passive;
         public string ShortDescription { get; set; }
