@@ -18,23 +18,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @*<div class="row">
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                @if (ViewBag.Area != "Site Administrator")
+                                {
+                                        <div class="d-flex justify-content-center mb-2">
+                                        <div class="col-md-3 m-3">
+                                            <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                        </div>
+                                        <div class="col-md-3 m-3">
+                                            <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
-                                    </div>
-                                </div>*@
-
-                                <div class="d-flex justify-content-center mb-2">
-                                    <div class="col-md-3 m-3">
-                                        <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
-                                    </div>
-                                    <div class="col-md-3 m-3">
-                                        <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
-                                    </div>
-                                </div>
+                                }
 
                                 @foreach (var item in Model)
                                 {
@@ -56,4 +50,7 @@
             </div>
         </div>
     </div>
+        <a asp-controller="User" asp-action="UserExcel" class="m-4">
+            <button class="btn btn-outline-primary">Export to Excel</button>
+        </a>
 </div>
