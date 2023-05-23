@@ -39,6 +39,7 @@
 		<PackageReference Include="Chart.js" Version="3.7.1" />
 		<PackageReference Include="DotNetOpenAuth.OAuth.Core" Version="4.3.4.13329" />
 		<PackageReference Include="EPPlus" Version="6.2.4" />
+		<PackageReference Include="itextsharp.xmlworker" Version="5.5.13.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -6,12 +6,16 @@ using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Enums;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
 using OfficeOpenXml;
 using System.Drawing;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
@@ -145,8 +149,6 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             var stream = new MemoryStream();
 
             var date = DateTime.Now;
-            var startDate = new DateTime(date.Year, date.Month, 1);
-            var endDate = new DateTime(date.Year, date.Month + 1, 1);
 
             List<AppUserVM> allUsersList = await _appUserService.GetAllUsers();
 
@@ -254,7 +256,118 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}.xlsx");
+        }
+
+        [HttpGet]
+        public async Task<FileResult> UserPDF()
+        {
+            // ffc0cb (pembe)
+            var allUsers = await _appUserService.GetAllUsers();
+
+            var date = DateTime.Now;
+
+            List<AppUserVM> users = allUsers.ToList();
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Full Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Email Address</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Identity Number</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Birth Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Company Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Title</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Role</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (AppUserVM user in users)
+            {
+                sb.Append("<tr>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{user.FullName}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.Email);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.IdentityNumber);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.BirthDate.ToShortDateString());
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.CompanyName);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.Title.Name);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(user.Roles[0]);
+                sb.Append("</td>");
+
+                sb.Append("</tr>");
+            }
+
+            #region Total User Count
+            sb.Append("<tr style='border: none'>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total User Count: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(users.Count);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 5f, 10f, 30f, 5f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}.pdf");
+
         }
     }
 }

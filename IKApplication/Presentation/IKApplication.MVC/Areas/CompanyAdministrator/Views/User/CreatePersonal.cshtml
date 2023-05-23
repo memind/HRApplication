@@ -1,4 +1,4 @@
-﻿@model PersonalCreateDTO
+﻿@model AppUserCreateDTO
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
@@ -9,7 +9,7 @@
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
-                            @*<div class="col-md-4">
+                            <div class="col-md-4">
                             <label asp-for="UploadPath" class="form-label">Photo</label>
                             <div class="form-group">
                             <img src="@Model.ImagePath" width="200" />
@@ -19,7 +19,7 @@
                             <span asp-validation-for="UploadPath" class="text-danger"></span>
                             <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
                             </div>
-                            </div>*@
+                            </div>
 
                             <div class="col-md-8">
                                 <input type="hidden" asp-for="Id" />

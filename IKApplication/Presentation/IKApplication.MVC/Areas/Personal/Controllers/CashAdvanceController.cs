@@ -73,6 +73,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 await _cashAdvanceService.Create(model);
                 _toast.AddSuccessToastMessage(Messages.Advance.Create(), new ToastrOptions { Title = "Creating Advance" });
 

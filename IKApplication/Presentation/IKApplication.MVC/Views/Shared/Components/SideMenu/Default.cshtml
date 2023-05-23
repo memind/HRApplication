@@ -69,6 +69,17 @@
             }
         </li>
         <li class="nav-item menu-items">
+            @if (area == "CompanyAdministrator")
+            {
+                <a class="nav-link" asp-area="@area" asp-controller="Title" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-format-title"></i>
+                    </span>
+                    <span class="menu-title">Company Titles</span>
+                </a>
+            }
+        </li>
+        <li class="nav-item menu-items">
             @if (area == "SiteAdministrator")
             {
                 <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="RegistrationList">

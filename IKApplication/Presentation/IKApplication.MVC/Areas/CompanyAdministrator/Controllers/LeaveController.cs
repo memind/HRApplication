@@ -1,18 +1,23 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.LeaveDTOs;
+using IKApplication.Application.VMs.ExcelVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
 using System.Data;
 using System.Drawing;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
@@ -153,6 +158,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 await _leaveService.Create(model, User.Identity.Name);
 
                 _toast.AddSuccessToastMessage(Messages.Leaves.Create(), new ToastrOptions { Title = "Creating Leave" });
@@ -204,42 +210,50 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LeaveExcel()
+        public IActionResult LeaveExport()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LeaveExcel(ExcelDateVM dates)
         {
             var stream = new MemoryStream();
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var date = DateTime.Now;
-            var startDate = new DateTime(date.Year, date.Month, 1);
-            var endDate = new DateTime(date.Year, date.Month + 1, 1);
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             List<LeaveVM> allLeaveList = await _leaveService.GetAllLeaves(user.CompanyId);
-            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList();
+            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
-            ws.Cells["A1"].Value = "Monthly Report";
-            ws.Cells["B1"].Value = "Leave";
+            ws.Cells["A1"].Value = "Leave Report";
+            ws.Cells["B1"].Value = "Created at";
+            ws.Cells["C1"].Value = date.ToShortDateString();
+            ws.Cells["A2"].Value = startDate.ToShortDateString();
+            ws.Cells["B2"].Value = "to";
+            ws.Cells["C2"].Value = endDate.ToShortDateString();
 
-            ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["A5"].Value = "Leave For";
+            ws.Cells["B5"].Value = "Approved By";
+            ws.Cells["C5"].Value = "Start Date";
+            ws.Cells["D5"].Value = "End Date";
+            ws.Cells["E5"].Value = "Explanation";
+            ws.Cells["F5"].Value = "Leave Type";
+            ws.Cells["G5"].Value = "Status";
 
-            ws.Cells["A4"].Value = "Leave For";
-            ws.Cells["B4"].Value = "Approved By";
-            ws.Cells["C4"].Value = "Start Date";
-            ws.Cells["D4"].Value = "End Date";
-            ws.Cells["E4"].Value = "Explanation";
-            ws.Cells["F4"].Value = "Leave Type";
-            ws.Cells["G4"].Value = "Status";
+            ws.Cells["A5:G5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Font.Bold = true;
 
-            ws.Cells["A4:G4"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Font.Bold = true;
-
-            int rowStart = 5;
+            int rowStart = 6;
 
             foreach (var leave in leaveList)
             {
@@ -310,7 +324,124 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Monthly_Leave_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<FileResult> LeavePDF(ExcelDateVM dates)
+        {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var allLeaves = await _leaveService.GetAllLeaves(user.CompanyId);
+
+            var date = DateTime.Now;
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+            List<LeaveVM> leaves = allLeaves.Where(x => x.Status != Domain.Enums.Status.Deleted).Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Leave For</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Start Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>End Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Explanation</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Leave Type</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (LeaveVM leave in leaves)
+            {
+                if (leave.Status == Status.Passive)
+                {
+                    sb.Append("<tr style='background-color: #ffc0cb'>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{leave.AppUser.Name} {leave.AppUser.SecondName} {leave.AppUser.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{leave.ApprovedBy.Name} {leave.ApprovedBy.SecondName} {leave.ApprovedBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.StartDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.EndDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.Explanation);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.LeaveType.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+                else
+                {
+                    sb.Append("<tr>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{leave.AppUser.Name} {leave.AppUser.SecondName} {leave.AppUser.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{leave.ApprovedBy.Name} {leave.ApprovedBy.SecondName} {leave.ApprovedBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.StartDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.EndDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.Explanation);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.LeaveType.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+            }
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
+
         }
     }
 }

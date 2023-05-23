@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
-using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Domain.Entites;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
 using System.Data;
+using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.Personal.Controllers
 {
@@ -17,29 +18,23 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailService _emailService;
+        private readonly ITitleService _titleService;
         private readonly IToastNotification _toast;
         private readonly ICompanyService _companyService;
         private readonly ITitleService _titleService;
         private readonly IMapper _mapper;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast, ITitleService titleService)
         {
             _appUserService = appUserSerives;
             _toast = toast;
-            _companyService = companyService;
             _titleService = titleService;
-            _mapper = mapper;
-            _emailService = emailService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //Todo: Get all users and send to view
-            var personals = await _appUserService.GetAllUsers();
-            return View(personals);
+            return RedirectToAction("Index","Dashboard");
         }
         [HttpGet]
         public async Task<IActionResult> ProfileDetails()
@@ -53,17 +48,20 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             ViewBag.Title = "Update Personal";
-            return View(await _appUserService.GetById(id));
+            ViewBag.Area = "Personal";
+            var user = await _appUserService.GetById(id);
+            user.Titles = await _titleService.GetCompanyTitles(user.CompanyId);
+            return View(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(PersonalUpdateDTO personal)
+        public async Task<IActionResult> Update(AppUserUpdateDTO personal)
         {
             if (ModelState.IsValid)
             {
                 if (personal.Password == personal.ConfirmPassword)
                 {
-                    await _appUserService.UpdatePersonal(personal);
+                    await _appUserService.UpdateUser(personal);
                     _toast.AddSuccessToastMessage(Messages.User.Update(personal.Email), new ToastrOptions { Title = "Updating Personal" });
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -74,6 +72,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 }
             }
 
+            personal.Titles = await _titleService.GetCompanyTitles(personal.CompanyId);
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Personal" });
             return View(personal);
         }

@@ -122,6 +122,22 @@
             }
         }
 
+        public static class Title
+        {
+            public static string Create()
+            {
+                return $"Title created successfully!";
+            }
+            public static string Update()
+            {
+                return $"Title updated successfully!";
+            }
+            public static string Delete()
+            {
+                return $"Title deleted successfully!";
+            }
+        }
+
         public static class Expense
         {
             public static string Create()

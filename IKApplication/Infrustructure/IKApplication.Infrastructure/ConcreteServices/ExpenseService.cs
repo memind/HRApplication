@@ -38,7 +38,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 expense.DeleteDate = expenseUpdateDTO.DeleteDate;
                 expense.ShortDescription = expenseUpdateDTO.ShortDescription;
                 expense.LongDescription = expenseUpdateDTO.LongDescription;
-                expense.Amount = expenseUpdateDTO.Amount;
+                expense.Amount = Convert.ToDecimal(expenseUpdateDTO.AmountString);
                 expense.ExpenseDate = expenseUpdateDTO.ExpenseDate;
                 expense.Type = expenseUpdateDTO.Type;
                 await _expenseRepository.Update(expense);
