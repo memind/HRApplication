@@ -30,5 +30,7 @@ namespace IKApplication.Application.DTOs.LeaveDTOs
 
         public string? FullName { get; set; }
         public virtual LeaveType LeaveType { get; set; }
+        public int TotalLeaveDays { get; set; }
+        public int RemainingLeaveDays { get; set; }
     }
 }
