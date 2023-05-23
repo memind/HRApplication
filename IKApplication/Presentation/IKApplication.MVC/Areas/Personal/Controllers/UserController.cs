@@ -21,7 +21,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         private readonly ITitleService _titleService;
         private readonly IToastNotification _toast;
         private readonly ICompanyService _companyService;
-        private readonly ITitleService _titleService;
         private readonly IMapper _mapper;
 
         public UserController(IAppUserService appUserSerives, IToastNotification toast, ITitleService titleService)
