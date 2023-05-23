@@ -7,13 +7,18 @@ using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
 using System.Data;
 using System.Drawing;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
+using iTextSharp.tool.xml.html.head;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
@@ -119,7 +124,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             return View(model);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _expenseService.DeleteExpense(id);
@@ -190,7 +195,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public IActionResult ExpenseExcel()
+        public IActionResult ExpenseExport()
         {
             return View();
         }
@@ -207,7 +212,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             List<ExpenseVM> allExpenseList = await _expenseService.GetAllExpenses(user.CompanyId);
-            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList() ;
+            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
@@ -240,7 +245,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             decimal totalPendingAmount = 0;
             decimal totalAmount = 0;
 
-            foreach (var expense in expenseList) 
+            foreach (var expense in expenseList)
             {
                 if (expense.Status == Domain.Enums.Status.Passive)
                 {
@@ -305,7 +310,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("H{0}", rowStart)].Value = expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active" ;
+                ws.Cells[string.Format("H{0}", rowStart)].Value = expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -376,7 +381,270 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",$"Expense_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Expense_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<FileResult> ExpensePDF(ExcelDateVM dates)
+        {
+            // ffc0cb (pembe)
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var expenses = await _expenseService.GetAllExpenses(user.CompanyId);
+
+            var date = DateTime.Now;
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+            List<ExpenseVM> customers = expenses.Where(x => x.Status != Domain.Enums.Status.Deleted).Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
+
+            decimal totalApprovedAmount = 0;
+            decimal totalPendingAmount = 0;
+            decimal totalAmount = 0;
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Type</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Amount</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Short Description</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Long Description</th>");
+            //sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (ExpenseVM expense in customers)
+            {
+                if (expense.Status == Domain.Enums.Status.Passive)
+                {
+                    sb.Append("<tr style='background-color: #ffc0cb'>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{expense.ApprovedBy.Name} {expense.ApprovedBy.SecondName} {expense.ApprovedBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Type);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.ExpenseDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Amount);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.ShortDescription);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.LongDescription);
+                    sb.Append("</td>");
+
+                    // Status A4'e sigmadi
+                    //sb.Append("<td style='border: 1px solid #ccc'>");
+                    //sb.Append(expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    //sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+
+                else
+                {
+                    sb.Append("<tr>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{expense.ApprovedBy.Name} {expense.ApprovedBy.SecondName} {expense.ApprovedBy.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Type);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.ExpenseDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Amount);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.ShortDescription);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.LongDescription);
+                    sb.Append("</td>");
+
+                    // Status A4'e sigmadi
+                    //sb.Append("<td style='border: 1px solid #ccc'>");
+                    //sb.Append(expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    //sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+                totalAmount += expense.Amount;
+
+                if (expense.Status == Domain.Enums.Status.Passive)
+                {
+                    totalPendingAmount += expense.Amount;
+                }
+
+                if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
+                {
+                    totalApprovedAmount += expense.Amount;
+                }
+            }
+
+
+            #region Total Approved Expenses Amount
+            sb.Append("<tr style='border: none'>");
+
+            // Status kolonu silindigi icin
+            //sb.Append("<td>");
+            //sb.Append("");
+            //sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Approved Expenses Amount: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(totalApprovedAmount);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
+            #region Total Pending Expenses Amount
+            sb.Append("<tr style='border: none'>");
+
+            // Status kolonu silindigi icin
+            //sb.Append("<td>");
+            //sb.Append("");
+            //sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Pending Expenses Amount: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(totalPendingAmount);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
+            #region Total Expenses Amount
+            sb.Append("<tr style='border: none'>");
+
+            // Status kolonu silindigi icin
+            //sb.Append("<td>");
+            //sb.Append("");
+            //sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Expenses Amount: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(totalAmount);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"Expense_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
+
         }
     }
 }
