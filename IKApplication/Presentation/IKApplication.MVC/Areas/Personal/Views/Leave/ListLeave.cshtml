@@ -7,6 +7,12 @@
             <div class="col-12">
                 <div class="table-responsive">
                     <form>
+                         @if (Model == null || Model.Count == 0)
+                        {
+                            <p>Has no data</p>
+                        }
+                        else
+                        {
                         <table id="order-listing" class="table">
                             <thead>
                                 <tr>
@@ -48,6 +54,7 @@
                                 }
                             </tbody>
                         </table>
+                        }
                     </form>
                 </div>
             </div>

@@ -21,5 +21,7 @@ namespace IKApplication.Domain.Entites
 
         public AppUser AppUser { get; set; }
         public AppUser ApprovedBy { get; set; }
+        public int TotalLeaveDays { get; set; }
+        public int RemainingLeaveDays { get; set; }
     }
 }

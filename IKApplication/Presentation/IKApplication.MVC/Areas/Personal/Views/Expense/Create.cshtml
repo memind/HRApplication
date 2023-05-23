@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">Add Expense</h5>
-                <form asp-controller="Expense" asp-action="Create" method="post">
+                <form id="addExpenseForm" asp-controller="Expense" asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <input type="hidden" asp-for="CreateDate" />
@@ -32,7 +32,7 @@
                         <div class="form-group">
                             <label asp-for="ExpenseDate" class="form-label">Expense Date</label><br />
                             <span asp-validation-for="ExpenseDate" class="text-danger"></span>
-                            <input asp-for="ExpenseDate" type="date" class="form-control mb-3">
+                            <input id="ExpenseDate" asp-for="ExpenseDate" type="date" class="form-control mb-3">
                         </div>
 
                         <div class="form-group">
@@ -53,3 +53,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("addExpenseForm").addEventListener("submit", function (event) {
+            var expenseDate = document.getElementById("ExpenseDate").value;
+            var selectedDate = new Date(expenseDate);
+            var currentDate = new Date();
+
+            if (selectedDate > currentDate) {
+                alert("You cannot select a future date.");
+                event.preventDefault(); // Formun gönderimini engeller
+            }
+        });
+    });
+</script>

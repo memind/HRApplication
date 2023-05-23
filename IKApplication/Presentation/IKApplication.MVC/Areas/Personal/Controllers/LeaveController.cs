@@ -83,6 +83,17 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
                 _emailService.SendMail(companyManagerMap.Email, subject, body);
 
+                var remainingLeaveDays = await _leaveService.GetRemainingLeaveDays(model.Id);
+                var requestedLeaveDays = (model.EndDate - model.StartDate).Days + 1;
+                if (remainingLeaveDays < requestedLeaveDays)
+                {
+
+                    throw new Exception("Insufficient leave balance");
+                }
+                model.AppUserId = leaveFor.Id;
+                //model.TotalLeaveDays = requestedLeaveDays;
+                model.RemainingLeaveDays = remainingLeaveDays - requestedLeaveDays;
+
                 return RedirectToAction("ListLeave", "Leave", new { Area = "Personal" });
             }
 

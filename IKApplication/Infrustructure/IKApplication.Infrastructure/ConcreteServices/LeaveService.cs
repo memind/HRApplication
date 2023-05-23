@@ -190,5 +190,29 @@ namespace IKApplication.Infrastructure.ConcreteServices
             map.Status = Status.Active;
             await _leaveRepository.Update(map);
         }
+
+        public async Task<int> GetRemainingLeaveDays(Guid appUserId)
+        {
+            var currentYear = DateTime.Now.Year;
+            List<Leave> approvedLeaves = await _leaveRepository.GetFilteredList(
+            select: x => x,
+            where: x => x.AppUserId == appUserId &&
+                x.LeaveStatus == LeaveStatus.Approved &&
+                x.StartDate.Year == currentYear &&
+                x.EndDate.Year == currentYear,
+           orderBy: null,
+           include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy));
+
+            int totalLeaveDays = 0;
+            foreach (var leave in approvedLeaves)
+            {
+                totalLeaveDays += (leave.EndDate - leave.StartDate).Days + 1;
+            }
+
+            int totalLeaveCount = 20; // Toplam izin gün sayısı, uygun bir değerle değiştirilmelidir
+
+            int remainingLeaveDays = (totalLeaveDays <= totalLeaveCount) ? totalLeaveCount - totalLeaveDays : 0;
+            return remainingLeaveDays;
+        }
     }
 }
