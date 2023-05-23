@@ -8,12 +8,16 @@ using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
 using System.Data;
 using System.Drawing;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
@@ -189,7 +193,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public IActionResult CashAdvanceExcel()
+        public IActionResult CashAdvanceExport()
         {
             return View();
         }
@@ -313,6 +317,148 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             pck.Save();
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
+        }
+        [HttpPost]
+        public async Task<FileResult> CashAdvancePDF(ExcelDateVM dates)
+        {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var allAdvances = await _cashAdvanceService.GetAllAdvances(user.CompanyId);
+
+            var date = DateTime.Now;
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+            List<CashAdvanceVM> advances = allAdvances.Where(x => x.Status != Domain.Enums.Status.Deleted).Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
+
+            decimal totalAmount = 0;
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Advance To</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Requested Amount</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Description</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Create Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (CashAdvanceVM advance in advances)
+            {
+                if (advance.Status == Domain.Enums.Status.Passive)
+                {
+                    sb.Append("<tr style='background-color: #ffc0cb'>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{advance.Director.Name} {advance.Director.SecondName} {advance.Director.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.RequestedAmount);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.Description);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.CreateDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+                else 
+                {
+                    sb.Append("<tr>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append($"{advance.Director.Name} {advance.Director.SecondName} {advance.Director.Surname}");
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.RequestedAmount);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.Description);
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.CreateDate.ToShortDateString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                    sb.Append("</td>");
+
+                    sb.Append("</tr>");
+                }
+
+                totalAmount += advance.RequestedAmount;
+            }
+
+
+            #region Total Cash Advance Amount
+            sb.Append("<tr style='border: none'>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='border: 0px solid #ccc'>");
+            sb.Append("");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Cash Advance Amount: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(totalAmount);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
+
         }
     }
 }
