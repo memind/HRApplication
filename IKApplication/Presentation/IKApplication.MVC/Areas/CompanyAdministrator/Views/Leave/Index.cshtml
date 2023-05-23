@@ -9,6 +9,9 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Leave List</h4>
+        <a asp-controller="Leave" asp-action="CreateLeave">
+            <button class="btn btn-outline-primary">Add Leave</button>
+        </a>
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
@@ -32,7 +35,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <button class="btn btn-outline-primary" asp-action="CreateLeave">New Leave</button>
                                 @foreach (var item in Model)
                                 {
 
