@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.LeaveDTOs;
+using IKApplication.Application.VMs.ExcelVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
@@ -153,6 +154,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 await _leaveService.Create(model, User.Identity.Name);
 
                 _toast.AddSuccessToastMessage(Messages.Leaves.Create(), new ToastrOptions { Title = "Creating Leave" });
@@ -204,42 +206,50 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LeaveExcel()
+        public IActionResult LeaveExcel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LeaveExcel(ExcelDateVM dates)
         {
             var stream = new MemoryStream();
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var date = DateTime.Now;
-            var startDate = new DateTime(date.Year, date.Month, 1);
-            var endDate = new DateTime(date.Year, date.Month + 1, 1);
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             List<LeaveVM> allLeaveList = await _leaveService.GetAllLeaves(user.CompanyId);
-            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList();
+            List<LeaveVM> leaveList = allLeaveList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
-            ws.Cells["A1"].Value = "Monthly Report";
-            ws.Cells["B1"].Value = "Leave";
+            ws.Cells["A1"].Value = "Leave Report";
+            ws.Cells["B1"].Value = "Created at";
+            ws.Cells["C1"].Value = date.ToShortDateString();
+            ws.Cells["A2"].Value = startDate.ToShortDateString();
+            ws.Cells["B2"].Value = "to";
+            ws.Cells["C2"].Value = endDate.ToShortDateString();
 
-            ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["A5"].Value = "Leave For";
+            ws.Cells["B5"].Value = "Approved By";
+            ws.Cells["C5"].Value = "Start Date";
+            ws.Cells["D5"].Value = "End Date";
+            ws.Cells["E5"].Value = "Explanation";
+            ws.Cells["F5"].Value = "Leave Type";
+            ws.Cells["G5"].Value = "Status";
 
-            ws.Cells["A4"].Value = "Leave For";
-            ws.Cells["B4"].Value = "Approved By";
-            ws.Cells["C4"].Value = "Start Date";
-            ws.Cells["D4"].Value = "End Date";
-            ws.Cells["E4"].Value = "Explanation";
-            ws.Cells["F4"].Value = "Leave Type";
-            ws.Cells["G4"].Value = "Status";
+            ws.Cells["A5:G5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:G5"].Style.Font.Bold = true;
 
-            ws.Cells["A4:G4"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:G4"].Style.Font.Bold = true;
-
-            int rowStart = 5;
+            int rowStart = 6;
 
             foreach (var leave in leaveList)
             {
@@ -310,7 +320,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Monthly_Leave_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
         }
     }
 }

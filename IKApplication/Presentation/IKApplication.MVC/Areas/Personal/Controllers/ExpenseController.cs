@@ -74,6 +74,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 model.Amount = decimal.Parse(model.AmountString);
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });

@@ -1,0 +1,39 @@
+﻿@model List<TitleVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Title List</h4>
+        <a asp-controller="Title" asp-action="CreateTitle">
+            <button class="btn btn-outline-primary">Add Title</button>
+        </a>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>
+
+                                            <button class="btn btn-outline-primary" asp-controller="Title" asp-action="UpdateTitle" asp-route-id="@item.Id">Update</button>
+                                            <button class="btn btn-outline-danger" asp-controller="Title" asp-action="DeleteTitle" asp-route-id="@item.Id">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

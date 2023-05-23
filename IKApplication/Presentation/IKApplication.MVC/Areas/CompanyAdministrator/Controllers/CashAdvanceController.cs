@@ -3,6 +3,7 @@ using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.CashAdvanceDTOs;
 using IKApplication.Application.dtos.ExpenseDTOs;
 using IKApplication.Application.VMs.CashAdvanceVMs;
+using IKApplication.Application.VMs.ExcelVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Infrastructure.ConcreteServices;
@@ -80,6 +81,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Id = Guid.NewGuid();
                 await _cashAdvanceService.Create(model);
                 _toast.AddSuccessToastMessage(Messages.Advance.Create(), new ToastrOptions { Title = "Creating Advance" });
 
@@ -187,41 +189,49 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CashAdvanceExcel()
+        public IActionResult CashAdvanceExcel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CashAdvanceExcel(ExcelDateVM dates)
         {
             var stream = new MemoryStream();
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var date = DateTime.Now;
-            var startDate = new DateTime(date.Year, date.Month, 1);
-            var endDate = new DateTime(date.Year, date.Month + 1, 1);
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             List<CashAdvanceVM> allAdvanceList = await _cashAdvanceService.GetAllAdvances(user.CompanyId);
-            List<CashAdvanceVM> advanceList = allAdvanceList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList();
+            List<CashAdvanceVM> advanceList = allAdvanceList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
-            ws.Cells["A1"].Value = "Monthly Report";
-            ws.Cells["B1"].Value = "Cash Advance";
+            ws.Cells["A1"].Value = "Cash Advance Report";
+            ws.Cells["B1"].Value = "Created at";
+            ws.Cells["C1"].Value = date.ToShortDateString();
+            ws.Cells["A2"].Value = startDate.ToShortDateString();
+            ws.Cells["B2"].Value = "to";
+            ws.Cells["C2"].Value = endDate.ToShortDateString();
 
-            ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["A5"].Value = "Advance To";
+            ws.Cells["B5"].Value = "Approved By";
+            ws.Cells["C5"].Value = "Requested Amount";
+            ws.Cells["D5"].Value = "Description";
+            ws.Cells["E5"].Value = "Create Date";
+            ws.Cells["F5"].Value = "Status";
 
-            ws.Cells["A4"].Value = "Advance To";
-            ws.Cells["B4"].Value = "Approved By";
-            ws.Cells["C4"].Value = "Requested Amount";
-            ws.Cells["D4"].Value = "Description";
-            ws.Cells["E4"].Value = "Create Date";
-            ws.Cells["F4"].Value = "Status";
+            ws.Cells["A5:F5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:F5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:F5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:F5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:F5"].Style.Font.Bold = true;
 
-            ws.Cells["A4:F4"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:F4"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:F4"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:F4"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:F4"].Style.Font.Bold = true;
-
-            int rowStart = 5;
+            int rowStart = 6;
             decimal totalAmount = 0;
 
             foreach (var advance in advanceList)
@@ -284,7 +294,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 totalAmount += advance.RequestedAmount;
             }
 
-            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Expense Amount: ";
+            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Cash Advance Amount: ";
             ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -302,7 +312,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Monthly_Cash_Advance_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
         }
     }
 }
