@@ -1,8 +1,11 @@
-﻿using IKApplication.Application.AbstractServices;
+﻿using AutoMapper;
+using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.PersonalDTO;
 using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Domain.Entites;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using System.Data;
@@ -14,12 +17,21 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
     public class UserController : Controller
     {
         private readonly IAppUserService _appUserService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IEmailService _emailService;
         private readonly IToastNotification _toast;
+        private readonly ICompanyService _companyService;
+        private readonly ITitleService _titleService;
+        private readonly IMapper _mapper;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService)
         {
             _appUserService = appUserSerives;
             _toast = toast;
+            _companyService = companyService;
+            _titleService = titleService;
+            _mapper = mapper;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -64,6 +76,15 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Personal" });
             return View(personal);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var user = await _appUserService.GetById(id);
+            await _appUserService.Delete(id);
+            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting Personal" });
+            return RedirectToAction("Index");
         }
     }
 }

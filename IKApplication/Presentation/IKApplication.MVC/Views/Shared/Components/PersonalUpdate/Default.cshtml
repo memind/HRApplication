@@ -4,131 +4,137 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">@ViewBag.Title</h5>
+                @*<h5 class="card-header">@ViewBag.Title</h5>*@
+                <h5 class="card-header">Update Personal</h5>
                 <form asp-controller="Personal" asp-action="Update" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
-                        <div class="row">
-                            @*<div class="col-md-4">
-                                <label asp-for="UploadPath" class="form-label">Photo</label>
-                                <div class="form-group">
-                                    <img src="@Model.ImagePath" width="200" />
-                                </div>
+                        @*<div class="row">*@
+                        <div class="card-body">
 
-                                <div class="form-group">
-                                    <span asp-validation-for="UploadPath" class="text-danger"></span>
-                                    <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
-                                </div>
+                            @*<div class="col-md-4">
+                            <label asp-for="UploadPath" class="form-label">Photo</label>
+                            <div class="form-group">
+                            <img src="@Model.ImagePath" width="200" />
+                            </div>
+
+                            <div class="form-group">
+                            <span asp-validation-for="UploadPath" class="text-danger"></span>
+                            <input asp-for="UploadPath" type="file" class="form-control mb-3" placeholder="Photo">
+                            </div>
                             </div>*@
 
-                            <div class="col-md-8">
-                                <input type="hidden" asp-for="Id" />
-                                <input type="hidden" asp-for="ImagePath" />
-                                <input type="hidden" asp-for="CreateDate" />
-                                <input type="hidden" asp-for="UpdateDate" />
-                                <input type="hidden" asp-for="Status" />
-                                <input type="hidden" asp-for="Email" />
-                                <input type="hidden" asp-for="Titles" />
-                                <input type="hidden" asp-for="Companies" />
-                                <input type="hidden" asp-for="CompanyId" />
-                                <input type="hidden" asp-for="Password" />
-                                <input type="hidden" asp-for="ConfirmPassword" />
+                            @*<div class="col-md-8">*@
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="ImagePath" />
+                            <input type="hidden" asp-for="CreateDate" />
+                            <input type="hidden" asp-for="UpdateDate" />
+                            <input type="hidden" asp-for="Status" />
+                            <input type="hidden" asp-for="Email" />
+                            <input type="hidden" asp-for="Titles" />
+                            <input type="hidden" asp-for="Companies" />
+                            <input type="hidden" asp-for="CompanyId" />
+                            @*<input type="hidden" asp-for="Password" />*@
+                            @*<input type="hidden" asp-for="ConfirmPassword" />*@
 
-                                <div class="form-group">
-                                    <label asp-for="Name" class="form-label">Name</label><br />
-                                    <span asp-validation-for="Name" class="text-danger"></span>
-                                    <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="form-label">Name</label><br />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                                <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="SecondName" class="form-label">Second Name</label><br />
-                                    <span asp-validation-for="SecondName" class="text-danger"></span>
-                                    <input asp-for="SecondName" type="text" class="form-control mb-3" placeholder="Enter Second Name">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="SecondName" class="form-label">Second Name</label><br />
+                                <span asp-validation-for="SecondName" class="text-danger"></span>
+                                <input asp-for="SecondName" type="text" class="form-control mb-3" placeholder="Enter Second Name">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="Surname" class="form-label">Surname</label><br />
-                                    <span asp-validation-for="Surname" class="text-danger"></span>
-                                    <input asp-for="Surname" type="text" class="form-control mb-3" placeholder="Enter Surname">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="Surname" class="form-label">Surname</label><br />
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                                <input asp-for="Surname" type="text" class="form-control mb-3" placeholder="Enter Surname">
+                            </div>
 
-                                @*<div class="form-group">
-                                    <label asp-for="CompanyId" class="form-label">Company</label><br />
-                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
-                                    <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
-                                </div>*@
+                            @*<div class="form-group">
+                            <label asp-for="CompanyId" class="form-label">Company</label><br />
+                            <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            <select asp-for="CompanyId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Companies,"Id","Name"))"></select>
+                            </div>*@
 
-                                <div class="form-group">
-                                    <label asp-for="TitleId" class="form-label">Title</label><br />
-                                    <span asp-validation-for="TitleId" class="text-danger"></span>
-                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))"></select>
-                                </div>
+                            @*<div class="form-group">
+                            <label asp-for="TitleId" class="form-label">Title</label><br />
+                            <span asp-validation-for="TitleId" class="text-danger"></span>
+                            <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))"></select>
+                            </div>*@
 
-                                <div class="form-group">
-                                    <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
-                                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
-                                    <select asp-for="BloodGroup" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
+                                <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                                <select asp-for="BloodGroup" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="Position" class="form-label">Position</label><br />
-                                    <span asp-validation-for="Position" class="text-danger"></span>
-                                    <input asp-for="Position" type="text" class="form-control mb-3" placeholder="Enter Position">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="Position" class="form-label">Position</label><br />
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                                <input asp-for="Position" type="text" class="form-control mb-3" placeholder="Enter Position">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
-                                    <span asp-validation-for="BirthDate" class="text-danger"></span>
-                                    <input asp-for="BirthDate" type="date" class="form-control mb-3" placeholder="Enter Birth Date">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                <input asp-for="BirthDate" type="date" class="form-control mb-3" placeholder="Enter Birth Date">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
-                                    <span asp-validation-for="JobStartDate" class="text-danger"></span>
-                                    <input asp-for="JobStartDate" type="date" class="form-control mb-3">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
+                                <span asp-validation-for="JobStartDate" class="text-danger"></span>
+                                <input asp-for="JobStartDate" type="date" class="form-control mb-3">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="IdentityNumber" class="form-label">Identity Number</label><br />
-                                    <span asp-validation-for="IdentityNumber" class="text-danger"></span>
-                                    <input asp-for="IdentityNumber" type="text" class="form-control mb-3" placeholder="Enter Identity Number">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="IdentityNumber" class="form-label">Identity Number</label><br />
+                                <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                                <input asp-for="IdentityNumber" type="text" class="form-control mb-3" placeholder="Enter Identity Number">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="Email" class="form-label">Email</label><br />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                    <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email" disabled>
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="Email" class="form-label">Email</label><br />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <input asp-for="Email" type="email" class="form-control mb-3" placeholder="Enter Email" disabled>
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                    <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">
+                            </div>
 
-                                @*<div class="form-group">
-                                    <label asp-for="Password" class="form-label">Password</label><br />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
-                                </div>
+                            @*<div class="form-group">
+                            <label asp-for="Password" class="form-label">Password</label><br />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <input asp-for="Password" type="password" class="form-control mb-3" placeholder="Enter Password">
+                            </div>
 
-                                <div class="form-group">
-                                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
-                                </div>*@
+                            <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label><br />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control mb-3" placeholder="Enter Password Again">
+                            </div>*@
 
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Update</button>
-                                </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Update</button>
                             </div>
                         </div>
                     </div>
                 </form>
+
+
                 <div class="d-flex justify-content-center mb-2">
                     <div class="col-md-2">
                         <a asp-controller="User" asp-action="Index">
-                            <button class="btn btn-outline-info">Back to List</button>
+                            @*<button class="btn btn-outline-info">Back to List</button>*@
+                            <button type="submit" class="btn btn-outline-primary btn-block">Update</button>
+
                         </a>
                     </div>
                 </div>
@@ -136,7 +142,7 @@
         </div>
     </div>
 </div>
-
+@*
 <script type="text/javascript">
     $(function () {
         $('#CompanyId').change(function () {
@@ -145,11 +151,12 @@
     @foreach (var title in Model.Titles)
     {
         <text>
-                                if (companyId == "@title.CompanyId")
-                        options += "<option value='@title.Id'>@title.Name</option>";
+                                                                if (companyId == "@title.CompanyId")
+                    options += "<option value='@title.Id'>@title.Name</option>";
         </text>
     }
                 document.getElementById("TitleId").innerHTML = options;
         });
     })
 </script>
+*@

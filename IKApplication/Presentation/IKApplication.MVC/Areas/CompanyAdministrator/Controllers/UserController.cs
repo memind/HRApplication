@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
+using SixLabors.ImageSharp.ColorSpaces.Companding;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.CompanyAdministratorControllers
@@ -48,6 +49,10 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var users = await _appUserService.GetUsersByCompany(user.CompanyId);
             return View(users);
         }
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> ProfileDetails()
         {
@@ -55,6 +60,10 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             ViewBag.Title = "Profile Details";
             return View("Update", user);
         }
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
@@ -145,9 +154,17 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
 
-            var model = new PersonalCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
+            var model = new PersonalCreateDTO() 
+            { 
+                CompanyId = user.CompanyId, 
+                Companies = companies, 
+                Titles = titles, 
+                Password = "123", 
+                ConfirmPassword = "123" 
+            };
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonal(PersonalCreateDTO model)
@@ -162,6 +179,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 user.Password = "123";
 
                 await _appUserService.UpdateUser(user);
+            
 
                 string subject = "Get Your Password";
                 string body = "To set your password, please click the link below: https://ikapp.azurewebsites.net/Account/ForgotPassword";
