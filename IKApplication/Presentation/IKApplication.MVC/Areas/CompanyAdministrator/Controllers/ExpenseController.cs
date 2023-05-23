@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.ExpenseDTOs;
+using IKApplication.Application.VMs.ExcelVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Domain.Entites;
@@ -189,43 +190,52 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExpenseExcel()
+        public IActionResult ExpenseExcel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExpenseExcel(ExcelDateVM dates)
         {
             var stream = new MemoryStream();
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var date = DateTime.Now;
-            var startDate = new DateTime(date.Year,date.Month, 1);
-            var endDate = new DateTime(date.Year, date.Month + 1, 1);
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             List<ExpenseVM> allExpenseList = await _expenseService.GetAllExpenses(user.CompanyId);
-            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate >= startDate && x.CreateDate < endDate).ToList() ;
+            List<ExpenseVM> expenseList = allExpenseList.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList() ;
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
-            ws.Cells["A1"].Value = "Monthly Report";
-            ws.Cells["B1"].Value = "Expense";
+            ws.Cells["A1"].Value = "Expense Report";
+            ws.Cells["B1"].Value = "Created at";
+            ws.Cells["C1"].Value = date.ToShortDateString();
+            ws.Cells["A2"].Value = startDate.ToShortDateString();
+            ws.Cells["B2"].Value = "to";
+            ws.Cells["C2"].Value = endDate.ToShortDateString();
 
-            ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
 
-            ws.Cells["A4"].Value = "Expense By";
-            ws.Cells["B4"].Value = "Approved By";
-            ws.Cells["C4"].Value = "Expense Type";
-            ws.Cells["D4"].Value = "Expense Date";
-            ws.Cells["E4"].Value = "Amount";
-            ws.Cells["F4"].Value = "Short Description";
-            ws.Cells["G4"].Value = "Long Description";
-            ws.Cells["H4"].Value = "Status";
+            ws.Cells["A5"].Value = "Expense By";
+            ws.Cells["B5"].Value = "Approved By";
+            ws.Cells["C5"].Value = "Expense Type";
+            ws.Cells["D5"].Value = "Expense Date";
+            ws.Cells["E5"].Value = "Amount";
+            ws.Cells["F5"].Value = "Short Description";
+            ws.Cells["G5"].Value = "Long Description";
+            ws.Cells["H5"].Value = "Status";
 
-            ws.Cells["A4:H4"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:H4"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:H4"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:H4"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A4:H4"].Style.Font.Bold = true;
+            ws.Cells["A5:H5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Font.Bold = true;
 
-            int rowStart = 5;
+            int rowStart = 6;
             decimal totalApprovedAmount = 0;
             decimal totalPendingAmount = 0;
             decimal totalAmount = 0;
@@ -366,7 +376,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",$"Monthly_Expense_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",$"Expense_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
         }
     }
 }

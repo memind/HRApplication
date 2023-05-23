@@ -254,7 +254,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Month}/{date.Year}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}.xlsx");
         }
     }
 }
