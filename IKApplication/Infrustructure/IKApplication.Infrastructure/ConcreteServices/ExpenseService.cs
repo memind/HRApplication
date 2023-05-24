@@ -25,6 +25,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task CreateExpense(ExpenseCreateDTO expenseCreateDTO)
         {
             var map = _mapper.Map<Expense>(expenseCreateDTO);
+            var expenseBy = await _appUserService.GetCurrentUserInfo(expenseCreateDTO.ExpenseById);
+
+
+            map.ApprovedById = (Guid)expenseBy.PatronId;
+            map.ExpenseById = expenseBy.Id;
+            map.CompanyId = expenseBy.CompanyId;
+
             await _expenseRepository.Create(map);
         }
 
@@ -122,9 +129,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ExpenseBy = x.ExpenseBy,
                         Type = x.Type
                     },
-                    where: x => x.Status == Status.Passive && x.ExpenseBy.CompanyId == companyId,
+                    where: x => x.Status == Status.Passive && x.ExpenseBy.CompanyId == companyId && x.ApprovedById == x.ExpenseBy.PatronId,
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
-                    include: x => x.Include(x => x.ExpenseBy).Include(x => x.ApprovedBy)
+                    include: x => x.Include(x => x.ExpenseBy).Include(x => x.ApprovedBy).Include(x => x.ExpenseBy.Patron)
                 );
 
             return companyExpenses;
@@ -168,18 +175,38 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task<ExpenseVM> GetVMById(Guid id)
         {
-            var expense = await _expenseRepository.GetDefault(x => x.Id == id);
-            var map = _mapper.Map<ExpenseVM>(expense);
-            map.ApprovedBy = expense.ApprovedBy;
-            map.ExpenseBy = expense.ExpenseBy;
+            var expense = await _expenseRepository.GetFilteredFirstOrDefault
+                (
+                    select: x => new ExpenseVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        CreateDate = x.CreateDate,
+                        ShortDescription = x.ShortDescription,
+                        LongDescription = x.LongDescription,
+                        Amount = x.Amount,
+                        ExpenseDate = x.ExpenseDate,
+                        ApprovedById = x.ApprovedById,
+                        ApprovedBy = x.ApprovedBy,
+                        ExpenseById = x.ExpenseById,
+                        CompanyId = x.CompanyId,
+                        ExpenseBy = x.ExpenseBy,
+                        Type = x.Type
+                    },
+                    where: x => x.Id == id && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.ExpenseDate),
+                    include: x => x.Include(x => x.ExpenseBy).Include(x => x.ApprovedBy).Include(x => x.ExpenseBy.Company).Include(x => x.ExpenseBy.Patron)
+                );
 
-            return map;
+            return expense;
         }
 
         public async Task AcceptExpense(ExpenseVM model)
         {
             var map = _mapper.Map<Expense>(model);
             map.Status = Status.Active;
+            map.ApprovedBy = null;
+            map.ExpenseBy = null;
             await _expenseRepository.Update(map);
         }
     }

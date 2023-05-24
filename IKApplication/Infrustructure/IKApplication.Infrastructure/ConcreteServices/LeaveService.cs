@@ -29,7 +29,13 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task Create(CreateLeaveDTO model, string userName)
         {
             var map = _mapper.Map<Leave>(model);
-            //map.AppUserId = await _appUserService.GetUserId(userName);
+            var leaveFor = await _appUserService.GetCurrentUserInfo((Guid)model.AppUserId);
+
+
+            map.ApprovedById = (Guid)leaveFor.PatronId;
+            map.AppUserId = leaveFor.Id;
+            map.CompanyId = leaveFor.CompanyId;
+
             await _leaveRepository.Create(map);
         }
 
@@ -129,7 +135,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ApprovedBy = x.ApprovedBy,
                         ApprovedById = x.ApprovedById
                     },
-                    where: x => x.Status == Status.Passive && x.AppUser.CompanyId == companyId,
+                    where: x => x.Status == Status.Passive && x.AppUser.CompanyId == companyId && x.ApprovedById == x.AppUser.PatronId,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
                     include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
                 );
@@ -176,18 +182,43 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task<LeaveVM> GetVMById(Guid id)
         {
-            var leave = await _leaveRepository.GetDefault(x => x.Id == id);
-            var map = _mapper.Map<LeaveVM>(leave);
-            map.ApprovedBy = leave.ApprovedBy;
-            map.AppUser = leave.AppUser;
-           
-            return map;
+            //var leave = await _leaveRepository.GetDefault(x => x.Id == id);
+            //var map = _mapper.Map<LeaveVM>(leave);
+            //map.ApprovedBy = leave.ApprovedBy;
+            //map.AppUser = leave.AppUser;
+            var leave = await _leaveRepository.GetFilteredFirstOrDefault
+                (
+                    select: x => new LeaveVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        AppUserId = x.AppUserId,
+                        AppUser = x.AppUser,
+                        LeaveType = x.LeaveType,
+                        CompanyId = x.CompanyId,
+                        ApprovedBy = x.ApprovedBy,
+                        ApprovedById = x.ApprovedById
+                    },
+                    where: x => x.Id == id && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy).Include(x => x.AppUser.Company).Include(x => x.AppUser.Patron)
+                );
+
+            return leave;
         }
 
         public async Task AcceptLeave(LeaveVM model)
         {
             var map = _mapper.Map<Leave>(model);
             map.Status = Status.Active;
+            map.AppUser = null;
+            map.ApprovedBy = null;
             await _leaveRepository.Update(map);
         }
 

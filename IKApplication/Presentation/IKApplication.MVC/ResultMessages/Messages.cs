@@ -116,6 +116,10 @@
             {
                 return $"Your password changed successfully!";
             }
+            public static string Set()
+            {
+                return $"Your password settled successfully!";
+            }
             public static string Error()
             {
                 return $"The email address you entered is not registered!";

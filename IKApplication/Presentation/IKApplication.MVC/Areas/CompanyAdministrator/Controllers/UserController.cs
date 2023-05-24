@@ -30,7 +30,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         private readonly ITitleService _titleService;
         private readonly IMapper _mapper;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService, UserManager<AppUser> userManager)
         {
             _appUserService = appUserSerives;
             _toast = toast;
@@ -38,6 +38,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             _titleService = titleService;
             _mapper = mapper;
             _emailService = emailService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -49,9 +50,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             return View(users);
         }
 
-
-
-
         [HttpGet]
         public async Task<IActionResult> ProfileDetails()
         {
@@ -59,10 +57,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             ViewBag.Title = "Profile Details";
             return View("Update", user);
         }
-
-
-
-
 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
@@ -108,22 +102,26 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         [HttpPost]
         public async Task<IActionResult> CreateCompanyManager(AppUserCreateDTO model)
         {
+            var patron = await _appUserService.GetByUserName(User.Identity.Name);
             if (ModelState.IsValid)
             {
+                model.PatronId = patron.Id;
+                model.Id = Guid.NewGuid();
+                model.Password = "123";
+                model.ConfirmPassword = "123";
+
                 await _appUserService.CreateUser(model, "Company Administrator");
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-                var user = await _appUserService.GetByUserName(model.Email);
-                user.Password = "123";
+                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
+                string subject = "Set Your Password";
+                string body = "To set your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
 
-                await _appUserService.UpdateUser(user);
+                _emailService.SendMail(model.Email, subject, body);
 
                 var company = await _companyService.GetById(user.CompanyId);
                 var create = _appUserService.AddCompanyManager(model, company);
-
-                string subject = "Get Your Password";
-                string body = "To set your password, please click the link below: https://ikapp.azurewebsites.net/Account/ForgotPassword";
-                _emailService.SendMail(model.Email, subject, body);
-
 
                 _toast.AddSuccessToastMessage(Messages.CompanyAdmin.Create(model.Email), new ToastrOptions { Title = "Creating Company Manager" });
                 return RedirectToAction("Index");
@@ -157,28 +155,32 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             return View(model);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> CreatePersonal(AppUserCreateDTO model)
         {
             if (ModelState.IsValid)
             {
+                var patron = await _appUserService.GetByUserName(User.Identity.Name);
+
+                model.PatronId = patron.Id;
                 model.Id = Guid.NewGuid();
+                model.Password = "123";
+                model.ConfirmPassword = "123";
+
                 await _appUserService.CreateUser(model, "Personal");
 
-                var user = await _appUserService.GetByUserName(model.Email);
-                user.Password = "123";
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-                await _appUserService.UpdateUser(user);
-            
+                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
+                string subject = "Set Your Password";
+                string body = "To set your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
 
-                string subject = "Get Your Password";
-                string body = "To set your password, please click the link below: https://ikapp.azurewebsites.net/Account/ForgotPassword";
-                _emailService.SendMail(model.Email, subject, body);
+                _emailService.SendMail(user.Email, subject, body);
 
 
                 _toast.AddSuccessToastMessage(Messages.Personal.Create(model.Email), new ToastrOptions { Title = "Creating Personal" });
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "User");
             }
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Personal" });
@@ -189,10 +191,60 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
 
             model.CompanyId = currentUser.CompanyId;
+            model.PatronId = currentUser.Id;
             model.Companies = companies;
             model.Titles = titles;
             model.Password = "123";
             model.ConfirmPassword = "123";
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> SetPassword(string email, string Code)
+        {
+            var model = new ResetPasswordVM();
+
+            if (email != null && Code != null)
+            {
+                model.Code = Code;
+                model.Email = email;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> SetPassword(ResetPasswordVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user != null)
+            {
+                user.Status = Status.Active;
+                var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+
+                if (result.Succeeded)
+                {
+                    var mailUser = await _appUserService.GetCurrentUserInfo(model.Email); 
+
+                    string subject = "New Personal";
+                    string body = $"Personal {mailUser.Name} {mailUser.SecondName} {mailUser.Surname} has been active.";
+
+                    _emailService.SendMail(mailUser.Patron.Email, subject, body);
+
+                    _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Set(), new ToastrOptions { Title = "Success" });
+                    return RedirectToAction("Login", "Account", new { Area = "" });
+                }
+            }
+
+            _toast.AddErrorToastMessage(Messages.ResetPasswordMessage.Error(), new ToastrOptions { Title = "Error" });
 
             return View(model);
         }

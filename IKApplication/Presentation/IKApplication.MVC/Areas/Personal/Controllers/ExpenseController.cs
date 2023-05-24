@@ -60,29 +60,20 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
-            var company = await _companyService.GetById(expenseBy.CompanyId);
-            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            var companyManager = companyManagers.Where(x => x.CompanyId == expenseBy.CompanyId).First();
-
-            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
-
-            model.ApprovedById = companyManagerMap.Id;
-            model.ExpenseById = expenseBy.Id;
-            model.CompanyId = expenseBy.CompanyId;
-
             if (ModelState.IsValid)
             {
+                model.ExpenseById = expenseBy.Id;
                 model.Id = Guid.NewGuid();
                 model.Amount = decimal.Parse(model.AmountString);
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
 
-                string subject = "New Expense Request Arrived";
-                string body = $"The user {expenseBy.Name} {expenseBy.SecondName} {expenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+                var mailExpense = await _expenseService.GetVMById(model.Id);
 
-                _emailService.SendMail(companyManagerMap.Email, subject, body);
+                string subject = "New Expense Request Arrived";
+                string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
 
                 return RedirectToAction("Index", "Expense");
             }
@@ -95,6 +86,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             var expense = await _expenseService.GetById(id);
             var map = _mapper.Map<ExpenseUpdateDTO>(expense);
+            map.AmountString = map.Amount.ToString();
             return View(map);
         }
 

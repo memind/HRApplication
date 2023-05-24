@@ -76,6 +76,8 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
             if (user != null)
             {
+                Guid id = user.Id;
+                user.PatronId = id;
                 await _appUserService.UpdateUser(user);
                 _toast.AddSuccessToastMessage(Messages.User.Accept(user.Email), new ToastrOptions { Title = "User Request" });
             }

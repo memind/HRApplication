@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">Add Expense</h5>
-                <form id="addExpenseForm" asp-controller="Expense" asp-action="Create" method="post">
+                <form id="addExpenseForm" asp-controller="Expense" asp-action="Create" method="post" onsubmit="return validateDate();">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <input type="hidden" asp-for="CreateDate" />
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<script>
+@*<script>
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("addExpenseForm").addEventListener("submit", function (event) {
             var expenseDate = document.getElementById("ExpenseDate").value;
@@ -68,4 +68,29 @@
             }
         });
     });
+</script>*@
+
+<script>
+    var formId = "addExpenseForm";
+    var inputId = "ExpenseDate";
+    function validateDate() {
+        var form = document.getElementById(formId);
+        var input = document.getElementById(inputId);
+        var now = new Date();
+        var enteredDate = new Date(input.value);
+
+        var oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+
+        if (enteredDate > now) {
+            alert("You cannot select a future date!");
+            return false;
+        }
+
+        if (enteredDate <= oneYearAgo) {
+            alert("You cannot select more than one year ago!");
+            return false;
+        }
+
+        form.submit();
+    }
 </script>

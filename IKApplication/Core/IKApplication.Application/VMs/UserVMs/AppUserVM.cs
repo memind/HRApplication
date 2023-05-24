@@ -23,6 +23,8 @@ namespace IKApplication.Application.VMs.UserVMs
         public string Email { get; set; }
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
+        public Guid? PatronId { get; set; }
+        public AppUser? Patron { get; set; }
         public string CompanyName { get; set; }
         public Title Title { get; set; }
         public List<string> Roles { get; set; }

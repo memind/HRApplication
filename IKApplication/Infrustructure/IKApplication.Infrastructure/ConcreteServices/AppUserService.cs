@@ -107,10 +107,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyName = x.Company.Name,
                     Title = x.Title,
                     JobStartDate = x.JobStartDate,
-                    PhoneNumber = x.PhoneNumber
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
-                include: x => x.Include(x => x.Company).Include(x => x.Title));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
 
             foreach (var user in users)
             {
@@ -141,10 +142,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyName = x.Company.Name,
                     Title = x.Title,
                     JobStartDate = x.JobStartDate,
-                    PhoneNumber = x.PhoneNumber
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
-                include: x => x.Include(x => x.Company).Include(x => x.Title));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
 
             foreach (var user in users)
             {
@@ -192,12 +194,46 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyName = x.Company.Name,
                     Title = x.Title,
                     JobStartDate = x.JobStartDate,
-                    PhoneNumber = x.PhoneNumber
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId,
+                    Patron = x.Patron
                 },
                 where: x => x.UserName == userName,
-                include: x => x.Include(x => x.Company).Include(x => x.Title));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
 
             model.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(userName));
+
+            return model;
+        }
+        public async Task<AppUserVM> GetCurrentUserInfo(Guid id)
+        {
+            AppUserVM model = await _appUserRepository.GetFilteredFirstOrDefault(
+                select: x => new AppUserVM
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    BloodGroup = x.BloodGroup,
+                    Profession = x.Profession,
+                    BirthDate = x.BirthDate,
+                    IdentityNumber = x.IdentityNumber,
+                    ImagePath = x.ImagePath,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
+                    CompanyName = x.Company.Name,
+                    Title = x.Title,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId,
+                    Patron = x.Patron
+                },
+                where: x => x.Id == id,
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
+
+            model.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByEmailAsync(model.Email));
 
             return model;
         }
@@ -285,6 +321,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.PhoneNumber = model.PhoneNumber;
                 user.UpdateDate = model.UpdateDate;
                 user.Status = model.Status;
+                user.PatronId = model.PatronId;
 
                 await _userManager.UpdateAsync(user);
             }
@@ -350,7 +387,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 ConfirmPassword = register.UserConfirmPassword,
                 ImagePath = register.UserImagePath,
                 CompanyId = company.Id,
-                TitleId = title.Id,
+                TitleId = title.Id
             };
             await CreateUser(user, role);
         }

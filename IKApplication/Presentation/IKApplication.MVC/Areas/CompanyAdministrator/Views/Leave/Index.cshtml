@@ -16,59 +16,59 @@
             <div class="col-12">
                 <div class="table-responsive">
                     <form>
-                         @if (Model == null || Model.Count == 0)
+                        @if (Model == null || Model.Count == 0)
                         {
-                            <p>Has no data</p>
+                            <p class="text-center mt-4" style="font-style: italic;">Has no data</p>
                         }
                         else
                         {
-                        <table id="order-listing" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Personal</th>
-                                    <th>Approved By</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Explanation</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-
+                            <table id="order-listing" class="table">
+                                <thead>
                                     <tr>
-                                        <td>@item.PersonalFullName</td>
-                                        <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
-                                        <td>@item.StartDate.ToShortDateString()</td>
-                                        <td>@item.EndDate.ToShortDateString()</td>
-                                        <td>@item.Explanation</td>
-                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
-                                        {
-                                            <td>
-                                                Approved
-                                            </td>
-                                        }
-                                        @if (@item.Status == Status.Passive)
-                                        {
-                                            <td>
-                                                In Pending
-                                            </td>
-                                        }
-                                        <td>
-                                            @if ((item.Status == Status.Passive || item.Status == Status.Deleted) && item.CurrentUserId == item.AppUserId)
-                                            {
-                                                <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
-                                            }
-                                            <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
-                                        </td>
+                                        <th>Personal</th>
+                                        <th>Approved By</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Explanation</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+
+                                        <tr>
+                                            <td>@item.PersonalFullName</td>
+                                            <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>@item.EndDate.ToShortDateString()</td>
+                                            <td>@item.Explanation</td>
+                                            @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                            {
+                                                <td>
+                                                    Approved
+                                                </td>
+                                            }
+                                            @if (@item.Status == Status.Passive)
+                                            {
+                                                <td>
+                                                    In Pending
+                                                </td>
+                                            }
+                                            <td>
+                                                @if ((item.Status == Status.Passive || item.Status == Status.Deleted) && item.CurrentUserId == item.AppUserId)
+                                                {
+                                                    <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
+                                                }
+                                                <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                            </td>
+                                        </tr>
 
 
-                                }
-                            </tbody>
-                        </table>
+                                    }
+                                </tbody>
+                            </table>
                         }
                     </form>
                 </div>

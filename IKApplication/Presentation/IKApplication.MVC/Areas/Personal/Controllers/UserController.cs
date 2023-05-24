@@ -75,14 +75,5 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Personal" });
             return View(personal);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var user = await _appUserService.GetById(id);
-            await _appUserService.Delete(id);
-            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting Personal" });
-            return RedirectToAction("Index");
-        }
     }
 }
