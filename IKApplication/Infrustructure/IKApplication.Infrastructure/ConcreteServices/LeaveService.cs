@@ -51,6 +51,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 leave.LeaveStatus = model.LeaveStatus;
                 leave.StartDate = model.StartDate;
                 leave.EndDate = model.EndDate;
+                leave.TotalLeaveDays = model.TotalLeaveDays;
                 await _leaveRepository.Update(leave);
             }
         }
@@ -82,7 +83,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         AppUser = x.AppUser,
                         LeaveType = x.LeaveType,
                         ApprovedBy = x.ApprovedBy,
-                        ApprovedById = x.ApprovedById
+                        ApprovedById = x.ApprovedById,
+                        TotalLeaveDays = x.TotalLeaveDays
                     },
                     where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -104,7 +106,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         EndDate = x.EndDate,
                         Explanation = x.Explanation,
                         LeaveStatus = x.LeaveStatus,
-                        LeaveType = x.LeaveType
+                        LeaveType = x.LeaveType,
+                        TotalLeaveDays = x.TotalLeaveDays
                     },
                     where: x => x.Id == id && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -133,7 +136,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         CompanyId = x.CompanyId,
                         LeaveType = x.LeaveType,
                         ApprovedBy = x.ApprovedBy,
-                        ApprovedById = x.ApprovedById
+                        ApprovedById = x.ApprovedById,
+                        TotalLeaveDays = x.TotalLeaveDays
                     },
                     where: x => x.Status == Status.Passive && x.AppUser.CompanyId == companyId && x.ApprovedById == x.AppUser.PatronId,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -162,7 +166,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         LeaveType = x.LeaveType,
                         CompanyId = x.CompanyId,
                         ApprovedBy = x.ApprovedBy,
-                        ApprovedById = x.ApprovedById
+                        ApprovedById = x.ApprovedById,
+                        TotalLeaveDays = x.TotalLeaveDays
                     },
                     where: x => x.AppUser.UserName == userName && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -182,10 +187,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task<LeaveVM> GetVMById(Guid id)
         {
-            //var leave = await _leaveRepository.GetDefault(x => x.Id == id);
-            //var map = _mapper.Map<LeaveVM>(leave);
-            //map.ApprovedBy = leave.ApprovedBy;
-            //map.AppUser = leave.AppUser;
             var leave = await _leaveRepository.GetFilteredFirstOrDefault
                 (
                     select: x => new LeaveVM()
@@ -203,7 +204,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         LeaveType = x.LeaveType,
                         CompanyId = x.CompanyId,
                         ApprovedBy = x.ApprovedBy,
-                        ApprovedById = x.ApprovedById
+                        ApprovedById = x.ApprovedById,
+                        TotalLeaveDays = x.TotalLeaveDays
                     },
                     where: x => x.Id == id && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -222,28 +224,18 @@ namespace IKApplication.Infrastructure.ConcreteServices
             await _leaveRepository.Update(map);
         }
 
-        public async Task<int> GetRemainingLeaveDays(Guid appUserId)
+        public async Task<int> GetCurrentUsersTotals(Guid userId)
         {
-            var currentYear = DateTime.Now.Year;
-            List<Leave> approvedLeaves = await _leaveRepository.GetFilteredList(
-            select: x => x,
-            where: x => x.AppUserId == appUserId &&
-                x.LeaveStatus == LeaveStatus.Approved &&
-                x.StartDate.Year == currentYear &&
-                x.EndDate.Year == currentYear,
-           orderBy: null,
-           include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy));
+            var user = await _appUserService.GetById(userId);
+            var usersLeaves = await GetPersonelLeaves(user.Email);
+            var userTotal = 0;
 
-            int totalLeaveDays = 0;
-            foreach (var leave in approvedLeaves)
+            foreach (var leave in usersLeaves)
             {
-                totalLeaveDays += (leave.EndDate - leave.StartDate).Days + 1;
+                userTotal += leave.TotalLeaveDays;
             }
 
-            int totalLeaveCount = 20; // Toplam izin gün sayısı, uygun bir değerle değiştirilmelidir
-
-            int remainingLeaveDays = (totalLeaveDays <= totalLeaveCount) ? totalLeaveCount - totalLeaveDays : 0;
-            return remainingLeaveDays;
+            return userTotal;
         }
     }
 }

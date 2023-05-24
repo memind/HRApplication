@@ -212,6 +212,10 @@
             {
                 return $"Leave refused successfully!";
             }
+            public static string Cannot()
+            {
+                return $"You cannot add more leave. Because you have already reached 20 days!";
+            }
         }
 
         public static class Errors

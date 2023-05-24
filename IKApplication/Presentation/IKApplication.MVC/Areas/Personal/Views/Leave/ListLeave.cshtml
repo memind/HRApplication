@@ -1,61 +1,76 @@
 ﻿@model List<LeaveVM>
-
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Leave List</h4>
-        <a asp-controller="Leave" asp-action="CreateLeave">
-            <button class="btn btn-outline-primary" asp-action="CreateLeave">Add Leave</button>
-        </a>
+
+        @if (Model.First().UserTotal >= 20)
+        {
+            <button class="btn btn-outline-primary" disabled>You cannot add leave</button>
+            <div class="row mt-2">
+                <p class="text-danger">
+                    All your leaves have reached 20 days. You cannot add more leave.
+                </p>
+            </div>
+        }
+        else
+        {
+            <a asp-controller="Leave" asp-action="CreateLeave">
+                <button class="btn btn-outline-primary" asp-action="CreateLeave">Add Leave</button>
+            </a>
+        }
+
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
                     <form>
-                         @if (Model == null || Model.Count == 0)
+                        @if (Model == null || Model.Count == 0)
                         {
                             <p class="text-center mt-4" style="font-style: italic;">Has no data</p>
                         }
                         else
                         {
-                        <table id="order-listing" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Explanation</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
+                            <table id="order-listing" class="table">
+                                <thead>
                                     <tr>
-                                        <td>@item.StartDate.ToShortDateString()</td>
-                                        <td>@item.EndDate.ToShortDateString()</td>
-                                        <td>@item.Explanation</td>
-                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
-                                        {
-                                            <td>
-                                                Approved
-                                            </td>
-                                        }
-                                        @if (@item.Status == Status.Passive)
-                                        {
-                                            <td>
-                                                In Pending
-                                            </td>
-                                        }
-                                        <td>
-                                            @if (item.Status == Status.Passive || item.Status == Status.Deleted)
-                                            {
-                                                <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
-                                            }
-                                            <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
-                                        </td>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Explanation</th>
+                                        <th>Total Leave Days</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>@item.EndDate.ToShortDateString()</td>
+                                            <td>@item.Explanation</td>
+                                            <td>@item.TotalLeaveDays</td>
+                                            @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                            {
+                                                <td>
+                                                    Approved
+                                                </td>
+                                            }
+                                            @if (@item.Status == Status.Passive)
+                                            {
+                                                <td>
+                                                    In Pending
+                                                </td>
+                                            }
+                                            <td>
+                                                @if (item.Status == Status.Passive || item.Status == Status.Deleted)
+                                                {
+                                                    <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
+                                                }
+                                                <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         }
                     </form>
                 </div>

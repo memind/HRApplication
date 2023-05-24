@@ -15,7 +15,7 @@ namespace IKApplication.Application.AbstractServices
         Task<LeaveVM> GetVMById(Guid id);
         Task AcceptLeave(LeaveVM model);
         Task<UpdateLeaveDTO> GetByID(Guid id);
+        Task<int> GetCurrentUsersTotals(Guid userId);
         Task<string> GetPersonalName(Guid id);
-        Task<int> GetRemainingLeaveDays(Guid appUserId);
     }
 }
