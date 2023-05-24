@@ -22,7 +22,6 @@ namespace IKApplication.Application.DTOs.LeaveDTOs
         public Guid? ApprovedById { get; set; }
         public Guid CompanyId { get; set; }
         public LeaveType? LeaveTypes { get; set; }
-        public int TotalLeaveDays => 20;
-        public int RemainingLeaveDays { get; set; }
+        public int TotalLeaveDays { get; set; }
     }
 }

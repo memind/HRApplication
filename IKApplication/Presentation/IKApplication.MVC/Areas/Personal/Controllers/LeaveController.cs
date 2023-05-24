@@ -41,8 +41,32 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateLeave()
+        public async Task<IActionResult> CreateLeave()
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var leaveList = await _leaveService.GetAllLeaves(user.CompanyId);
+
+            foreach (var leave in leaveList)
+            {
+                leave.PersonalFullName = await _leaveService.GetPersonalName(leave.AppUserId);
+                leave.CurrentUserId = user.Id;
+                leave.UserTotal = await _leaveService.GetCurrentUsersTotals(leave.AppUserId);
+            }
+
+            if (leaveList.FirstOrDefault() != null)
+            {
+                if (leaveList.FirstOrDefault().UserTotal >= 20)
+                {
+                    _toast.AddErrorToastMessage(Messages.Leaves.Cannot(), new ToastrOptions { Title = "Creating Leave" });
+                    RedirectToAction("Index", "Leave");
+                }
+
+                else
+                {
+                    return View();
+                }
+            }
+
             return View();
         }
 
@@ -52,24 +76,11 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             var leaveFor = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
-            //var company = await _companyService.GetById(leaveFor.CompanyId);
-            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            //var companyManager = companyManagers.Where(x => x.CompanyId == leaveFor.CompanyId).First();
-
-            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
-
-            //model.CompanyId = company.Id;
-            //model.ApprovedById = companyManagerMap.Id;
-            //model.AppUserId = leaveFor.Id;
-
             if (DateTime.Compare(model.StartDate, model.EndDate) > 0)
             {
                 _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Leave" });
                 return View(model);
             }
-
 
             if (ModelState.IsValid)
             {
@@ -86,16 +97,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
                 _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
 
-                var remainingLeaveDays = await _leaveService.GetRemainingLeaveDays(model.Id);
-                var requestedLeaveDays = (model.EndDate - model.StartDate).Days + 1;
-                if (remainingLeaveDays < requestedLeaveDays)
-                {
-
-                    throw new Exception("Insufficient leave balance");
-                }
-                model.AppUserId = leaveFor.Id;
-                //model.TotalLeaveDays = requestedLeaveDays;
-                model.RemainingLeaveDays = remainingLeaveDays - requestedLeaveDays;
+                model.TotalLeaveDays = (int)(model.EndDate - model.StartDate).TotalDays;
 
                 return RedirectToAction("ListLeave", "Leave", new { Area = "Personal" });
             }
@@ -130,6 +132,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 try
                 {
                     model.AppUserId = employee.Id;
+                    model.TotalLeaveDays = (int)(model.EndDate - model.StartDate).TotalDays;
                     await _leaveService.Update(model);
                     _toast.AddSuccessToastMessage(Messages.Leaves.Update(), new ToastrOptions { Title = "Updating Leave" });
                 }

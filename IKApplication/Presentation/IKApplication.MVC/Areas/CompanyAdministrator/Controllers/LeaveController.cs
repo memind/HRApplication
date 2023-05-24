@@ -53,6 +53,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 leave.PersonalFullName = await _leaveService.GetPersonalName(leave.AppUserId);
                 leave.CurrentUserId = user.Id;
+                leave.UserTotal = await _leaveService.GetCurrentUsersTotals(leave.AppUserId);
             }
 
             return View(leaveList);
@@ -124,6 +125,30 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateLeave()
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            var leaveList = await _leaveService.GetAllLeaves(user.CompanyId);
+
+            foreach (var leave in leaveList)
+            {
+                leave.PersonalFullName = await _leaveService.GetPersonalName(leave.AppUserId);
+                leave.CurrentUserId = user.Id;
+                leave.UserTotal = await _leaveService.GetCurrentUsersTotals(leave.AppUserId);
+            }
+
+            if (leaveList.FirstOrDefault() != null)
+            {
+                if (leaveList.FirstOrDefault().UserTotal >= 20)
+                {
+                    _toast.AddErrorToastMessage(Messages.Leaves.Cannot(), new ToastrOptions { Title = "Creating Leave" });
+                    RedirectToAction("Index","Leave");
+                }
+
+                else
+                {
+                    return View();
+                }
+            }
+            
             return View();
         }
 
@@ -131,18 +156,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> CreateLeave(CreateLeaveDTO model)
         {
             var leaveFor = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-
-            //var company = await _companyService.GetById(leaveFor.CompanyId);
-            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            //var companyManager = companyManagers.Where(x => x.CompanyId == leaveFor.CompanyId).First();
-
-            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
-
-            //model.CompanyId = company.Id;
-            //model.ApprovedById = companyManagerMap.Id;
-            //model.AppUserId = leaveFor.Id;
 
             if (DateTime.Compare(model.StartDate, model.EndDate) > 0)
             {
@@ -165,6 +178,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
                 _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
 
+                model.TotalLeaveDays = (int)(model.EndDate - model.StartDate).TotalDays;
                 return RedirectToAction("Index", "Leave");
             }
 
@@ -242,13 +256,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["D5"].Value = "End Date";
             ws.Cells["E5"].Value = "Explanation";
             ws.Cells["F5"].Value = "Leave Type";
-            ws.Cells["G5"].Value = "Status";
+            ws.Cells["G5"].Value = "Total Leave Days";
+            ws.Cells["H5"].Value = "Status";
 
-            ws.Cells["A5:G5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:G5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:G5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:G5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:G5"].Style.Font.Bold = true;
+            ws.Cells["A5:H5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5:H5"].Style.Font.Bold = true;
 
             int rowStart = 6;
 
@@ -263,6 +278,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     ws.Cells[string.Format("E{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("H{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
 
                     ws.Cells[string.Format("A{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("B{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
@@ -271,6 +287,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     ws.Cells[string.Format("E{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("H{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                 }
 
                 ws.Cells[string.Format("A{0}", rowStart)].Value = $"{leave.AppUser.Name} {leave.AppUser.SecondName} {leave.AppUser.Surname}";
@@ -309,11 +326,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("G{0}", rowStart)].Value = leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("G{0}", rowStart)].Value = leave.TotalLeaveDays;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("H{0}", rowStart)].Value = leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
 
                 rowStart++;
@@ -351,6 +374,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>End Date</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Explanation</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Leave Type</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Total Leave Days</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
             sb.Append("</tr>");
 
@@ -386,6 +410,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.TotalLeaveDays.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(leave.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
                     sb.Append("</td>");
 
@@ -417,6 +445,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(leave.LeaveType.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(leave.TotalLeaveDays.ToString());
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");

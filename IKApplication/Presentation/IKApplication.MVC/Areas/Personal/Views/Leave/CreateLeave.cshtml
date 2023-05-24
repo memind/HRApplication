@@ -38,6 +38,11 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label asp-for="TotalLeaveDays" class="form-label">Total Leave Days</label><br />
+                                    <input asp-for="TotalLeaveDays" type="number" class="form-control mb-3" readonly>
+                                </div>
+
+                                <div class="form-group">
                                     <button type="submit" class="btn btn-outline-primary btn-block">Add Leave</button>
                                 </div>
                             </div>
@@ -51,3 +56,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    function calculateDuration() {
+        var startDate = new Date(document.getElementById("StartDate").value); var endDate = new Date(document.getElementById("EndDate").value); var millisecondsPerDay = 1000 * 60 * 60 * 24; var duration = 0; // Tarih aralığındaki her gün için döngü
+        while (startDate <= endDate) { // Cumartesi veya pazar günü değilse süreyi bir gün artır
+            if (startDate.getDay() !== 6 && startDate.getDay() !== 0) { duration++; } startDate.setTime(startDate.getTime() + millisecondsPerDay); // Bir sonraki günü işaretle
+        } document.getElementById("TotalLeaveDays").value = duration;
+    }
+</script>

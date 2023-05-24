@@ -35,6 +35,11 @@
                             </div>
 
                             <div class="form-group">
+                                <label asp-for="TotalLeaveDays" class="form-label">Total Leave Days</label><br />
+                                <input asp-for="TotalLeaveDays" type="text" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
+                            </div>
+
+                            <div class="form-group">
                                 <label asp-for="LeaveType">Leave Type</label><br />
                                 <select class="form-control mb-3 auth-form-dark" asp-for="LeaveType" asp-items="@Html.GetEnumSelectList<LeaveType>()" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;"></select>
                             </div>
