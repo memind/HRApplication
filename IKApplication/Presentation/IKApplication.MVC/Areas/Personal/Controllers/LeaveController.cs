@@ -58,7 +58,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 if (leaveList.FirstOrDefault().UserTotal >= 20)
                 {
                     _toast.AddErrorToastMessage(Messages.Leaves.Cannot(), new ToastrOptions { Title = "Creating Leave" });
-                    RedirectToAction("Index", "Leave");
+                    return RedirectToAction("Index", "Leave");
                 }
 
                 else
