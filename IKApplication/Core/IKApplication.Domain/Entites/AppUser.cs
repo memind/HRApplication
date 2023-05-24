@@ -31,13 +31,15 @@ namespace IKApplication.Domain.Entites
         public Guid CompanyId { get; set; }
         public Guid? AddressId { get; set; }
         public Guid TitleId { get; set; }   // Unvan
-        //public Guid? ExpenseId { get; set; }
+        public Guid? PatronId { get; set; }
 
         // Navigation Properties
+        public AppUser? Patron { get; set; }
         public Company Company { get; set; }
         public Address? Address { get; set; }
         public Title Title { get; set; }
         public List<Expense>? Expenses { get; set; }
+        public List<AppUser>? Employees { get; set; }
         public List<CashAdvance>? CashAdvances { get; set; }
         public List<Leave>? Leaves { get; set; }
         public List<Leave>? ApproveLeaves { get; set; }
@@ -46,6 +48,7 @@ namespace IKApplication.Domain.Entites
 
         public AppUser()
         {
+            Employees = new List<AppUser>();
             ApproveCashAdvances = new List<CashAdvance>();
             CashAdvances = new List<CashAdvance>();
             ApproveExpenses = new List<Expense>();

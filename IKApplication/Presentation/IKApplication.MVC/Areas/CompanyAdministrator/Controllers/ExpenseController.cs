@@ -71,29 +71,20 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
-            var company = await _companyService.GetById(expenseBy.CompanyId);
-            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            var companyManager = companyManagers.Where(x => x.CompanyId == expenseBy.CompanyId).First();
-
-            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
-
-            model.ApprovedById = companyManagerMap.Id;
-            model.ExpenseById = expenseBy.Id;
-            model.CompanyId = expenseBy.CompanyId;
-
             if (ModelState.IsValid)
             {
+                model.ExpenseById = expenseBy.Id;
                 model.Amount = Convert.ToDecimal(model.AmountString);
                 model.Id = Guid.NewGuid();
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
 
-                string subject = "New Expense Request Arrived";
-                string body = $"The user {expenseBy.Name} {expenseBy.SecondName} {expenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+                var mailExpense = await _expenseService.GetVMById(model.Id);
 
-                _emailService.SendMail(companyManagerMap.Email, subject, body);
+                string subject = "New Expense Request Arrived";
+                string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
 
                 return RedirectToAction("Index", "Expense");
             }
@@ -167,10 +158,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Accepted";
             string body = $"Your expense request for '{expense.ShortDescription}' accepted.";
 
-            var expenseVM = await _expenseService.GetVMById(expense.Id);
-            var expenseBy = await _appUserService.GetById(expenseVM.ExpenseById);
-
-            _emailService.SendMail(expenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }
@@ -178,7 +166,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpGet]
         public async Task<IActionResult> RefuseExpense(Guid id)
         {
-            var expense = await _expenseService.GetById(id);
+            var expense = await _expenseService.GetVMById(id);
             await _expenseService.DeleteExpense(id);
 
             _toast.AddSuccessToastMessage(Messages.Expense.Refuse(expense.ShortDescription), new ToastrOptions { Title = "Refusing Expense" });
@@ -186,10 +174,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Refused";
             string body = $"Your expense request for '{expense.ShortDescription}' refused.";
 
-            var expenseVM = await _expenseService.GetVMById(expense.Id);
-            var expenseBy = await _appUserService.GetById(expenseVM.ExpenseById);
-
-            _emailService.SendMail(expenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }

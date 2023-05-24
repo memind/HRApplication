@@ -16,3 +16,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+input[disabled] {
+    background-color: #f2f2f2; /* Gri arkaplan rengi */
+    color: #999999; /* Gri metin rengi */
+}

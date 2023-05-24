@@ -16,7 +16,6 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string UserSurname { get; set; }
         public BloodGroup? UserBloodGroup { get; set; }
         public string? UserProfession { get; set; }
-        [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime UserBirthDate { get; set; }
         public string UserIdentityNumber { get; set; }
         public string UserTitle { get; set; }

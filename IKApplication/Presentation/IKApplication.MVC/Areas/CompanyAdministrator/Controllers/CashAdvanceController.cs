@@ -1,4 +1,4 @@
-﻿ using AutoMapper;
+﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.CashAdvanceDTOs;
 using IKApplication.Application.dtos.ExpenseDTOs;
@@ -69,30 +69,29 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> Create(CashAdvanceCreateDTO model)
         {
             var advanceTo = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            var advanceToMap = _mapper.Map<Domain.Entites.AppUser>(advanceTo);
+            //var advanceToMap = _mapper.Map<Domain.Entites.AppUser>(advanceTo);
 
-            var company = await _companyService.GetById(advanceTo.CompanyId);
-            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
+            //var company = await _companyService.GetById(advanceTo.CompanyId);
+            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
 
-            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            var companyManager = companyManagers.Where(x => x.CompanyId == advanceTo.CompanyId).First();
+            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
+            //var companyManager = companyManagers.Where(x => x.CompanyId == advanceTo.CompanyId).First();
 
-            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
-
-            model.DirectorId = companyManagerMap.Id;
-            model.AdvanceToId = advanceTo.Id;
-            model.CompanyId = advanceTo.CompanyId;
+            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
 
             if (ModelState.IsValid)
             {
                 model.Id = Guid.NewGuid();
+                model.AdvanceToId = advanceTo.Id;
                 await _cashAdvanceService.Create(model);
                 _toast.AddSuccessToastMessage(Messages.Advance.Create(), new ToastrOptions { Title = "Creating Advance" });
 
-                string subject = "New Advance Request Arrived";
-                string body = $"The user {advanceTo.Name} {advanceTo.SecondName} {advanceTo.Surname} requested a cash advance. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
+                var mailAdvance = await _cashAdvanceService.GetVMById(model.Id);
 
-                _emailService.SendMail(companyManagerMap.Email, subject, body);
+                string subject = "New Advance Request Arrived";
+                string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(mailAdvance.AdvanceTo.Patron.Email, subject, body);
 
                 return RedirectToAction("Index", "CashAdvance");
             }
@@ -160,14 +159,12 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var advance = await _cashAdvanceService.GetVMById(id);
             await _cashAdvanceService.AcceptAdvance(advance);
 
-            var advanceTo = await _appUserService.GetById(advance.AdvanceToId);
-
-            _toast.AddSuccessToastMessage(Messages.Advance.Accept($"{advanceTo.Name} {advanceTo.SecondName} {advanceTo.Surname}"), new ToastrOptions { Title = "Accepting Expense" });
+            _toast.AddSuccessToastMessage(Messages.Advance.Accept($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}"), new ToastrOptions { Title = "Accepting Expense" });
 
             string subject = "Your Advance Request Accepted";
             string body = $"Your cash advance request for '{advance.Description}' accepted.";
 
-            _emailService.SendMail(advanceTo.Email, subject, body);
+            _emailService.SendMail(advance.AdvanceTo.Email, subject, body);
 
             return RedirectToAction("CashAdvanceRequests");
         }
@@ -175,20 +172,15 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpGet]
         public async Task<IActionResult> RefuseCashAdvance(Guid id)
         {
-            var advance = await _cashAdvanceService.GetById(id);
-            var user = await _appUserService.GetById(advance.AdvanceToId);
+            var advance = await _cashAdvanceService.GetVMById(id);
             await _cashAdvanceService.Delete(id);
 
-            var advanceVM = await _cashAdvanceService.GetVMById(advance.Id);
-
             string subject = "Your Advance Request Refused";
-            string body = $"Your cash advance request for '{advanceVM.Description}' refused.";
+            string body = $"Your cash advance request for '{advance.Description}' refused.";
 
-            var advanceTo = await _appUserService.GetById(advanceVM.AdvanceToId);
+            _emailService.SendMail(advance.AdvanceTo.Email, subject, body);
 
-            _emailService.SendMail(advanceTo.Email, subject, body);
-
-            _toast.AddSuccessToastMessage(Messages.Advance.Refuse($"{user.Name} {user.SecondName} {user.Surname}"), new ToastrOptions { Title = "Refusing Advance" });
+            _toast.AddSuccessToastMessage(Messages.Advance.Refuse($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}"), new ToastrOptions { Title = "Refusing Advance" });
             return RedirectToAction("CashAdvanceRequests");
         }
 
@@ -382,7 +374,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
                     sb.Append("</tr>");
                 }
-                else 
+                else
                 {
                     sb.Append("<tr>");
 

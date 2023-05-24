@@ -29,6 +29,12 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task Create(CashAdvanceCreateDTO createCashAdvanceDTO)
         {
             var map = _mapper.Map<CashAdvance>(createCashAdvanceDTO);
+            var advanceTo = await _appUserService.GetCurrentUserInfo((Guid)createCashAdvanceDTO.AdvanceToId);
+
+            map.AdvanceToId = advanceTo.Id;
+            map.DirectorId = (Guid)advanceTo.PatronId;
+            map.CompanyId = (Guid)advanceTo.CompanyId;
+
             await _cashAdvanceRepository.Create(map);
         }
 
@@ -74,7 +80,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         AdvanceToId = x.AdvanceToId,
                         DirectorId = x.DirectorId
                     },
-                    where: x => x.Status == Status.Passive && x.AdvanceTo.CompanyId == companyId,
+                    where: x => x.Status == Status.Passive && x.AdvanceTo.CompanyId == companyId && x.DirectorId == x.AdvanceTo.PatronId,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
                     include: x => x.Include(x => x.AdvanceTo).Include(x => x.Director)
                 );
@@ -169,18 +175,39 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
         public async Task<CashAdvanceVM> GetVMById(Guid id)
         {
-            var advance = await _cashAdvanceRepository.GetDefault(x => x.Id == id);
-            var map = _mapper.Map<CashAdvanceVM>(advance);
-            map.AdvanceTo = advance.AdvanceTo;
-            map.Director = advance.Director;
+            var advance = await _cashAdvanceRepository.GetFilteredFirstOrDefault
+                (
+                    select: x => new CashAdvanceVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        Description = x.Description,
+                        RequestedAmount = x.RequestedAmount,
+                        Director = x.Director,
+                        AdvanceTo = x.AdvanceTo,
+                        IsPaymentProcessed = x.IsPaymentProcessed,
+                        FinalDateRequest = x.FinalDateRequest,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        DeleteDate = x.DeleteDate,
+                        CompanyId = x.CompanyId,
+                        AdvanceToId = x.AdvanceToId,
+                        DirectorId = x.DirectorId
+                    },
+                    where: x => x.Id == id && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AdvanceTo).Include(x => x.Director).Include(x => x.Director.Company).Include(x => x.AdvanceTo.Patron)
+                );
 
-            return map;
+            return advance;
         }
 
         public async Task AcceptAdvance(CashAdvanceVM model)
         {
             var map = _mapper.Map<CashAdvance>(model);
             map.Status = Status.Active;
+            map.Director = null;
+            map.AdvanceTo = null;
             await _cashAdvanceRepository.Update(map);
         }
     }

@@ -15,7 +15,6 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string Surname { get; set; }
         public BloodGroup? BloodGroup { get; set; }
         public string? Profession { get; set; }
-        [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime BirthDate { get; set; }
         public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
@@ -29,6 +28,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime CreateDate => DateTime.Now;
         public Status Status => Status.Passive;
         public Guid CompanyId { get; set; }
+        public Guid? PatronId { get; set; }
         public Guid TitleId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }

@@ -92,10 +92,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Leave Request Accepted";
             string body = $"Your leave request for '{leave.Explanation}' accepted.";
 
-            var leaveVM = await _leaveService.GetVMById(leave.Id);
-            var leaveFor = await _appUserService.GetById(leaveVM.AppUserId);
-
-            _emailService.SendMail(leaveFor.Email, subject, body);
+            _emailService.SendMail(leave.AppUser.Email, subject, body);
 
             return RedirectToAction("LeaveRequests");
         }
@@ -103,7 +100,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpGet]
         public async Task<IActionResult> RefuseLeave(Guid id)
         {
-            var leave = await _leaveService.GetByID(id);
+            var leave = await _leaveService.GetVMById(id);
             await _leaveService.Delete(id);
 
             _toast.AddSuccessToastMessage(Messages.Leaves.Refuse(), new ToastrOptions { Title = "Refusing Leave" });
@@ -111,10 +108,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Leave Request Refused";
             string body = $"Your leave request for '{leave.Explanation}' refused.";
 
-            var leaveVM = await _leaveService.GetVMById(leave.Id);
-            var leaveFor = await _appUserService.GetById(leaveVM.AppUserId);
-
-            _emailService.SendMail(leaveFor.Email, subject, body);
+            _emailService.SendMail(leave.AppUser.Email, subject, body);
 
             return RedirectToAction("LeaveRequests");
         }
@@ -138,17 +132,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var leaveFor = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
-            var company = await _companyService.GetById(leaveFor.CompanyId);
-            var companyMap = _mapper.Map<Domain.Entites.Company>(company);
+            //var company = await _companyService.GetById(leaveFor.CompanyId);
+            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
 
-            var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            var companyManager = companyManagers.Where(x => x.CompanyId == leaveFor.CompanyId).First();
+            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
+            //var companyManager = companyManagers.Where(x => x.CompanyId == leaveFor.CompanyId).First();
 
-            var companyManagerMap = _mapper.Map<AppUser>(companyManager);
+            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
 
-            model.CompanyId = company.Id;
-            model.ApprovedById = companyManagerMap.Id;
-            model.AppUserId = leaveFor.Id;
+            //model.CompanyId = company.Id;
+            //model.ApprovedById = companyManagerMap.Id;
+            //model.AppUserId = leaveFor.Id;
 
             if (DateTime.Compare(model.StartDate, model.EndDate) > 0)
             {
@@ -159,14 +153,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 model.Id = Guid.NewGuid();
+                model.AppUserId = leaveFor.Id;
                 await _leaveService.Create(model, User.Identity.Name);
 
                 _toast.AddSuccessToastMessage(Messages.Leaves.Create(), new ToastrOptions { Title = "Creating Leave" });
 
-                string subject = "New Leave Request Arrived";
-                string body = $"The user {leaveFor.Name} {leaveFor.SecondName} {leaveFor.Surname} requested a leave. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
+                var mailLeave = await _leaveService.GetVMById(model.Id);
 
-                _emailService.SendMail(companyManagerMap.Email, subject, body);
+                string subject = "New Leave Request Arrived";
+                string body = $"The user {mailLeave.AppUser.Name} {mailLeave.AppUser.SecondName} {mailLeave.AppUser.Surname} requested a leave. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
+
+                _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
 
                 return RedirectToAction("Index", "Leave");
             }

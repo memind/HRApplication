@@ -14,6 +14,7 @@ namespace IKApplication.Application.AbstractServices
         Task<List<AppUserVM>> GetUsersByCompany(Guid companyId);
         Task<List<AppUserVM>> GetUsersByRole(string role);
         Task<AppUserVM> GetCurrentUserInfo(string userName);
+        Task<AppUserVM> GetCurrentUserInfo(Guid id);
         Task<List<RegisterVM>> GetAllRegistrations();
         Task<bool> Login(LoginDTO model);
         Task LogOut();

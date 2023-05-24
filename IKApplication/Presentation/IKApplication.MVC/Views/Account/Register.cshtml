@@ -139,3 +139,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+        var birthDateInput = document.getElementById('birthDateInput');
+        var birthDate = new Date(birthDateInput.value);
+        var today = new Date();
+
+        // Doğum tarihine göre yaş kontrolü yapılıyor
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        if (age < 18) {
+            alert('You must be at least 18 years old to register.');
+            event.preventDefault(); // Formun gönderilmesini engelle
+        }
+    });
+</script>

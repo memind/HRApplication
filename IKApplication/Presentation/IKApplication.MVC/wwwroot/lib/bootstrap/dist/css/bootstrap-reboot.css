@@ -305,9 +305,11 @@ select {
 select {
   word-wrap: normal;
 }
-select:disabled {
-  opacity: 1;
-}
+    select:disabled {
+        opacity: 1;
+        background-color: #f2f2f2;
+        color: #49423d;
+    }
 
 [list]::-webkit-calendar-picker-indicator {
   display: none;
