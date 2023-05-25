@@ -43,6 +43,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             //Todo: Get all users and send to viewawait _appUserService.GetById(userId);
             var users = await _appUserService.GetAllUsers();
             ViewBag.Area = "Site Administrator";
+            ViewBag.Header = "User List";
             return View(users);
         }
 

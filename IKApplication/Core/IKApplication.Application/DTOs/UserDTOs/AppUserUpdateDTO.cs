@@ -30,7 +30,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Status Status => Status.Modified;
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
-        public Guid? PatronId { get; set; }
+        public Guid PatronId { get; set; }
         public Guid? AddressId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
