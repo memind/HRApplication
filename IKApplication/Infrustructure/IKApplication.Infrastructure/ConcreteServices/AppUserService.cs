@@ -54,7 +54,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
                     JobStartDate = x.JobStartDate,
-                    PhoneNumber = x.PhoneNumber
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId
                 },
                 where: x => x.UserName == userName);
 
@@ -108,7 +109,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     Title = x.Title,
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
-                    PatronId = x.PatronId
+                    PatronId = x.PatronId,
+                    Patron = x.Patron
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -143,7 +145,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     Title = x.Title,
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
-                    PatronId = x.PatronId
+                    PatronId = x.PatronId,
+                    Patron = x.Patron
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));

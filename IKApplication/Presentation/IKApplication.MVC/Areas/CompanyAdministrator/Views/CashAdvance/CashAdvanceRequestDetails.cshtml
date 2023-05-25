@@ -28,16 +28,59 @@
                         </div>
 
                     </div>
-                    <a asp-controller="CashAdvance" asp-action="AcceptCashAdvance" asp-route-id="@Model.Id">
+                    <a id="acceptButton" asp-controller="CashAdvance" asp-action="AcceptCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#acceptModal">
                         <button class="btn btn-outline-primary">Accept Cash Advance</button>
                     </a>
-                    <a asp-controller="CashAdvance" asp-action="RefuseCashAdvance" asp-route-id="@Model.Id">
+                    <a id="refuseButton" asp-controller="CashAdvance" asp-action="RefuseCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#refuseModal">
                         <button class="btn btn-outline-danger">Refuse Cash Advance</button>
                     </a>
                     <a asp-controller="CashAdvance" asp-action="CashAdvanceRequests">
                         <button class="btn btn-outline-info">Back to List</button>
                     </a>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Accept a Cash Advance</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to accept this cash advance?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No</button>
+
+                <a asp-controller="CashAdvance" asp-action="AcceptCashAdvance" asp-route-id="@Model.Id">
+                    <button data-bs-toggle="modal" data-bs-target="#acceptModal" class="btn btn-outline-success">Yes</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="refuseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Refuse a Cash Advance</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to refuse this cash advance?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No</button>
+
+                <a asp-controller="CashAdvance" asp-action="RefuseCashAdvance" asp-route-id="@Model.Id">
+                    <button data-bs-toggle="modal" data-bs-target="#refuseModal" class="btn btn-outline-danger">Yes</button>
+                </a>
             </div>
         </div>
     </div>
