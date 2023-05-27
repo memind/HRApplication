@@ -8,21 +8,11 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Leave List</h4>
-        @if (Model.First().UserTotal >= 20)
-        {
-            <button class="btn btn-outline-primary" disabled>You cannot add leave</button>
-            <div class="row mt-2">
-                <p class="text-danger">
-                    All your leaves have reached 20 days. You cannot add more leave.
-                </p>
-            </div>
-        }
-        else
-        {
-            <a asp-controller="Leave" asp-action="CreateLeave">
-                <button class="btn btn-outline-primary">Add Leave</button>
-            </a>
-        }
+
+        <a asp-controller="Leave" asp-action="CreateLeave">
+            <button class="btn btn-outline-primary">Add Leave</button>
+        </a>
+
 
 
         <div class="row">
