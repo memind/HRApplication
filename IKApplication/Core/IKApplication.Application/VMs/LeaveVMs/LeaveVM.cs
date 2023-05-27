@@ -34,6 +34,5 @@ namespace IKApplication.Application.VMs.LeaveVMs
         public LeaveType LeaveType { get; set; }
         public string PersonalFullName { get; set; }
         public int TotalLeaveDays { get; set; }
-        public int UserTotal { get; set; }
     }
 }

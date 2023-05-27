@@ -50,21 +50,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             {
                 leave.PersonalFullName = await _leaveService.GetPersonalName(leave.AppUserId);
                 leave.CurrentUserId = user.Id;
-                leave.UserTotal = await _leaveService.GetCurrentUsersTotals(leave.AppUserId);
-            }
-
-            if (leaveList.FirstOrDefault() != null)
-            {
-                if (leaveList.FirstOrDefault().UserTotal >= 20)
-                {
-                    _toast.AddErrorToastMessage(Messages.Leaves.Cannot(), new ToastrOptions { Title = "Creating Leave" });
-                    return RedirectToAction("Index", "Leave");
-                }
-
-                else
-                {
-                    return View();
-                }
             }
 
             return View();
