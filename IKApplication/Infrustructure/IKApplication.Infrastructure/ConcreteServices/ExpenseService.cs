@@ -27,7 +27,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var map = _mapper.Map<Expense>(expenseCreateDTO);
             var expenseBy = await _appUserService.GetCurrentUserInfo(expenseCreateDTO.ExpenseById);
 
-
             map.ApprovedById = (Guid)expenseBy.PatronId;
             map.ExpenseById = expenseBy.Id;
             map.CompanyId = expenseBy.CompanyId;
