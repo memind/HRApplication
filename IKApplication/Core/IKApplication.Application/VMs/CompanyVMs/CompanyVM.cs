@@ -10,5 +10,6 @@ namespace IKApplication.Application.VMs.CompanyVMs
         public string PhoneNumber { get; set; }
         public string SectorName { get; set; }
         public int NumberOfEmployees { get; set; }
+        public string ContactPerson { get; set; }
     }
 }

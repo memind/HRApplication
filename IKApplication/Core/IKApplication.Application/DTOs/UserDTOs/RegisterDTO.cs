@@ -15,7 +15,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string? UserSecondName { get; set; }
         public string UserSurname { get; set; }
         public BloodGroup? UserBloodGroup { get; set; }
-        public string? UserProfession { get; set; }
+        public string UserProfession { get; set; }
         public DateTime UserBirthDate { get; set; }
         public string UserIdentityNumber { get; set; }
         public string UserTitle { get; set; }

@@ -19,5 +19,6 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
         public Guid ExpenseById { get; set; }
         public Guid CompanyId { get; set; }
         public ExpenseType Type { get; set; }
+        public Currency Currency { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
         [Range(typeof(DateTime), "2022-01-01", "2024-01-01", ErrorMessage = "You can't enter a date more than 1 year ago or later than today.")]
         public DateTime ExpenseDate { get; set; }
         public ExpenseType Type { get; set; }
+        public Currency Currency { get; set; }
         public string? FullName { get; set; }
     }
 }

@@ -1,0 +1,58 @@
+﻿@model List<ProfessionVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Profession List</h4>
+        <a asp-controller="Profession" asp-action="CreateProfession">
+            <button class="btn btn-outline-primary">Add Profession</button>
+        </a>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        <table id="order-listing" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>
+                                                Active
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Passive)
+                                        {
+                                            <td>
+                                                Passive
+                                            </td>
+                                        }
+                                        @if (@item.Status == Status.Deleted)
+                                        {
+                                            <td>
+                                                Deleted
+                                            </td>
+                                        }
+                                        <td>
+
+                                            <button class="btn btn-outline-primary" asp-controller="Profession" asp-action="UpdateProfession" asp-route-id="@item.Id">Update</button>
+                                            <button class="btn btn-outline-danger" asp-controller="Profession" asp-action="DeleteProfession" asp-route-id="@item.Id">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

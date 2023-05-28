@@ -3,17 +3,23 @@ using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.ExcelVMs;
+using IKApplication.Application.VMs.LeaveVMs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
 using SixLabors.ImageSharp.ColorSpaces.Companding;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.CompanyAdministratorControllers
@@ -43,6 +49,15 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
         [HttpGet]
         public async Task<IActionResult> Index()
+        {
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
+            var users = await _appUserService.GetUsersByCompany(user.CompanyId);
+            ViewBag.Header = "Staff";
+            return View(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StaffCards()
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             var users = await _appUserService.GetUsersByCompany(user.CompanyId);
@@ -232,7 +247,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
                 if (result.Succeeded)
                 {
-                    var mailUser = await _appUserService.GetCurrentUserInfo(model.Email); 
+                    var mailUser = await _appUserService.GetCurrentUserInfo(model.Email);
 
                     string subject = "New Personal";
                     string body = $"Personal {mailUser.Name} {mailUser.SecondName} {mailUser.Surname} has been active.";
@@ -268,8 +283,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var startDate = new DateTime(date.Year, date.Month, 1);
             var endDate = new DateTime(date.Year, date.Month + 1, 1);
 
-            List<AppUserVM> allUsers = await _appUserService.GetAllUsers();
-            List<AppUserVM> allUsersList = allUsers.Where(x => x.CompanyId == user.CompanyId).ToList();
+            List<AppUserVM> allUsersList = await _appUserService.GetUsersByCompany(user.CompanyId);
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Users");
@@ -296,7 +310,24 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             ws.Cells["A5:I5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells["A5:I5"].Style.Font.Bold = true;
 
-            int rowStart = 6;
+            int rowStart = 7;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Personal Count: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("B{0}", rowStart)].Value = allUsersList.Count;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
+
+            rowStart++;
 
             foreach (var userData in allUsersList)
             {
@@ -357,25 +388,101 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 rowStart++;
             }
 
-            ws.Cells[string.Format("H{0}", rowStart)].Value = "Total Personal Count: ";
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("I{0}", rowStart)].Value = allUsersList.Count;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Font.Bold = true;
-
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Month}/{date.Year}.xlsx");
+        }
+
+
+        [HttpGet]
+        public async Task<FileResult> UserPDF(ExcelDateVM dates)
+        {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+
+            var date = DateTime.Now;
+            var startDate = dates.Start;
+            var endDate = dates.End;
+            var endDateHours = endDate.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+            List<AppUserVM> users = await _appUserService.GetUsersByCompany(user.CompanyId);
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Full Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Email Address</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Identity Number</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Birth Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Blood Group</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Company Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Title</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Profession</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Role</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (AppUserVM personal in users)
+            {
+                sb.Append("<tr>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{personal.FullName}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{personal.Email}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.IdentityNumber);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.BirthDate.ToShortDateString());
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.BloodGroup);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.CompanyName);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.Title.Name);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.Profession.Name);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(personal.Roles.First());
+                sb.Append("</td>");
+
+                sb.Append("</tr>");
+
+            }
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
+
         }
     }
 }

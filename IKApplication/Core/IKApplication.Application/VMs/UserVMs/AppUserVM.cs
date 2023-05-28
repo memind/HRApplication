@@ -13,7 +13,6 @@ namespace IKApplication.Application.VMs.UserVMs
         public string Surname { get; set; }
         public string FullName => Name + " " + SecondName + " " + Surname;
         public BloodGroup? BloodGroup { get; set; }
-        public string? Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
@@ -23,10 +22,12 @@ namespace IKApplication.Application.VMs.UserVMs
         public string Email { get; set; }
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
+        public Guid ProfessionId { get; set; }
         public Guid PatronId { get; set; }
         public AppUser Patron { get; set; }
         public string CompanyName { get; set; }
         public Title Title { get; set; }
+        public Profession Profession { get; set; }
         public List<string> Roles { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace IKApplication.Application.VMs.ExpenseVMs
         public Guid CompanyId { get; set; }
         public AppUser ExpenseBy { get; set; }
         public ExpenseType Type { get; set; }
+        public Currency Currency { get; set; }
         public string? FullName { get; set; }
         public DateTime CreateDate { get; set; }
     }

@@ -48,7 +48,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     SectorName = x.Sector.Name,
-                    NumberOfEmployees = x.NumberOfEmployees
+                    NumberOfEmployees = x.NumberOfEmployees,
+                    ContactPerson = $"{x.CompanyManagers.FirstOrDefault().Name} {x.CompanyManagers.FirstOrDefault().SecondName} {x.CompanyManagers.FirstOrDefault().Surname}"
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -78,6 +79,23 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
                 await _companyRepository.Delete(company);
             }
+        }
+
+        public async Task<List<CompanyVM>> GetAllPassiveCompanies()
+        {
+            return await _companyRepository.GetFilteredList(
+                select: x => new CompanyVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    SectorName = x.Sector.Name,
+                    NumberOfEmployees = x.NumberOfEmployees
+                },
+                where: x => (x.Status == Status.Passive),
+                orderBy: x => x.OrderBy(x => x.CreateDate),
+                include: x => x.Include(x => x.Sector));
         }
     }
 }

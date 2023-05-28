@@ -141,12 +141,21 @@
         // Şuandan 1 yıl öncesini hesapla
         var ago = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
 
-        // Bugünden ileri bir tarih girilmişse
-        if (jobDate > now) {
-            alert("You cannot select a future date!");
+        // Şuandan 1 yıl öncesini hesapla
+        var twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate());
+        var threeMonthsLater = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
+
+        // Girilen tarih şuandan 3 ay sonrasını geçiyorsa
+        if (jobDate > threeMonthsLater) {
+            alert("You cannot select more than a 3 month later from now as Start Date!");
             return false;
         }
 
+        // Girilen tarih şuandan 2 ay öncesini geçiyorsa
+        if (jobDate < twoMonthsAgo) {
+            alert("You cannot select more than a 2 month ago from now as Start Date!");
+            return false;
+        }
 
         // Girilen tarih şuandan 1 yıl öncesine denk geliyorsa
         if (ago <= enteredDate) {

@@ -214,21 +214,42 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["B2"].Value = "to";
             ws.Cells["C2"].Value = endDate.ToShortDateString();
 
-            ws.Cells["A5"].Value = "Advance To";
-            ws.Cells["B5"].Value = "Approved By";
-            ws.Cells["C5"].Value = "Requested Amount";
-            ws.Cells["D5"].Value = "Description";
-            ws.Cells["E5"].Value = "Create Date";
-            ws.Cells["F5"].Value = "Status";
+            ws.Cells["A6"].Value = "Advance To";
+            ws.Cells["B6"].Value = "Approved By";
+            ws.Cells["C6"].Value = "Requested Amount";
+            ws.Cells["D6"].Value = "Description";
+            ws.Cells["E6"].Value = "Create Date";
+            ws.Cells["F6"].Value = "Status";
 
-            ws.Cells["A5:F5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:F5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:F5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:F5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:F5"].Style.Font.Bold = true;
+            ws.Cells["A6:F6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Font.Bold = true;
 
-            int rowStart = 6;
+            int rowStart = 5;
             decimal totalAmount = 0;
+            foreach (var advance in advanceList)
+            {
+                totalAmount += advance.RequestedAmount;
+            }
+
+            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Cash Advance Amount: ";
+            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("F{0}", rowStart)].Value = totalAmount;
+            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("E{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("F{0}", rowStart)].Style.Font.Bold = true;
+            rowStart++;
+            rowStart++;
 
             foreach (var advance in advanceList)
             {
@@ -285,25 +306,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-
                 rowStart++;
-                totalAmount += advance.RequestedAmount;
             }
-
-            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Cash Advance Amount: ";
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("F{0}", rowStart)].Value = totalAmount;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Font.Bold = true;
 
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();

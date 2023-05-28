@@ -210,25 +210,90 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["C2"].Value = endDate.ToShortDateString();
 
 
-            ws.Cells["A5"].Value = "Expense By";
-            ws.Cells["B5"].Value = "Approved By";
-            ws.Cells["C5"].Value = "Expense Type";
-            ws.Cells["D5"].Value = "Expense Date";
-            ws.Cells["E5"].Value = "Amount";
-            ws.Cells["F5"].Value = "Short Description";
-            ws.Cells["G5"].Value = "Long Description";
-            ws.Cells["H5"].Value = "Status";
+            ws.Cells["A8"].Value = "Expense By";
+            ws.Cells["B8"].Value = "Approved By";
+            ws.Cells["C8"].Value = "Expense Type";
+            ws.Cells["D8"].Value = "Expense Date";
+            ws.Cells["E8"].Value = "Amount";
+            ws.Cells["F8"].Value = "Currency";
+            ws.Cells["G8"].Value = "Short Description";
+            ws.Cells["H8"].Value = "Long Description";
+            ws.Cells["I8"].Value = "Status";
 
-            ws.Cells["A5:H5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:H5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:H5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:H5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:H5"].Style.Font.Bold = true;
+            ws.Cells["A8:I8"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A8:I8"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A8:I8"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A8:I8"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A8:I8"].Style.Font.Bold = true;
 
-            int rowStart = 6;
+            int rowStart = 5;
             decimal totalApprovedAmount = 0;
             decimal totalPendingAmount = 0;
             decimal totalAmount = 0;
+
+            foreach (var expense in expenseList)
+            {
+                totalAmount += expense.Amount;
+
+                if (expense.Status == Domain.Enums.Status.Passive)
+                {
+                    totalPendingAmount += expense.Amount;
+                }
+
+                if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
+                {
+                    totalApprovedAmount += expense.Amount;
+                }
+            }
+
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Approved Expenses Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("B{0}", rowStart)].Value = totalApprovedAmount;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
+            rowStart++;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Pending Expenses Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("B{0}", rowStart)].Value = totalPendingAmount;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
+            rowStart++;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Expense Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("B{0}", rowStart)].Value = totalAmount;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
+            rowStart++;
+            rowStart++;
 
             foreach (var expense in expenseList)
             {
@@ -242,6 +307,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     ws.Cells[string.Format("H{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[string.Format("I{0}", rowStart)].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
 
                     ws.Cells[string.Format("A{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("B{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
@@ -251,6 +317,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     ws.Cells[string.Format("F{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("G{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                     ws.Cells[string.Format("H{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
+                    ws.Cells[string.Format("I{0}", rowStart)].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("pink")));
                 }
 
                 ws.Cells[string.Format("A{0}", rowStart)].Value = $"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}";
@@ -283,23 +350,29 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("F{0}", rowStart)].Value = expense.ShortDescription;
+                ws.Cells[string.Format("F{0}", rowStart)].Value = expense.Currency.ToString();
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("G{0}", rowStart)].Value = expense.LongDescription;
+                ws.Cells[string.Format("G{0}", rowStart)].Value = expense.ShortDescription;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("H{0}", rowStart)].Value = expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("H{0}", rowStart)].Value = expense.LongDescription;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("I{0}", rowStart)].Value = expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
 
                 rowStart++;
@@ -315,54 +388,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     totalApprovedAmount += expense.Amount;
                 }
             }
-
-            ws.Cells[string.Format("G{0}", rowStart)].Value = "Total Approved Expenses Amount: ";
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("H{0}", rowStart)].Value = totalApprovedAmount;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Font.Bold = true;
-            rowStart++;
-
-            ws.Cells[string.Format("G{0}", rowStart)].Value = "Total Pending Expenses Amount: ";
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("H{0}", rowStart)].Value = totalPendingAmount;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Font.Bold = true;
-            rowStart++;
-
-            ws.Cells[string.Format("G{0}", rowStart)].Value = "Total Expense Amount: ";
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("H{0}", rowStart)].Value = totalAmount;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Font.Bold = true;
-
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
@@ -400,6 +425,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Type</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Date</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Amount</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Currency</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Short Description</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Long Description</th>");
             //sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
@@ -433,17 +459,16 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Currency.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(expense.ShortDescription);
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(expense.LongDescription);
                     sb.Append("</td>");
-
-                    // Status A4'e sigmadi
-                    //sb.Append("<td style='border: 1px solid #ccc'>");
-                    //sb.Append(expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
-                    //sb.Append("</td>");
 
                     sb.Append("</tr>");
                 }
@@ -473,17 +498,16 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(expense.Currency.ToString());
+                    sb.Append("</td>");
+
+                    sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(expense.ShortDescription);
                     sb.Append("</td>");
 
                     sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append(expense.LongDescription);
                     sb.Append("</td>");
-
-                    // Status A4'e sigmadi
-                    //sb.Append("<td style='border: 1px solid #ccc'>");
-                    //sb.Append(expense.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
-                    //sb.Append("</td>");
 
                     sb.Append("</tr>");
                 }
@@ -503,11 +527,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             #region Total Approved Expenses Amount
             sb.Append("<tr style='border: none'>");
-
-            // Status kolonu silindigi icin
-            //sb.Append("<td>");
-            //sb.Append("");
-            //sb.Append("</td>");
 
             sb.Append("<td style='border: 0px solid #ccc'>");
             sb.Append("");

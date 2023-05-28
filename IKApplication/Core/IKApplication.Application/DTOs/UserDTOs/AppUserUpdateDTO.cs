@@ -1,5 +1,6 @@
 ﻿using IKApplication.Application.VMs.CompanyVMs;
 using IKApplication.Application.VMs.TitleVMs;
+using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string? SecondName { get; set; }
         public string Surname { get; set; }
         public BloodGroup? BloodGroup { get; set; }
-        public string? Profession { get; set; }
+        public Profession Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }
         public string Email { get; set; }
@@ -31,6 +32,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
         public Guid PatronId { get; set; }
+        public Guid ProfessionId { get; set; }
         public Guid? AddressId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }

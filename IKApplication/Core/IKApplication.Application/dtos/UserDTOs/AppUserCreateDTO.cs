@@ -30,6 +30,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Guid CompanyId { get; set; }
         public Guid? PatronId { get; set; }
         public Guid TitleId { get; set; }
+        public Guid ProfessionId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
     }

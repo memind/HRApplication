@@ -47,6 +47,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 expense.Amount = Convert.ToDecimal(expenseUpdateDTO.AmountString);
                 expense.ExpenseDate = expenseUpdateDTO.ExpenseDate;
                 expense.Type = expenseUpdateDTO.Type;
+                expense.Currency = expenseUpdateDTO.Currency;
                 await _expenseRepository.Update(expense);
             }
         }
@@ -77,7 +78,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         CompanyId = x.CompanyId,
                         ExpenseById = x.ExpenseById,
                         ExpenseBy = x.ExpenseBy,
-                        Type = x.Type
+                        Type = x.Type,
+                        Currency = x.Currency
                     },
                     where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
@@ -98,7 +100,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
                         ExpenseDate = x.ExpenseDate,
-                        Type = x.Type
+                        Type = x.Type,
+                        Currency = x.Currency
                     },
                     where: x => x.Id == id && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
@@ -126,7 +129,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         CompanyId = x.CompanyId,
                         ExpenseById = x.ExpenseById,
                         ExpenseBy = x.ExpenseBy,
-                        Type = x.Type
+                        Type = x.Type,
+                        Currency = x.Currency
                     },
                     where: x => x.Status == Status.Passive && x.ExpenseBy.CompanyId == companyId && x.ApprovedById == x.ExpenseBy.PatronId,
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
@@ -154,7 +158,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ExpenseById = x.ExpenseById,
                         CompanyId = x.CompanyId,
                         ExpenseBy = x.ExpenseBy,
-                        Type = x.Type
+                        Type = x.Type,
+                        Currency = x.Currency
                     },
                     where: x => x.ExpenseBy.Id == id && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
@@ -190,7 +195,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ExpenseById = x.ExpenseById,
                         CompanyId = x.CompanyId,
                         ExpenseBy = x.ExpenseBy,
-                        Type = x.Type
+                        Type = x.Type,
+                        Currency = x.Currency
                     },
                     where: x => x.Id == id && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.ExpenseDate),
