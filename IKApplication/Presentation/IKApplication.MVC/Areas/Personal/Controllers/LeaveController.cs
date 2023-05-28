@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
 using System.Data;
+using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.Personal.Controllers
 {
@@ -52,6 +53,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 leave.CurrentUserId = user.Id;
             }
 
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View();
         }
 
@@ -88,6 +90,9 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             }
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Leave" });
+
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
 
             return View(model);
         }

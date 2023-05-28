@@ -15,7 +15,7 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
         public string AmountString { get; set; }
         public decimal Amount { get; set; }
         public DateTime ExpenseDate { get; set; }
-        public Guid? ApprovedById { get; set; }
+        public Guid ApprovedById { get; set; }
         public Guid ExpenseById { get; set; }
         public Guid CompanyId { get; set; }
         public ExpenseType Type { get; set; }

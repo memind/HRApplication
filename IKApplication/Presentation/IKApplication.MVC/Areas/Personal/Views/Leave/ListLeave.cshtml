@@ -26,6 +26,7 @@
                                         <th>End Date</th>
                                         <th>Explanation</th>
                                         <th>Total Leave Days</th>
+                                        <th>Approved By</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -38,6 +39,7 @@
                                             <td>@item.EndDate.ToShortDateString()</td>
                                             <td>@item.Explanation</td>
                                             <td>@item.TotalLeaveDays</td>
+                                            <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
                                             @if (@item.Status == Status.Active || item.Status == Status.Modified)
                                             {
                                                 <td>

@@ -19,7 +19,6 @@
                         <table id="order-listing" class="table">
                             <thead>
                                 <tr>
-                                    <th>Cash Advance To</th>
                                     <th>Approved By</th>
                                     <th>Amount</th>
                                     <th>Status</th>
@@ -30,7 +29,6 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.FullName</td>
                                         <td>@item.Director.Name @item.Director.SecondName @item.Director.Surname</td>
                                         <td>@item.RequestedAmount</td>
                                         @if (@item.Status == Status.Active || item.Status == Status.Modified)

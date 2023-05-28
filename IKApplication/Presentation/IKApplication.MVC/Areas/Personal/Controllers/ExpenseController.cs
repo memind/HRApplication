@@ -50,8 +50,10 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View();
         }
 
@@ -77,7 +79,12 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
 
                 return RedirectToAction("Index", "Expense");
             }
+
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Expense" });
+
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
+
             return View(model);
         }
 

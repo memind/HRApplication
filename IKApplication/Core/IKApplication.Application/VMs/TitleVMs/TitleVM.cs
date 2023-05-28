@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IKApplication.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace IKApplication.Application.VMs.TitleVMs
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public Status Status { get; set; }
         public Guid CompanyId { get; set; }
     }
 }
