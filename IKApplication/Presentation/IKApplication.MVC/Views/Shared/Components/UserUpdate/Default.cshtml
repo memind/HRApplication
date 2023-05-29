@@ -37,7 +37,7 @@
                                 <div class="form-group">
                                     <label asp-for="Name" class="form-label">Name</label><br />
                                     <span asp-validation-for="Name" class="text-danger"></span>
-                                    <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name">
+                                    <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name" disabled="@(!User.IsInRole("CompanyAdministrator"))>
                                 </div>
 
                                 <div class="form-group">
@@ -50,12 +50,13 @@
                                     <label asp-for="Surname" class="form-label">Surname</label><br />
                                     <span asp-validation-for="Surname" class="text-danger"></span>
                                     <input asp-for="Surname" type="text" class="form-control mb-3" placeholder="Enter Surname">
+                                    <input asp-for="Surname" type="text" class="form-control mb-3" placeholder="Enter Surname" disabled="@(!User.IsInRole("CompanyAdministrator"))">
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="TitleId" class="form-label">Title</label><br />
                                     <span asp-validation-for="TitleId" class="text-danger"></span>
-                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))"></select>
+                                    <select asp-for="TitleId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Titles.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))" disabled="@(!User.IsInRole("CompanyAdministrator"))"></select>
                                 </div>
 
                                 <div class="form-group">
@@ -67,25 +68,25 @@
                                 <div class="form-group">
                                     <label asp-for="Profession" class="form-label">Profession</label><br />
                                     <span asp-validation-for="Profession" class="text-danger"></span>
-                                    <input asp-for="Profession" type="text" class="form-control mb-3" placeholder="Enter Profession">
+                                    <input asp-for="Profession" type="text" class="form-control mb-3" placeholder="Enter Profession" disabled="@(!User.IsInRole("CompanyAdministrator"))>
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="BirthDate" class="form-label">Birth Date</label><br />
                                     <span asp-validation-for="BirthDate" class="text-danger"></span>
-                                    <input id="birthDateInput" asp-for="BirthDate" type="date" class="form-control mb-3">
+                                    <input id="birthDateInput" asp-for="BirthDate" type="date" class="form-control mb-3" disabled="@(!User.IsInRole("CompanyAdministrator"))>
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="JobStartDate" class="form-label">Start Date</label><br />
                                     <span asp-validation-for="JobStartDate" class="text-danger"></span>
-                                    <input id="jobStart" asp-for="JobStartDate" type="date" class="form-control mb-3">
+                                    <input id="jobStart" asp-for="JobStartDate" type="date" class="form-control mb-3" disabled="@(!User.IsInRole("CompanyAdministrator"))>
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="IdentityNumber" class="form-label">Identity Number</label><br />
                                     <span asp-validation-for="IdentityNumber" class="text-danger"></span>
-                                    <input asp-for="IdentityNumber" type="text" class="form-control mb-3" placeholder="Enter Identity Number">
+                                    <input asp-for="IdentityNumber" type="text" class="form-control mb-3" placeholder="Enter Identity Number" disabled="@(!User.IsInRole("CompanyAdministrator"))>
                                 </div>
 
                                 <div class="form-group">
