@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Create a Company Manager</h5>
-                <form id="form" asp-controller="User" asp-action="CreatePersonal" method="post" enctype="multipart/form-data" onsubmit="return validateDate();">
+                <h5 class="card-header">Create a USER</h5>
+                <form id="form" asp-controller="User" asp-action="CreateCompanyManagerAndPersonal" method="post" enctype="multipart/form-data" onsubmit="return validateDate();">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
@@ -31,6 +31,7 @@
                                 <input type="hidden" asp-for="Companies" />
                                 <input type="hidden" asp-for="Password" />
                                 <input type="hidden" asp-for="ConfirmPassword" />
+                               
 
                                 <div class="form-group">
                                     <label asp-for="Name" class="form-label">Name</label><br />
@@ -104,8 +105,18 @@
                                     <input id="jobStart" asp-for="JobStartDate" type="date" class="form-control mb-3" placeholder="Enter Personal Job Start Date">
                                 </div>
 
+
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-outline-primary btn-block">Add Personal</button>
+                                    <label asp-for="Role" class="form-label">Role</label><br />
+                                    <span asp-validation-for="Role" class="text-danger"></span>
+                                    <input type="radio" name="role" value="companyManager" /> Company Manager
+                                    <input type="radio" name="role" value="personal" /> Personal
+                                </div>
+                                
+
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-outline-primary btn-block">Add User</button>
                                 </div>
                             </div>
                         </div>

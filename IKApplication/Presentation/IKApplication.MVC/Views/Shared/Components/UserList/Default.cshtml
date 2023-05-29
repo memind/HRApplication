@@ -20,13 +20,15 @@
                             <tbody>
                                 @if (ViewBag.Area != "Site Administrator")
                                 {
-                                        <div class="d-flex justify-content-center mb-2">
+                                    <div class="d-flex justify-content-center mb-2">
                                         <div class="col-md-3 m-3">
-                                            <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                            <button class="btn btn-outline-primary" asp-action="CreateCompanyManagerAndPersonal">New USER</button>
                                         </div>
-                                        <div class="col-md-3 m-3">
-                                            <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
-                                        </div>
+                                        @*
+                                    <div class="col-md-3 m-3">
+                                    <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
+                                    </div>
+                                    *@
                                     </div>
                                 }
 
@@ -50,9 +52,9 @@
             </div>
         </div>
     </div>
-        <a asp-controller="User" asp-action="UserExcel" class="m-4">
-            <button class="btn btn-outline-primary">Export to Excel</button>
-        </a>
+    <a asp-controller="User" asp-action="UserExcel" class="m-4">
+        <button class="btn btn-outline-primary">Export to Excel</button>
+    </a>
     <a asp-controller="User" asp-action="UserPDF" class="m-4">
         <button class="btn btn-outline-primary">Export to PDF</button>
     </a>

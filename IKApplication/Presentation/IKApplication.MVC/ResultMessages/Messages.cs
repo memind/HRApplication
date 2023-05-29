@@ -24,7 +24,7 @@
                 return $"User {mail}'s request accepted successfully!";
             }
         }
-
+        /*
         public static class Personal
         {
             public static string Create(string email)
@@ -42,22 +42,22 @@
                 return $"Personal {email} deleted successfully!";
             }
         }
-
-        public static class CompanyAdmin
+        */
+        public static class CompanyAdminAndPersonal
         {
             public static string Create(string email)
             {
-                return $"Company manager {email} created successfully!";
+                return $"USER {email} created successfully!";
             }
 
             public static string Update(string email)
             {
-                return $"Company manager {email} updated successfully!";
+                return $"USER {email} updated successfully!";
             }
 
             public static string Delete(string email)
             {
-                return $"Company manager {email} deleted successfully!";
+                return $"USER {email} deleted successfully!";
             }
         }
 

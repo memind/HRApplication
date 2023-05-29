@@ -24,6 +24,7 @@ namespace IKApplication.Domain.Entites
         [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }  // TC Kimlik No - Pasaport no vb.
+        //public string? Role { get; set; }  //------------------------------------------------------
         public DateTime JobStartDate { get; set; }  // işe başlama tarihi
         public string ImagePath { get; set; }  // Fotoğraf Yolu
         [NotMapped]   // DB ile bağlantı olmasın

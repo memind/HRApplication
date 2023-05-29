@@ -18,6 +18,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime BirthDate { get; set; }
         public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
+        public string? Role { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }

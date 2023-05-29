@@ -100,7 +100,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCompanyManager(AppUserCreateDTO model)
+        public async Task<IActionResult> CreateCompanyManagerAndPersonal(AppUserCreateDTO model)
         {
             var patron = await _appUserService.GetByUserName(User.Identity.Name);
             if (ModelState.IsValid)
@@ -109,8 +109,17 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.Id = Guid.NewGuid();
                 model.Password = "123";
                 model.ConfirmPassword = "123";
+               string role = model.Role;
 
-                await _appUserService.CreateUser(model, "Company Administrator");
+                if (role == "companyManager")   // role burada belirlenecek
+                {
+                    await _appUserService.CreateUser(model, "Company Administrator");
+                }
+                else if (role == "personal")
+                {
+                    await _appUserService.CreateUser(model, "Personal");
+                }
+
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -123,11 +132,11 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 var company = await _companyService.GetById(user.CompanyId);
                 var create = _appUserService.AddCompanyManager(model, company);
 
-                _toast.AddSuccessToastMessage(Messages.CompanyAdmin.Create(model.Email), new ToastrOptions { Title = "Creating Company Manager" });
-                return RedirectToAction("Index");
+                _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Create(model.Email), new ToastrOptions { Title = "Creating User" });
+                return RedirectToAction("Index", "User");
             }
 
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Company Manager" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating User" });
 
             var currentUser = await _appUserService.GetByUserName(User.Identity.Name);
             var companies = await _companyService.GetAllCompanies();
@@ -135,6 +144,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
 
             model.CompanyId = currentUser.CompanyId;
+            model.PatronId = currentUser.Id;
             model.Companies = companies;
             model.Titles = titles;
             model.Password = "123";
@@ -142,7 +152,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             return View(model);
         }
-
+        /*
         [HttpGet]
         public async Task<IActionResult> CreatePersonal()
         {
@@ -199,6 +209,8 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             return View(model);
         }
+        */
+
 
         [AllowAnonymous]
         public async Task<IActionResult> SetPassword(string email, string Code)
@@ -254,7 +266,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         {
             var user = await _appUserService.GetById(id);
             await _appUserService.Delete(id);
-            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
+            _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
             return RedirectToAction("Index");
         }
 
