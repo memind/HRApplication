@@ -14,6 +14,7 @@
                                     <th>Full Name</th>
                                     <th>Title</th>
                                     <th>Company Name</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -39,6 +40,18 @@
                                         <td>@item.FullName</td>
                                         <td>@item.Title.Name</td>
                                         <td>@item.CompanyName</td>
+
+                                        @if (item.Status == Status.Active || item.Status == Status.Modified)
+                                        {
+                                            <td>Active</td>
+                                        }
+
+                                        @if (item.Status == Status.Passive)
+                                        {
+                                            <td>In Pending</td>
+                                        }
+                                        
+
                                         <td>
                                             <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
                                             <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>

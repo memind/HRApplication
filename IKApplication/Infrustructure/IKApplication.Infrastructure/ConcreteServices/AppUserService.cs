@@ -55,7 +55,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
-                    PatronId = x.PatronId
+                    PatronId = x.PatronId,
                 },
                 where: x => x.UserName == userName);
 
@@ -110,7 +110,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Status = x.Status  // eklendi
+                    
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -146,9 +148,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Status = x.Status
+
                 },
-                where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
+                where: x => (x.Status != Status.Deleted) && (x.CompanyId == companyId),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
 
             foreach (var user in users)
@@ -199,7 +203,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Status = x.Status
+
                 },
                 where: x => x.UserName == userName,
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -231,7 +237,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Status = x.Status
+
                 },
                 where: x => x.Id == id,
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));

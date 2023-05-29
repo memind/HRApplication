@@ -142,7 +142,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         {
             var user = await _appUserService.GetById(id);
             await _appUserService.Delete(id);
-            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
+            _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
             return RedirectToAction("Index");
         }
 

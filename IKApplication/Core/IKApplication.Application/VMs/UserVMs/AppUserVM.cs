@@ -21,6 +21,7 @@ namespace IKApplication.Application.VMs.UserVMs
         public string ImagePath { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        public Status Status { get; set; } // eklendi
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
         public Guid PatronId { get; set; }
