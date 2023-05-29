@@ -4,6 +4,7 @@ using IKApplication.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IKApplication.Persistance.Migrations
 {
     [DbContext(typeof(IKAppDbContext))]
-    partial class IKAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529180203_currencyAndProfession")]
+    partial class currencyAndProfession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

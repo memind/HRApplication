@@ -17,12 +17,12 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(x => x.SecondName).IsRequired(false).HasMaxLength(30);
             builder.Property(x => x.Surname).IsRequired(true).HasMaxLength(30);
             builder.Property(x => x.BloodGroup).IsRequired(false);
-            builder.Property(x => x.Profession).IsRequired(false).HasMaxLength(30);
             builder.Property(x => x.BirthDate).IsRequired(true);
             builder.Property(x => x.IdentityNumber).IsRequired(true).HasMaxLength(11).IsFixedLength(true);
             builder.Property(x => x.ImagePath).IsRequired(true);
             builder.Property(x => x.CompanyId).IsRequired(true);
             builder.Property(x => x.TitleId).IsRequired(true);
+            builder.Property(x => x.ProfessionId).IsRequired(true);
             builder.Property(x => x.PhoneNumber).IsRequired(true);
             builder.Property(x => x.AddressId).IsRequired(false);
 
