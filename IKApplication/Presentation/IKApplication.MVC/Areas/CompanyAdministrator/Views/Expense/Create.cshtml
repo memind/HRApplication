@@ -44,31 +44,16 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-outline-primary btn-block">Add Expense</button>
                         </div>
-                        
+
                     </div>
                 </form>
-                    <a asp-controller="Expense" asp-action="Index" class="ms-4 mb-2 mt-0">
-                        <button class="btn btn-outline-info">Back to List</button>
-                    </a>
+                <a asp-controller="Expense" asp-action="Index" class="ms-4 mb-2 mt-0">
+                    <button class="btn btn-outline-info">Back to List</button>
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-@*<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("addExpenseForm").addEventListener("submit", function (event) {
-            var expenseDate = document.getElementById("ExpenseDate").value;
-            var selectedDate = new Date(expenseDate);
-            var currentDate = new Date();
-
-            if (selectedDate > currentDate) {
-                alert("You cannot select a future date.");
-                event.preventDefault(); // Formun gönderimini engeller
-            }
-        });
-    });
-</script>*@
 
 <script>
     var formId = "addExpenseForm";

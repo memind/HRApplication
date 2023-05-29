@@ -8,13 +8,9 @@
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <div class="row">
-                           
                             <div class="col-md-8">
-                                
                                 <input type="hidden" asp-for="CreateDate" />
-                                
                                 <input type="hidden" asp-for="Status" />
-                               
                                 <div class="form-group">
                                     <label asp-for="StartDate" class="form-label">Start Date</label><br />
                                     <span asp-validation-for="StartDate" class="text-danger"></span>
@@ -30,18 +26,15 @@
                                     <span asp-validation-for="Explanation" class="text-danger"></span>
                                     <input asp-for="Explanation" type="text" class="form-control mb-3" placeholder="Enter Explanation" onfocus="calculateDuration()">
                                 </div>
-
                                 <div class="form-group">
                                     <label asp-for="LeaveTypes">Leave Type</label><br />
                                     <span asp-validation-for="LeaveTypes" class="text-danger"></span>
                                     <select class="form-control mb-3 auth-form-dark" asp-for="LeaveTypes" asp-items="@Html.GetEnumSelectList<LeaveType>()" onfocus="calculateDuration()"></select>
                                 </div>
-
                                 <div class="form-group">
                                     <label asp-for="TotalLeaveDays" class="form-label">Total Leave Days</label><br />
                                     <input asp-for="TotalLeaveDays" type="number" class="form-control mb-3" readonly>
                                 </div>
-
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-outline-primary btn-block">Add Leave</button>
                                 </div>
@@ -59,15 +52,20 @@
 
 <script>
     function calculateDuration() {
-        var startDate = new Date(document.getElementById("StartDate").value); 
-        var endDate = new Date(document.getElementById("EndDate").value); 
-        var millisecondsPerDay = 1000 * 60 * 60 * 24; 
-        var duration = 0; // Tarih aralığındaki her gün için döngü 
-    while (startDate <= endDate) { // Cumartesi veya pazar günü değilse süreyi bir gün artır 
-        if (startDate.getDay() !== 6 && startDate.getDay() !== 0) {
-            duration++; 
-        } 
-            startDate.setTime(startDate.getTime() + millisecondsPerDay); // Bir sonraki günü işaretle 
-        } 
-        document.getElementById("TotalLeaveDays").value = duration; }
+        var startDate = new Date(document.getElementById("StartDate").value);
+        var endDate = new Date(document.getElementById("EndDate").value);
+        var millisecondsPerDay = 1000 * 60 * 60 * 24;
+        var duration = 0;
+
+        // Loop through each day in the date range
+        while (startDate <= endDate) {
+            // Increment duration if it's not a Saturday or Sunday
+            if (startDate.getDay() !== 6 && startDate.getDay() !== 0) {
+                duration++;
+            }
+            startDate.setTime(startDate.getTime() + millisecondsPerDay);
+        }
+
+        document.getElementById("TotalLeaveDays").value = duration;
+    }
 </script>

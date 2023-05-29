@@ -28,21 +28,18 @@
                         </div>
 
                     </div>
-                    <a id="acceptButton" asp-controller="CashAdvance" asp-action="AcceptCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#acceptModal">
-                        <button class="btn btn-outline-primary">Accept Cash Advance</button>
-                    </a>
-                    <a id="refuseButton" asp-controller="CashAdvance" asp-action="RefuseCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#refuseModal">
-                        <button class="btn btn-outline-danger">Refuse Cash Advance</button>
-                    </a>
-                    <a asp-controller="CashAdvance" asp-action="CashAdvanceRequests">
-                        <button class="btn btn-outline-info">Back to List</button>
-                    </a>
+                    <div class="form-group">
+                        <div class="btn-group" role="group" aria-label="Cash Advance Actions">
+                            <a id="acceptButton" asp-controller="CashAdvance" asp-action="AcceptCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#acceptModal" class="btn btn-outline-primary">Accept Cash Advance</a>
+                            <a id="refuseButton" asp-controller="CashAdvance" asp-action="RefuseCashAdvance" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#refuseModal" class="btn btn-outline-danger">Refuse Cash Advance</a>
+                            <a asp-controller="CashAdvance" asp-action="CashAdvanceRequests" class="btn btn-outline-info">Back to List</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
