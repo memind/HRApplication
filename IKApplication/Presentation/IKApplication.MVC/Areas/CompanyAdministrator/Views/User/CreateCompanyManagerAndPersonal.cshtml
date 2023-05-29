@@ -109,8 +109,8 @@
                                 <div class="form-group">
                                     <label asp-for="Role" class="form-label">Role</label><br />
                                     <span asp-validation-for="Role" class="text-danger"></span>
-                                    <input type="radio" name="role" value="companyManager" /> Company Manager
-                                    <input type="radio" name="role" value="personal" /> Personal
+                                    <input type="radio" name="role" value="companyManager" asp-for = "Role" /> Company Manager
+                                    <input type="radio" name="role" value="personal" asp-for="Role" /> Personal
                                 </div>
                                 
 

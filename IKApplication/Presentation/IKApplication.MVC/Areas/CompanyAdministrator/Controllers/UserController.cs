@@ -109,18 +109,24 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.Id = Guid.NewGuid();
                 model.Password = "123";
                 model.ConfirmPassword = "123";
-               string role = model.Role;
+                string role = model.Role;
+
+
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (role == "companyManager")   // role burada belirlenecek
                 {
                     await _appUserService.CreateUser(model, "Company Administrator");
+                    var company = await _companyService.GetById(user.CompanyId);
+                    await _appUserService.AddCompanyManager(model, company);
                 }
                 else if (role == "personal")
                 {
                     await _appUserService.CreateUser(model, "Personal");
+
                 }
 
-                var user = await _userManager.FindByEmailAsync(model.Email);
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
@@ -129,8 +135,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
                 _emailService.SendMail(model.Email, subject, body);
 
-                var company = await _companyService.GetById(user.CompanyId);
-                var create = _appUserService.AddCompanyManager(model, company);
+
 
                 _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Create(model.Email), new ToastrOptions { Title = "Creating User" });
                 return RedirectToAction("Index", "User");
@@ -152,6 +157,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             return View(model);
         }
+
         /*
         [HttpGet]
         public async Task<IActionResult> CreatePersonal()
@@ -244,7 +250,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
                 if (result.Succeeded)
                 {
-                    var mailUser = await _appUserService.GetCurrentUserInfo(model.Email); 
+                    var mailUser = await _appUserService.GetCurrentUserInfo(model.Email);
 
                     string subject = "New Personal";
                     string body = $"Personal {mailUser.Name} {mailUser.SecondName} {mailUser.Surname} has been active.";
