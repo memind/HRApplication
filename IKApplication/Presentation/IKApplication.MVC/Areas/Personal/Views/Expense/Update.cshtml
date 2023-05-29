@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Currency" class="form-label">Expense Type</label><br />
+                            <label asp-for="Currency" class="form-label">Currency</label><br />
                             <span asp-validation-for="Currency" class="text-danger"></span>
                             <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()"></select>
                         </div>

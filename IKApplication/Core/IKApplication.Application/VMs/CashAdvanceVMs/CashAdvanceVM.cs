@@ -16,6 +16,7 @@ namespace IKApplication.Application.VMs.CashAdvanceVMs
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; }
+        public Currency Currency { get; set; }
         public Guid CompanyId { get; set; }
         public Guid AdvanceToId { get; set; }
         public Guid DirectorId { get; set; }

@@ -30,6 +30,12 @@
                         </div>
 
                         <div class="form-group">
+                            <label asp-for="Currency" class="form-label">Currency</label><br />
+                            <span asp-validation-for="Currency" class="text-danger"></span>
+                            <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()"></select>
+                        </div>
+
+                        <div class="form-group">
                             <label class="form-label">Approved By</label><br />
                             <input type="text" class="form-control mb-3" disabled value="@ViewBag.ApprovedBy">
                         </div>

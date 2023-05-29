@@ -18,5 +18,6 @@ namespace IKApplication.Application.dtos.CashAdvanceDTOs
         public DateTime? FinalDateRequest { get; set; }
         public DateTime CreateDate => DateTime.Now;
         public Status Status => Status.Passive;
+        public Currency Currency { get; set; }
     }
 }
