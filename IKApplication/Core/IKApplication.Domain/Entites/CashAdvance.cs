@@ -20,6 +20,7 @@ namespace IKApplication.Domain.Entites
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
         public Status Status { get; set; }
+        public Currency Currency { get; set; }
 
         // Navigation Properties
         public AppUser AdvanceTo { get; set; }
