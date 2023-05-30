@@ -59,7 +59,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
-                    PatronId = x.PatronId
+                    PatronId = x.PatronId,
                 },
                 where: x => x.UserName == userName);
 
@@ -114,6 +114,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
                     Patron = x.Patron,
+                    Status = x.Status,  // eklendi
                     Profession = x.Profession,
                     ProfessionId = x.ProfessionId
                 },
@@ -151,10 +152,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
                     Patron = x.Patron,
+                    Status = x.Status,
                     Profession = x.Profession,
                     ProfessionId = x.ProfessionId
                 },
-                where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
+                where: x => (x.Status != Status.Deleted) && (x.CompanyId == companyId),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron).Include(x => x.Profession));
 
             foreach (var user in users)
@@ -205,6 +207,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
                     Patron = x.Patron,
+                    Status = x.Status,
                     Profession = x.Profession,
                     ProfessionId = x.ProfessionId
                 },
@@ -238,6 +241,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
                     Patron = x.Patron,
+                    Status = x.Status,
                     Profession = x.Profession,
                     ProfessionId = x.ProfessionId
                 },
