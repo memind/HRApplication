@@ -117,7 +117,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCompanyManager(AppUserCreateDTO model)
+        public async Task<IActionResult> CreateCompanyManagerAndPersonal(AppUserCreateDTO model)
         {
             var patron = await _appUserService.GetByUserName(User.Identity.Name);
             if (ModelState.IsValid)
@@ -126,9 +126,24 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.Id = Guid.NewGuid();
                 model.Password = "123";
                 model.ConfirmPassword = "123";
+                string role = model.Role;
 
-                await _appUserService.CreateUser(model, "Company Administrator");
+
+
                 var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (role == "companyManager")   // role burada belirlenecek
+                {
+                    await _appUserService.CreateUser(model, "Company Administrator");
+                    var company = await _companyService.GetById(user.CompanyId);
+                    await _appUserService.AddCompanyManager(model, company);
+                }
+                else if (role == "personal")
+                {
+                    await _appUserService.CreateUser(model, "Personal");
+
+                }
+
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
@@ -137,14 +152,13 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
                 _emailService.SendMail(model.Email, subject, body);
 
-                var company = await _companyService.GetById(user.CompanyId);
-                var create = _appUserService.AddCompanyManager(model, company);
 
-                _toast.AddSuccessToastMessage(Messages.CompanyAdmin.Create(model.Email), new ToastrOptions { Title = "Creating Company Manager" });
-                return RedirectToAction("Index");
+
+                _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Create(model.Email), new ToastrOptions { Title = "Creating User" });
+                return RedirectToAction("Index", "User");
             }
 
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Company Manager" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating User" });
 
             var currentUser = await _appUserService.GetByUserName(User.Identity.Name);
             var companies = await _companyService.GetAllCompanies();
@@ -153,6 +167,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var professions = await _professionService.GetCompanyProfessions(patron.CompanyId);
 
             model.CompanyId = currentUser.CompanyId;
+            model.PatronId = currentUser.Id;
             model.Companies = companies;
             model.Titles = titles;
             model.Professions = professions;
@@ -162,6 +177,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             return View(model);
         }
 
+        /*
         [HttpGet]
         public async Task<IActionResult> CreatePersonal()
         {
@@ -222,6 +238,8 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             return View(model);
         }
+        */
+
 
         [AllowAnonymous]
         public async Task<IActionResult> SetPassword(string email, string Code)
@@ -277,7 +295,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         {
             var user = await _appUserService.GetById(id);
             await _appUserService.Delete(id);
-            _toast.AddSuccessToastMessage(Messages.Personal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
+            _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Delete(user.Email), new ToastrOptions { Title = "Deleting User" });
             return RedirectToAction("Index");
         }
 

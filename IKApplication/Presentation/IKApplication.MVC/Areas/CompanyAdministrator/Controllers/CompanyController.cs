@@ -1,9 +1,14 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.UserDTOs;
+using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using static IKApplication.MVC.ResultMessages.Messages;
+using System.Security.Policy;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
@@ -29,7 +34,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             {
                 await _companyService.Update(updateCompanyDTO);
                 _toast.AddSuccessToastMessage(Messages.Company.Update(updateCompanyDTO.Name), new ToastrOptions { Title = "Updating Company" });
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Update", "Company");
             }
 
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Company" });
