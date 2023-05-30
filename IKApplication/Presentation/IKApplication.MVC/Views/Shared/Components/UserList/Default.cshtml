@@ -6,69 +6,122 @@
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
-                    <form>
-                        <table id="order-listing" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Email</th>
-                                    <th>Full Name</th>
-                                    <th>Title</th>
-                                    <th>Company Name</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (ViewBag.Area != "Site Administrator")
-                                {
-                                    <div class="d-flex justify-content-center mb-2">
-                                        <div class="col-md-3 m-3">
-                                            <button class="btn btn-outline-primary" asp-action="CreateCompanyManagerAndPersonal">New USER</button>
-                                        </div>
-                                        @*
-                                    <div class="col-md-3 m-3">
-                                    <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
-                                    </div>
-                                    *@
-                                    </div>
-                                }
-
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Email</td>
-                                        <td>@item.FullName</td>
-                                        <td>@item.Title.Name</td>
-                                        <td>@item.CompanyName</td>
-
-                                        @if (item.Status == Status.Active || item.Status == Status.Modified)
+                    <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div id="order-listing_filter" class="dataTables_filter">
+                                    <label>
+                                        <input type="search" id="searchBar" class="form-control" placeholder="Search" aria-controls="order-listing">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="userList" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Title</th>
+                                            <th>Company Name</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.Area != "Site Administrator")
                                         {
-                                            <td>Active</td>
+
+                                            <div class="d-flex justify-content-center mb-2">
+                                                <div class="col-md-3 m-3">
+                                                    <button class="btn btn-outline-primary" asp-action="CreateCompanyManagerAndPersonal">New USER</button>
+                                                </div>
+                                                <div class="col-md-3 m-3">
+                                                    <button class="btn btn-outline-primary" asp-action="StaffCards">Go to Staff Summary</button>
+                                                </div>
+                                            </div>
                                         }
 
-                                        @if (item.Status == Status.Passive)
+                                        @foreach (var item in Model)
                                         {
-                                            <td>In Pending</td>
-                                        }
-                                        
+                                            <tr>
+                                                <td>@item.FullName</td>
+                                                <td>@item.Email</td>
+                                                <td>@item.Title.Name</td>
+                                                <td>@item.CompanyName</td>
 
-                                        <td>
-                                            <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                            <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </form>
+                                                @if (item.Status == Status.Active || item.Status == Status.Modified)
+                                                {
+                                                    <td>Active</td>
+                                                }
+
+                                                @if (item.Status == Status.Passive)
+                                                {
+                                                    <td>In Pending</td>
+                                                }
+
+
+
+                                                <td>
+                                                    <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                    <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <a asp-controller="User" asp-action="UserExcel" class="m-4">
-        <button class="btn btn-outline-primary">Export to Excel</button>
-    </a>
-    <a asp-controller="User" asp-action="UserPDF" class="m-4">
-        <button class="btn btn-outline-primary">Export to PDF</button>
-    </a>
+    <div class="row col-12 m-4">
+        <div class="col-2">
+            <a asp-controller="User" asp-action="UserExcel" class="m-4">
+                <button class="btn btn-outline-primary">Export to Excel</button>
+            </a>
+        </div>
+        <div class="col-2">
+            <a asp-controller="User" asp-action="UserPDF" class="m-4">
+                <button class="btn btn-outline-primary">Export to PDF</button>
+            </a>
+        </div>
+    </div>
+
+
+
 </div>
+
+
+<script>
+    var searchInput = document.getElementById('searchBar');
+    var table = document.getElementById('userList');
+    var tableRows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function (event) {
+        var searchText = event.target.value.toLowerCase();
+
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowData = row.getElementsByTagName('td');
+            var match = false;
+
+            for (var j = 0; j < rowData.length; j++) {
+                var cellData = rowData[j].innerText.toLowerCase();
+                if (cellData.indexOf(searchText) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>
