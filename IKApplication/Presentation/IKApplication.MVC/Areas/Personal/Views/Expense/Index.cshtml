@@ -43,15 +43,15 @@
                                             <td>@item.Amount,@item.Penny</td>
                                             @if (item.Currency == Currency.TL)
                                             {
-                                                <td><p value="&#x20BA;"></p></td>
+                                                <td>&#x20BA;</td>
                                             }
                                             @if (item.Currency == Currency.USD)
                                             {
-                                                <td><p value="&#x24;"></p></td>
+                                                <td>&#x24;</td>
                                             }
                                             @if (item.Currency == Currency.EUR)
                                             {
-                                                <td><p value="&#x20AC;"></p></td>
+                                                <td>&#x20AC;</td>
                                             }
                                             <td>@item.Type</td>
                                             <td>@item.ExpenseDate.ToShortDateString()</td>

@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Domain.Entites;
+using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,13 +22,15 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         private readonly ITitleService _titleService;
         private readonly IToastNotification _toast;
         private readonly ICompanyService _companyService;
+        private readonly IProfessionService _professionService;
         private readonly IMapper _mapper;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast, ITitleService titleService)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast, ITitleService titleService, IProfessionService professionService)
         {
             _appUserService = appUserSerives;
             _toast = toast;
             _titleService = titleService;
+            _professionService = professionService;
         }
 
         [HttpGet]
@@ -40,6 +43,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             var personal = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
+            personal.Professions = await _professionService.GetAllProfessions();
             return View("Update", personal);
         }
 
@@ -50,12 +54,14 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             ViewBag.Area = "Personal";
             var user = await _appUserService.GetById(id);
             user.Titles = await _titleService.GetCompanyTitles(user.CompanyId);
+            user.Professions = await _professionService.GetAllProfessions();
             return View(user);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO personal)
         {
+            personal.Profession = null;
             if (ModelState.IsValid)
             {
                 if (personal.Password == personal.ConfirmPassword)

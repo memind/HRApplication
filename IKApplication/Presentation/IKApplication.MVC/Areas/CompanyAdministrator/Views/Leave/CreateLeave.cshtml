@@ -36,6 +36,10 @@
                                     <input asp-for="TotalLeaveDays" type="number" class="form-control mb-3" readonly>
                                 </div>
                                 <div class="form-group">
+                                    <label class="form-label">Approved By</label><br />
+                                    <input type="text" class="form-control mb-3" disabled value="@ViewBag.ApprovedBy">
+                                </div>
+                                <div class="form-group">
                                     <button type="submit" class="btn btn-outline-primary btn-block">Add Leave</button>
                                 </div>
                             </div>

@@ -85,6 +85,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     model.Companies = await _companyService.GetAllCompanies();
 
                     model.Titles = await _titleService.GetAllTitles();
+
+                    model.Professions = await _professionService.GetAllProfessions();
                 }
                 return model;
             }
@@ -119,7 +121,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     ProfessionId = x.ProfessionId
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
-                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron).Include(x => x.Profession));
 
             foreach (var user in users)
             {
@@ -301,7 +303,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 var appUser = _mapper.Map<AppUser>(model);
                 appUser.UserName = model.Email;
                 appUser.Id = Guid.NewGuid();
-                appUser.PatronId = appUser.Id;
 
                 var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
                 if (result.Succeeded)
@@ -464,7 +465,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     ProfessionId = x.ProfessionId
                 },
                 where: x => (x.Status == Status.Passive),
-                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron).Include(x => x.Profession));
 
             foreach (var user in users)
             {

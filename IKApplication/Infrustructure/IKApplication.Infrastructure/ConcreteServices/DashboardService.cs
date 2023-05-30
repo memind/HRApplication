@@ -46,7 +46,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             dashboardVM.ActiveCompanies = (await _companyService.GetAllCompanies()).Count();
             dashboardVM.PassiveCompanies = (await _companyService.GetAllPassiveCompanies()).Count();
             dashboardVM.ActiveUsers = (await _appUserService.GetAllUsers()).Count();
-            dashboardVM.ActiveUsers = (await _appUserService.GetAllPassiveUsers()).Count();
+            dashboardVM.PassiveUsers = (await _appUserService.GetAllPassiveUsers()).Count();
 
             return dashboardVM;
         }
