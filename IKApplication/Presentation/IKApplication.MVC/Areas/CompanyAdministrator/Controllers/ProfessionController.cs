@@ -31,7 +31,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            var professions = await _professionService.GetCompanyProfessions(user.CompanyId);
+            var professions = await _professionService.GetCompanyProfessionsWithDeleted(user.CompanyId);
 
             return View(professions);
         }
@@ -54,11 +54,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _professionService.Create(model);
-                _toast.AddSuccessToastMessage(Messages.Title.Create(), new ToastrOptions { Title = "Creating Title" });
+                _toast.AddSuccessToastMessage(Messages.Profession.Create(), new ToastrOptions { Title = "Creating Profession" });
 
-                return RedirectToAction("Index", "Title");
+                return RedirectToAction("Index", "Profession");
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Title" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Profession" });
             return View(model);
         }
 
@@ -75,18 +75,26 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 await _professionService.Update(model);
-                _toast.AddSuccessToastMessage(Messages.Title.Update(), new ToastrOptions { Title = "Updating Title" });
-                return RedirectToAction("Index", "Title");
+                _toast.AddSuccessToastMessage(Messages.Profession.Update(), new ToastrOptions { Title = "Updating Profession" });
+                return RedirectToAction("Index", "Profession");
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Title" });
+            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Profession" });
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> DeleteTitle(Guid id)
+        public async Task<IActionResult> DeleteProfession(Guid id)
         {
             await _professionService.Delete(id);
-            _toast.AddSuccessToastMessage(Messages.Title.Delete(), new ToastrOptions { Title = "Deleting Title" });
+            _toast.AddSuccessToastMessage(Messages.Profession.Delete(), new ToastrOptions { Title = "Deleting Profession" });
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RecoverProfession(Guid id)
+        {
+            await _professionService.Recover(id);
+            _toast.AddSuccessToastMessage(Messages.Profession.Recover(), new ToastrOptions { Title = "Recovering Profession" });
             return RedirectToAction("Index");
         }
     }

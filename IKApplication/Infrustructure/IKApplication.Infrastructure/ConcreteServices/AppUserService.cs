@@ -290,12 +290,14 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
+            model.Profession = null;
 
             if (user == null && model.Password != null && model.Password == model.ConfirmPassword)
             {
                 var appUser = _mapper.Map<AppUser>(model);
                 appUser.UserName = model.Email;
                 appUser.Id = Guid.NewGuid();
+                appUser.PatronId = appUser.Id;
 
                 var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
                 if (result.Succeeded)

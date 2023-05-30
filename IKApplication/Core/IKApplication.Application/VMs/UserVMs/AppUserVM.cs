@@ -13,6 +13,7 @@ namespace IKApplication.Application.VMs.UserVMs
         public string Surname { get; set; }
         public string FullName => Name + " " + SecondName + " " + Surname;
         public BloodGroup? BloodGroup { get; set; }
+        public Status Status { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }

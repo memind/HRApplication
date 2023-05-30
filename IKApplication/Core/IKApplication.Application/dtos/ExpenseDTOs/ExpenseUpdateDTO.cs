@@ -12,9 +12,9 @@ namespace IKApplication.Application.dtos.ExpenseDTOs
         public Status Status => Status.Modified;
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public decimal Amount { get; set; }
-        [RegularExpression(@"^[0-9]+(\,[0-9]{1,2})$", ErrorMessage = "Please separate cents with commas. You can enter up to 2 digits after the comma.")]
-        public string AmountString { get; set; }
+        public int Amount { get; set; }
+        [Range(0, 100, ErrorMessage = "Value must be between 0 and 100.")]
+        public int? Penny { get; set; }
         [Range(typeof(DateTime), "2022-01-01", "2024-01-01", ErrorMessage = "You can't enter a date more than 1 year ago or later than today.")]
         public DateTime ExpenseDate { get; set; }
         public ExpenseType Type { get; set; }

@@ -213,6 +213,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A2"].Value = startDate.ToShortDateString();
             ws.Cells["B2"].Value = "to";
             ws.Cells["C2"].Value = endDate.ToShortDateString();
+            ws.Cells["A1:C2"].Style.Font.Bold = true;
 
             ws.Cells["A6"].Value = "Advance To";
             ws.Cells["B6"].Value = "Approved By";
@@ -234,20 +235,20 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 totalAmount += advance.RequestedAmount;
             }
 
-            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Cash Advance Amount: ";
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Cash Advance Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            ws.Cells[string.Format("F{0}", rowStart)].Value = totalAmount;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Value = totalAmount;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
+            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
             rowStart++;
             rowStart++;
 
@@ -335,6 +336,21 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             //Table start.
             sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
 
+            // Total Counts
+            #region Total Cash Advance Amount
+            sb.Append("<tr style='border: none'>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Cash Advance Amount: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(totalAmount);
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+            #endregion
+
             //Building the Header row.
             sb.Append("<tr>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Advance To</th>");
@@ -351,37 +367,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 if (advance.Status == Domain.Enums.Status.Passive)
                 {
                     sb.Append("<tr style='background-color: #ffc0cb'>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{advance.Director.Name} {advance.Director.SecondName} {advance.Director.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.RequestedAmount);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.Description);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.CreateDate.ToShortDateString());
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
-                    sb.Append("</td>");
-
-                    sb.Append("</tr>");
                 }
                 else
                 {
                     sb.Append("<tr>");
-
+                }
                     sb.Append("<td style='border: 1px solid #ccc'>");
                     sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
                     sb.Append("</td>");
@@ -407,41 +397,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     sb.Append("</td>");
 
                     sb.Append("</tr>");
-                }
+                
 
                 totalAmount += advance.RequestedAmount;
             }
-
-
-            #region Total Cash Advance Amount
-            sb.Append("<tr style='border: none'>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
-            sb.Append("Total Cash Advance Amount: ");
-            sb.Append("</td>");
-
-            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
-            sb.Append(totalAmount);
-            sb.Append("</td>");
-
-            sb.Append("</tr>");
-            #endregion
 
             //Table end.
             sb.Append("</table>");

@@ -63,15 +63,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
-                                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
-                                    <select asp-for="BloodGroup" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
+                                    <label asp-for="ProfessionId" class="form-label">Profession</label><br />
+                                    <span asp-validation-for="ProfessionId" class="text-danger"></span>
+                                    <select asp-for="ProfessionId" type="text" class="form-control mb-3" asp-items="@(new SelectList(Model.Professions.Where(x => x.CompanyId == Model.CompanyId),"Id","Name"))"></select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="Profession" class="form-label">Profession</label><br />
-                                    <span asp-validation-for="Profession" class="text-danger"></span>
-                                    <input asp-for="Profession" type="text" class="form-control mb-3" placeholder="Enter Profession">
+                                    <label asp-for="BloodGroup" class="form-label">Blood Group</label><br />
+                                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                                    <select asp-for="BloodGroup" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<BloodGroup>()"></select>
                                 </div>
 
                                 <div class="form-group">

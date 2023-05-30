@@ -44,7 +44,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 expense.DeleteDate = expenseUpdateDTO.DeleteDate;
                 expense.ShortDescription = expenseUpdateDTO.ShortDescription;
                 expense.LongDescription = expenseUpdateDTO.LongDescription;
-                expense.Amount = Convert.ToDecimal(expenseUpdateDTO.AmountString);
+                expense.Amount = expenseUpdateDTO.Amount;
+                expense.Penny = expenseUpdateDTO.Penny;
                 expense.ExpenseDate = expenseUpdateDTO.ExpenseDate;
                 expense.Type = expenseUpdateDTO.Type;
                 expense.Currency = expenseUpdateDTO.Currency;
@@ -72,6 +73,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
+                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -99,6 +101,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
+                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         Type = x.Type,
                         Currency = x.Currency
@@ -123,6 +126,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
+                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -152,6 +156,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
+                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -189,6 +194,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
+                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,

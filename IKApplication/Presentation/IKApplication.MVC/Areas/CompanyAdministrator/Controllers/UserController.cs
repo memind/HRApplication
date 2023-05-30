@@ -34,9 +34,10 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         private readonly IToastNotification _toast;
         private readonly ICompanyService _companyService;
         private readonly ITitleService _titleService;
+        private readonly IProfessionService _professionService;
         private readonly IMapper _mapper;
 
-        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService, UserManager<AppUser> userManager)
+        public UserController(IAppUserService appUserSerives, IToastNotification toast, ICompanyService companyService, ITitleService titleService, IMapper mapper, IEmailService emailService, UserManager<AppUser> userManager, IProfessionService professionService)
         {
             _appUserService = appUserSerives;
             _toast = toast;
@@ -45,6 +46,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             _mapper = mapper;
             _emailService = emailService;
             _userManager = userManager;
+            _professionService = professionService;
         }
 
         [HttpGet]
@@ -61,7 +63,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             var users = await _appUserService.GetUsersByCompany(user.CompanyId);
-            ViewBag.Header = "Staff";
             return View(users);
         }
 
@@ -109,8 +110,9 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companies = await _companyService.GetAllCompanies();
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
+            var professions = await _professionService.GetCompanyProfessions(user.CompanyId);
 
-            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
+            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123", Professions = professions };
             return View(model);
         }
 
@@ -148,10 +150,12 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companies = await _companyService.GetAllCompanies();
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
+            var professions = await _professionService.GetCompanyProfessions(patron.CompanyId);
 
             model.CompanyId = currentUser.CompanyId;
             model.Companies = companies;
             model.Titles = titles;
+            model.Professions = professions;
             model.Password = "123";
             model.ConfirmPassword = "123";
 
@@ -165,17 +169,19 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companies = await _companyService.GetAllCompanies();
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
+            var professions = await _professionService.GetCompanyProfessions(user.CompanyId);
 
-            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123" };
+            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123", Professions = professions };
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePersonal(AppUserCreateDTO model)
         {
+            var patron = await _appUserService.GetByUserName(User.Identity.Name);
+
             if (ModelState.IsValid)
             {
-                var patron = await _appUserService.GetByUserName(User.Identity.Name);
 
                 model.PatronId = patron.Id;
                 model.Id = Guid.NewGuid();
@@ -204,11 +210,13 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var companies = await _companyService.GetAllCompanies();
             var titles = await _titleService.GetAllTitles();
             var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
+            var professions = await _professionService.GetCompanyProfessions(patron.CompanyId);
 
             model.CompanyId = currentUser.CompanyId;
             model.PatronId = currentUser.Id;
             model.Companies = companies;
             model.Titles = titles;
+            model.Professions = professions;
             model.Password = "123";
             model.ConfirmPassword = "123";
 
@@ -288,46 +296,44 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Users");
 
-            ws.Cells["A1"].Value = "All Users";
+            ws.Cells["A1"].Value = "Staff List";
             ws.Cells["A1"].Style.Font.Bold = true;
 
             ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["B2"].Value = $"{date.Day} - {date.Month} - {date.Year}";
+            ws.Cells["A2:B2"].Style.Font.Bold = true;
 
-            ws.Cells["A5"].Value = "Full Name";
-            ws.Cells["B5"].Value = "Email Address";
-            ws.Cells["C5"].Value = "Identity Number";
-            ws.Cells["D5"].Value = "Birth Date";
-            ws.Cells["E5"].Value = "Blood Group";
-            ws.Cells["F5"].Value = "Company Name";
-            ws.Cells["G5"].Value = "Title";
-            ws.Cells["H5"].Value = "Profession";
-            ws.Cells["I5"].Value = "Role";
+            ws.Cells["A5"].Value = "Total Personal Count: ";
+            ws.Cells["A5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            ws.Cells["A5:I5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Font.Bold = true;
+            ws.Cells["B5"].Value = allUsersList.Count;
+            ws.Cells["B5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells["A5"].Style.Font.Bold = true;
+            ws.Cells["B5"].Style.Font.Bold = true;
+
+            ws.Cells["A6"].Value = "Full Name";
+            ws.Cells["B6"].Value = "Email Address";
+            ws.Cells["C6"].Value = "Identity Number";
+            ws.Cells["D6"].Value = "Birth Date";
+            ws.Cells["E6"].Value = "Blood Group";
+            ws.Cells["F6"].Value = "Company Name";
+            ws.Cells["G6"].Value = "Title";
+            ws.Cells["H6"].Value = "Profession";
+
+            ws.Cells["A6:H6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Font.Bold = true;
 
             int rowStart = 7;
-
-            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Personal Count: ";
-            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("B{0}", rowStart)].Value = allUsersList.Count;
-            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("B{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("A{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
-
-            rowStart++;
 
             foreach (var userData in allUsersList)
             {
@@ -379,12 +385,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("I{0}", rowStart)].Value = userData.Roles;
-                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
                 rowStart++;
             }
 
@@ -393,7 +393,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Month}/{date.Year}.xlsx");
         }
-
 
         [HttpGet]
         public async Task<FileResult> UserPDF(ExcelDateVM dates)
@@ -413,6 +412,12 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             //Table start.
             sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
 
+            //Total count.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Total Personal Count: </th>");
+            sb.Append($"<th style='font-weight: bold;border: 1px solid #ccc'>{users.Count()}</th>");
+            sb.Append("</tr>");
+
             //Building the Header row.
             sb.Append("<tr>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Full Name</th>");
@@ -423,7 +428,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Company Name</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Title</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Profession</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Role</th>");
             sb.Append("</tr>");
 
             //Building the Data rows.
@@ -463,10 +467,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 sb.Append(personal.Profession.Name);
                 sb.Append("</td>");
 
-                sb.Append("<td style='border: 1px solid #ccc'>");
-                sb.Append(personal.Roles.First());
-                sb.Append("</td>");
-
                 sb.Append("</tr>");
 
             }
@@ -476,12 +476,12 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            Document pdfDoc = new Document(PageSize.A4, 2f, 2f, 30f, 10f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
             pdfDoc.Close();
-            return File(stream.ToArray(), "application/pdf", $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
+            return File(stream.ToArray(), "application/pdf", $"All_Users_Report_{date.Month}/{date.Year}.pdf");
 
         }
     }

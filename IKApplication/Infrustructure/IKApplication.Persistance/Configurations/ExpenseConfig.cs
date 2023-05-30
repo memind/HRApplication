@@ -10,7 +10,8 @@ namespace IKApplication.Persistance.Configurations
         {
             builder.Property(x => x.ShortDescription).IsRequired(true);
             builder.Property(x => x.LongDescription).IsRequired(true);
-            builder.Property(x => x.Amount).IsRequired(true).HasColumnType("decimal(18, 2)");
+            builder.Property(x => x.Amount).IsRequired(true);
+            builder.Property(x => x.Penny).IsRequired(false);
             builder.Property(x => x.ExpenseDate).IsRequired(true);
             builder.Property(x => x.ExpenseById).IsRequired(true);
             builder.Property(x => x.ApprovedById).IsRequired(true);

@@ -74,7 +74,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             if (ModelState.IsValid)
             {
                 model.ExpenseById = expenseBy.Id;
-                model.Amount = Convert.ToDecimal(model.AmountString);
                 model.Id = Guid.NewGuid();
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
@@ -97,7 +96,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             var expense = await _expenseService.GetById(id);
             var map = _mapper.Map<ExpenseUpdateDTO>(expense);
-            map.AmountString = map.Amount.ToString();
             return View(map);
         }
 
@@ -106,7 +104,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Amount = Convert.ToDecimal(model.AmountString);
                 await _expenseService.UpdateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Update(), new ToastrOptions { Title = "Updating Expense" });
                 return RedirectToAction("Index", "Expense");
@@ -202,12 +199,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
+
             ws.Cells["A1"].Value = "Expense Report";
             ws.Cells["B1"].Value = "Created at";
             ws.Cells["C1"].Value = date.ToShortDateString();
             ws.Cells["A2"].Value = startDate.ToShortDateString();
             ws.Cells["B2"].Value = "to";
             ws.Cells["C2"].Value = endDate.ToShortDateString();
+            ws.Cells["A1:C2"].Style.Font.Bold = true;
 
 
             ws.Cells["A8"].Value = "Expense By";
@@ -227,26 +226,80 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A8:I8"].Style.Font.Bold = true;
 
             int rowStart = 5;
-            decimal totalApprovedAmount = 0;
-            decimal totalPendingAmount = 0;
-            decimal totalAmount = 0;
+
+            decimal? totalApprovedAmount = 0;
+            decimal? totalPendingAmount = 0;
+            decimal? totalAmount = 0;
+
+            decimal? totalApprovedPenny = 0;
+            decimal? totalPendingPenny = 0;
+            decimal? totalPenny = 0;
 
             foreach (var expense in expenseList)
             {
-                totalAmount += expense.Amount;
+                if (expense.Currency == Domain.Enums.Currency.TL)
+                {
+                    totalAmount += expense.Amount;
+                    totalPenny += expense.Penny / 100m;
+                }
+                if (expense.Currency == Domain.Enums.Currency.USD)
+                {
+                    totalAmount += (expense.Amount * 20.15m);
+                    totalPenny += (expense.Penny * 20.15m) / 100m;
+                }
+                if (expense.Currency == Domain.Enums.Currency.EUR)
+                {
+                    totalAmount += (expense.Amount * 21.58m);
+                    totalPenny += (expense.Penny * 21.58m) / 100m;
+                }
+
+
 
                 if (expense.Status == Domain.Enums.Status.Passive)
                 {
-                    totalPendingAmount += expense.Amount;
+                    if (expense.Currency == Domain.Enums.Currency.TL)
+                    {
+                        totalPendingAmount += expense.Amount;
+                        totalPendingPenny += expense.Penny / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.USD)
+                    {
+                        totalPendingAmount += (expense.Amount * 20.15m);
+                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.EUR)
+                    {
+                        totalPendingAmount += (expense.Amount * 21.58m);
+                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
+                    }
+
                 }
 
                 if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
                 {
-                    totalApprovedAmount += expense.Amount;
+                    if (expense.Currency == Domain.Enums.Currency.TL)
+                    {
+                        totalApprovedAmount += expense.Amount;
+                        totalApprovedPenny += expense.Penny / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.USD)
+                    {
+                        totalApprovedAmount += (expense.Amount * 20.15m);
+                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.EUR)
+                    {
+                        totalApprovedAmount += (expense.Amount * 21.58m);
+                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
+                    }
                 }
             }
 
-            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Approved Expenses Amount: ";
+            totalAmount += totalPenny;
+            totalApprovedAmount += totalApprovedPenny;
+            totalPendingAmount += totalPendingPenny;
+
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Approved Expenses Amount (TL): ";
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -262,7 +315,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
             rowStart++;
 
-            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Pending Expenses Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Pending Expenses Amount (TL): ";
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -278,7 +331,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells[string.Format("B{0}", rowStart)].Style.Font.Bold = true;
             rowStart++;
 
-            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Expense Amount: ";
+            ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Expense Amount (TL): ";
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -344,7 +397,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Amount;
+                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}";
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -376,17 +429,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
 
                 rowStart++;
-                totalAmount += expense.Amount;
-
-                if (expense.Status == Domain.Enums.Status.Passive)
-                {
-                    totalPendingAmount += expense.Amount;
-                }
-
-                if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
-                {
-                    totalApprovedAmount += expense.Amount;
-                }
             }
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
@@ -397,7 +439,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpPost]
         public async Task<FileResult> ExpensePDF(ExcelDateVM dates)
         {
-            // ffc0cb (pembe)
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
             var expenses = await _expenseService.GetAllExpenses(user.CompanyId);
 
@@ -408,9 +449,77 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             List<ExpenseVM> customers = expenses.Where(x => x.Status != Domain.Enums.Status.Deleted).Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
-            decimal totalApprovedAmount = 0;
-            decimal totalPendingAmount = 0;
-            decimal totalAmount = 0;
+            decimal? totalApprovedAmount = 0;
+            decimal? totalPendingAmount = 0;
+            decimal? totalAmount = 0;
+
+            decimal? totalApprovedPenny = 0;
+            decimal? totalPendingPenny = 0;
+            decimal? totalPenny = 0;
+
+            foreach (var expense in customers)
+            {
+                if (expense.Currency == Domain.Enums.Currency.TL)
+                {
+                    totalAmount += expense.Amount;
+                    totalPenny += expense.Penny / 100m;
+                }
+                if (expense.Currency == Domain.Enums.Currency.USD)
+                {
+                    totalAmount += (expense.Amount * 20.15m);
+                    totalPenny += (expense.Penny * 20.15m) / 100m;
+                }
+                if (expense.Currency == Domain.Enums.Currency.EUR)
+                {
+                    totalAmount += (expense.Amount * 21.58m);
+                    totalPenny += (expense.Penny * 21.58m) / 100m;
+                }
+
+
+
+                if (expense.Status == Domain.Enums.Status.Passive)
+                {
+                    if (expense.Currency == Domain.Enums.Currency.TL)
+                    {
+                        totalPendingAmount += expense.Amount;
+                        totalPendingPenny += expense.Penny / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.USD)
+                    {
+                        totalPendingAmount += (expense.Amount * 20.15m);
+                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.EUR)
+                    {
+                        totalPendingAmount += (expense.Amount * 21.58m);
+                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
+                    }
+
+                }
+
+                if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
+                {
+                    if (expense.Currency == Domain.Enums.Currency.TL)
+                    {
+                        totalApprovedAmount += expense.Amount;
+                        totalApprovedPenny += expense.Penny / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.USD)
+                    {
+                        totalApprovedAmount += (expense.Amount * 20.15m);
+                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
+                    }
+                    if (expense.Currency == Domain.Enums.Currency.EUR)
+                    {
+                        totalApprovedAmount += (expense.Amount * 21.58m);
+                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
+                    }
+                }
+            }
+
+            totalAmount += totalPenny;
+            totalApprovedAmount += totalApprovedPenny;
+            totalPendingAmount += totalPendingPenny;
 
             //Building an HTML string.
             StringBuilder sb = new StringBuilder();
@@ -418,138 +527,12 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             //Table start.
             sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
 
-            //Building the Header row.
-            sb.Append("<tr>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense By</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Type</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Date</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Amount</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Currency</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Short Description</th>");
-            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Long Description</th>");
-            //sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
-            sb.Append("</tr>");
-
-            //Building the Data rows.
-            foreach (ExpenseVM expense in customers)
-            {
-                if (expense.Status == Domain.Enums.Status.Passive)
-                {
-                    sb.Append("<tr style='background-color: #ffc0cb'>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{expense.ApprovedBy.Name} {expense.ApprovedBy.SecondName} {expense.ApprovedBy.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Type);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.ExpenseDate.ToShortDateString());
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Amount);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Currency.ToString());
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.ShortDescription);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.LongDescription);
-                    sb.Append("</td>");
-
-                    sb.Append("</tr>");
-                }
-
-                else
-                {
-                    sb.Append("<tr>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{expense.ApprovedBy.Name} {expense.ApprovedBy.SecondName} {expense.ApprovedBy.Surname}");
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Type);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.ExpenseDate.ToShortDateString());
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Amount);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.Currency.ToString());
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.ShortDescription);
-                    sb.Append("</td>");
-
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(expense.LongDescription);
-                    sb.Append("</td>");
-
-                    sb.Append("</tr>");
-                }
-                totalAmount += expense.Amount;
-
-                if (expense.Status == Domain.Enums.Status.Passive)
-                {
-                    totalPendingAmount += expense.Amount;
-                }
-
-                if (expense.Status == Domain.Enums.Status.Active || expense.Status == Domain.Enums.Status.Modified)
-                {
-                    totalApprovedAmount += expense.Amount;
-                }
-            }
-
-
+            //Counts
             #region Total Approved Expenses Amount
             sb.Append("<tr style='border: none'>");
 
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
-            sb.Append("Total Approved Expenses Amount: ");
+            sb.Append("Total Approved Expenses Amount (TL): ");
             sb.Append("</td>");
 
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
@@ -562,33 +545,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             #region Total Pending Expenses Amount
             sb.Append("<tr style='border: none'>");
 
-            // Status kolonu silindigi icin
-            //sb.Append("<td>");
-            //sb.Append("");
-            //sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
-            sb.Append("Total Pending Expenses Amount: ");
+            sb.Append("Total Pending Expenses Amount (TL): ");
             sb.Append("</td>");
 
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
@@ -601,33 +559,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             #region Total Expenses Amount
             sb.Append("<tr style='border: none'>");
 
-            // Status kolonu silindigi icin
-            //sb.Append("<td>");
-            //sb.Append("");
-            //sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
-            sb.Append("Total Expenses Amount: ");
+            sb.Append("Total Expenses Amount (TL): ");
             sb.Append("</td>");
 
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
@@ -636,6 +569,65 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             sb.Append("</tr>");
             #endregion
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Type</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Expense Date</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Amount</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Currency</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Short Description</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Long Description</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (ExpenseVM expense in customers)
+            {
+                if (expense.Status == Domain.Enums.Status.Passive)
+                {
+                    sb.Append("<tr style='background-color: #ffc0cb'>");
+                }
+
+                else
+                {
+                    sb.Append("<tr>");
+                }
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{expense.ExpenseBy.Name} {expense.ExpenseBy.SecondName} {expense.ExpenseBy.Surname}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{expense.ApprovedBy.Name} {expense.ApprovedBy.SecondName} {expense.ApprovedBy.Surname}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.Type);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.ExpenseDate.ToShortDateString());
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.Currency.ToString());
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.ShortDescription);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(expense.LongDescription);
+                sb.Append("</td>");
+
+                sb.Append("</tr>");
+            }
 
             //Table end.
             sb.Append("</table>");

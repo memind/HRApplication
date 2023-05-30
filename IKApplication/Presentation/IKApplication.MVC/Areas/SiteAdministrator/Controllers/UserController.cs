@@ -17,6 +17,7 @@ using OfficeOpenXml;
 using System.Drawing;
 using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
+using IKApplication.Domain.Entites;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
@@ -292,7 +293,15 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             //Building the Data rows.
             foreach (AppUserVM user in users)
             {
-                sb.Append("<tr>");
+                if (user.Status == Domain.Enums.Status.Passive)
+                {
+                    sb.Append("<tr style='background-color: #ffc0cb'>");
+                }
+
+                else
+                {
+                    sb.Append("<tr>");
+                }
 
                 sb.Append("<td style='border: 1px solid #ccc'>");
                 sb.Append($"{user.FullName}");

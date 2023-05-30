@@ -140,6 +140,30 @@
             {
                 return $"Title deleted successfully!";
             }
+            public static string Recover()
+            {
+                return $"Title recovered successfully!";
+            }
+        }
+
+        public static class Profession
+        {
+            public static string Create()
+            {
+                return $"Profession created successfully!";
+            }
+            public static string Update()
+            {
+                return $"Profession updated successfully!";
+            }
+            public static string Delete()
+            {
+                return $"Profession deleted successfully!";
+            }
+            public static string Recover()
+            {
+                return $"Profession recovered successfully!";
+            }
         }
 
         public static class Expense

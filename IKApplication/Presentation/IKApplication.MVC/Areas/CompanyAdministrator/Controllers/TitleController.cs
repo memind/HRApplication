@@ -33,7 +33,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            var titles = await _titleService.GetCompanyTitles(user.CompanyId);
+            var titles = await _titleService.GetCompanyTitlesWithDeleted(user.CompanyId);
 
             return View(titles);
         }
@@ -42,10 +42,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> CreateTitle()
         {
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            TitleCreateDTO model = new TitleCreateDTO() 
-            { 
-            Id = Guid.NewGuid(),
-            CompanyId = user.CompanyId
+            TitleCreateDTO model = new TitleCreateDTO()
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = user.CompanyId
             };
             return View(model);
         }
@@ -89,6 +89,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             await _titleService.Delete(id);
             _toast.AddSuccessToastMessage(Messages.Title.Delete(), new ToastrOptions { Title = "Deleting Title" });
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RecoverTitle(Guid id)
+        {
+            await _titleService.Recover(id);
+            _toast.AddSuccessToastMessage(Messages.Title.Recover(), new ToastrOptions { Title = "Recovering Title" });
             return RedirectToAction("Index");
         }
     }

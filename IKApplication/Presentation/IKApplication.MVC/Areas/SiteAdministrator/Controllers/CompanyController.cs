@@ -70,10 +70,25 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Companies");
 
             ws.Cells["A1"].Value = "All Companies";
-            ws.Cells["A1"].Style.Font.Bold = true;
+            ws.Cells["A1:B2"].Style.Font.Bold = true;
 
             ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["B2"].Value = $"{date.Day} - {date.Month} - {date.Year}";
+
+            ws.Cells["A5"].Value = "Total Company Count: ";
+            ws.Cells["A5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells["B5"].Value = allCompanies.Count;
+            ws.Cells["B5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+            ws.Cells["A5"].Style.Font.Bold = true;
+            ws.Cells["B5"].Style.Font.Bold = true;
 
             ws.Cells["A6"].Value = "Company Name";
             ws.Cells["B6"].Value = "Email Address";
@@ -88,23 +103,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A6:F6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             ws.Cells["A6:F6"].Style.Font.Bold = true;
 
-            int rowStart = 5;
-
-            ws.Cells[string.Format("E{0}", rowStart)].Value = "Total Company Count: ";
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("F{0}", rowStart)].Value = allCompanies.Count;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("F{0}", rowStart)].Style.Font.Bold = true;
-            rowStart++;
+            int rowStart = 7;
 
             foreach (var company in allCompanies)
             {
@@ -166,22 +165,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
             sb.Append("<tr style='border: none'>");
 
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
-            sb.Append("<td style='border: 0px solid #ccc'>");
-            sb.Append("");
-            sb.Append("</td>");
-
             sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
             sb.Append("Total Company Count: ");
             sb.Append("</td>");
@@ -206,7 +189,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             foreach (CompanyVM company in allCompanies)
             {
 
-                sb.Append("<tr style='background-color: #ffc0cb'>");
+                sb.Append("<tr>");
 
                 sb.Append("<td style='border: 1px solid #ccc'>");
                 sb.Append($"{company.Name}");

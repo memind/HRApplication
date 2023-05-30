@@ -1,4 +1,5 @@
 ﻿using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.ProfessionVMs;
 using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Http;
@@ -33,5 +34,6 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Guid ProfessionId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
+        public List<ProfessionVM>? Professions { get; set; }
     }
 }

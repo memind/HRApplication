@@ -31,11 +31,16 @@
 
                             <div class="form-group">
                                 <label asp-for="Amount" class="form-label">Amount</label><br />
-                                <input asp-for="Amount" type="text" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
+                                <input asp-for="Amount" type="number" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
                             </div>
 
                             <div class="form-group">
-                                <label asp-for="Currency" class="form-label">Expense Type</label><br />
+                                <label asp-for="Penny" class="form-label">Pennies</label><br />
+                                <input asp-for="Penny" type="number" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Currency" class="form-label">Currency</label><br />
                                 <span asp-validation-for="Currency" class="text-danger"></span>
                                 <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()" disabled></select>
                             </div>

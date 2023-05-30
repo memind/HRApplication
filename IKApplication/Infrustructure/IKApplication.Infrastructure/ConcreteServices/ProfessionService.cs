@@ -65,7 +65,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        CompanyId = x.CompanyId
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
                     },
                     where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                     orderBy: x => x.OrderBy(x => x.CreateDate));
@@ -87,9 +88,29 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        CompanyId = x.CompanyId
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
                     },
                     where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.Name),
+                    include: x => x.Include(x => x.Company)
+                );
+
+            return companyProfessions;
+        }
+
+        public async Task<List<ProfessionVM>> GetCompanyProfessionsWithDeleted(Guid companyId)
+        {
+            var companyProfessions = await _professionRepository.GetFilteredList
+                (
+                    select: x => new ProfessionVM()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
+                    },
+                    where: x => x.CompanyId == companyId && (x.Status != Status.Passive),
                     orderBy: x => x.OrderBy(x => x.Name),
                     include: x => x.Include(x => x.Company)
                 );
@@ -113,6 +134,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 );
 
             return profession;
+        }
+
+        public async Task Recover(Guid professionId)
+        {
+            var profession = await _professionRepository.GetDefault(x => x.Id == professionId);
+
+            profession.DeleteDate = null ;
+            profession.Status = Status.Modified;
+
+            await _professionRepository.Update(profession);
         }
     }
 }
