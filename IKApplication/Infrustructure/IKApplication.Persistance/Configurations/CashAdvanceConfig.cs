@@ -12,6 +12,7 @@ namespace IKApplication.Persistance.Configurations
             builder.Property(c => c.Description).HasMaxLength(255);
             builder.Property(c => c.RequestedAmount).HasColumnType("decimal(18, 2)");
             builder.Property(c => c.FinalDateRequest).HasColumnType("date");
+            builder.Property(x => x.Currency).IsRequired(true);
 
             // Configure relationships
             builder.HasOne(x => x.AdvanceTo).WithMany(x => x.CashAdvances).HasForeignKey(x => x.AdvanceToId).OnDelete(DeleteBehavior.Restrict);

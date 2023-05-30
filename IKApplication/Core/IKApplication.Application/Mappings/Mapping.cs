@@ -4,11 +4,13 @@ using IKApplication.Application.dtos.ExpenseDTOs;
 using IKApplication.Application.dtos.TitleDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.LeaveDTOs;
+using IKApplication.Application.DTOs.ProfessionDTOs;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CashAdvanceVMs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.LeaveVMs;
+using IKApplication.Application.VMs.ProfessionVMs;
 using IKApplication.Application.VMs.SectorVMs;
 using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Application.VMs.UserVMs;
@@ -33,6 +35,11 @@ namespace IKApplication.Application.Mappings
             CreateMap<Title, TitleUpdateDTO>().ReverseMap();
             CreateMap<Title, TitleVM>().ReverseMap();
             CreateMap<TitleUpdateDTO, TitleVM>().ReverseMap();
+
+            CreateMap<Profession, ProfessionCreateDTO>().ReverseMap();
+            CreateMap<Profession, ProfessionUpdateDTO>().ReverseMap();
+            CreateMap<Profession, ProfessionVM>().ReverseMap();
+            CreateMap<ProfessionUpdateDTO, ProfessionVM>().ReverseMap();
 
             CreateMap<Expense, ExpenseVM>().ReverseMap();
             CreateMap<Expense, ExpenseCreateDTO>().ReverseMap();

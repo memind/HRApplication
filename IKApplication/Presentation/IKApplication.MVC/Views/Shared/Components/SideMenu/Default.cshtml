@@ -23,182 +23,221 @@
                 </div>
             </div>
         </li>
-        <li class="nav-item nav-category">
-            <span class="nav-link">Navigation</span>
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item nav-category">
+
+                <span class="nav-link">Company</span>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="Company" asp-action="Update" asp-route-id="@Model.CompanyId">
                     <span class="menu-icon">
                         <i class="mdi mdi-office-building"></i>
                     </span>
                     <span class="menu-title">Company Details</span>
                 </a>
-            }
-            @if (area == "SiteAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Company" asp-action="Index">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-office-building"></i>
-                    </span>
-                    <span class="menu-title">Company List</span>
-                </a>
-            }
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "SiteAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="Index">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-account"></i>
-                    </span>
-                    <span class="menu-title">Users</span>
-                </a>
-            }
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="Index">
                     <span class="menu-icon">
                         <i class="mdi mdi-account"></i>
                     </span>
                     <span class="menu-title">Staff</span>
                 </a>
-            }
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Title" asp-action="Index">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-format-title"></i>
-                    </span>
-                    <span class="menu-title">Company Titles</span>
-                </a>
-            }
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "SiteAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="RegistrationList">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-database"></i>
-                    </span>
-                    <span class="menu-title">Registration Requests</span>
-                </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item nav-category">
+                <span class="nav-link">Company Lists</span>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="Index">
                     <span class="menu-icon">
                         <i class="mdi mdi-credit-card"></i>
                     </span>
                     <span class="menu-title">Company Expenses</span>
                 </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="ExpenseRequests">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-credit-card-clock"></i>
-                    </span>
-                    <span class="menu-title">Expense Requests</span>
-                </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="Index">
                     <span class="menu-icon">
                         <i class="mdi mdi-calendar-clock"></i>
                     </span>
                     <span class="menu-title">Company Leaves</span>
                 </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="LeaveRequests">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-calendar-check-outline"></i>
-                    </span>
-                    <span class="menu-title">Leave Requests</span>
-                </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "Personal")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="ListLeave">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-calendar-clock"></i>
-                    </span>
-                    <span class="menu-title">My Leaves</span>
-                </a>
-            }
-        </li>
-        <li class="nav-item menu-items">
-            @if (area == "Personal")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="Index">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-credit-card-clock"></i>
-                    </span>
-                    <span class="menu-title">My Expenses</span>
-                </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "Personal")
-            {
-                <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="Index">
-                    <span class="menu-icon">
-                        <i class="mdi mdi-cash"></i>
-                    </span>
-                    <span class="menu-title">My Cash Advances</span>
-                </a>
-            }
-        </li>
-
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="Index">
                     <span class="menu-icon">
                         <i class="mdi mdi-cash"></i>
                     </span>
                     <span class="menu-title">Company Advances</span>
                 </a>
-            }
-        </li>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item nav-category">
+                <span class="nav-link">Requests</span>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="ExpenseRequests">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-credit-card-clock"></i>
+                    </span>
+                    <span class="menu-title">Expense Requests</span>
+                </a>
+            </li>
+        }
 
-        <li class="nav-item menu-items">
-            @if (area == "CompanyAdministrator")
-            {
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="LeaveRequests">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-calendar-check-outline"></i>
+                    </span>
+                    <span class="menu-title">Leave Requests</span>
+                </a>
+            </li>
+        }
+
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
                 <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="CashAdvanceRequests">
                     <span class="menu-icon">
                         <i class="mdi mdi-cash-multiple"></i>
                     </span>
                     <span class="menu-title">Advance Requests</span>
                 </a>
-            }
-        </li>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item nav-category">
+                <span class="nav-link">Company Definitions</span>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Title" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-format-title"></i>
+                    </span>
+                    <span class="menu-title">Company Titles</span>
+                </a>
+            </li>
+        }
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Profession" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-bank"></i>
+                    </span>
+                    <span class="menu-title">Company Professions</span>
+                </a>
+            </li>
+        }
+        @if (area == "SiteAdministrator")
+        {
+            <li class="nav-item nav-category">
+                <span class="nav-link">System</span>
+            </li>
+        }
+        @if (area == "SiteAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Company" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-office-building"></i>
+                    </span>
+                    <span class="menu-title">Company List</span>
+                </a>
+            </li>
+        }
+        @if (area == "SiteAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-account"></i>
+                    </span>
+                    <span class="menu-title">Users</span>
+                </a>
+            </li>
+        }
+        @if (area == "SiteAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="RegistrationList">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-database"></i>
+                    </span>
+                    <span class="menu-title">Registration Requests</span>
+                </a>
+            </li>
+        }
+        @if (area == "Personal")
+        {
+            <li class="nav-item nav-category">
+                <span class="nav-link">My Job</span>
+            </li>
+        }
+        @if (area == "Personal")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Leave" asp-action="ListLeave">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-calendar-clock"></i>
+                    </span>
+                    <span class="menu-title">My Leaves</span>
+                </a>
+            </li>
+        }
+        @if (area == "Personal")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Expense" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-credit-card-clock"></i>
+                    </span>
+                    <span class="menu-title">My Expenses</span>
+                </a>
+            </li>
+        }
 
-        
-
+        @if (area == "Personal")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="CashAdvance" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-cash"></i>
+                    </span>
+                    <span class="menu-title">My Cash Advances</span>
+                </a>
+            </li>
+        }
     </ul>
 </nav>

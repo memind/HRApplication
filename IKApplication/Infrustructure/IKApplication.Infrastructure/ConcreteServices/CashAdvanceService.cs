@@ -44,7 +44,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             if (advance != null)
             {
                 advance.Status = Status.Passive;
-                //advance.AdvanceToId = updateCashAdvanceDTO.AdvanceToId;
+                advance.Currency = updateCashAdvanceDTO.Currency;
                 advance.Description = updateCashAdvanceDTO.Description;
                 advance.RequestedAmount = updateCashAdvanceDTO.RequestedAmount;
                 await _cashAdvanceRepository.Update(advance);
@@ -78,7 +78,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
-                        DirectorId = x.DirectorId
+                        DirectorId = x.DirectorId,
+                        Currency = x.Currency
                     },
                     where: x => x.Status == Status.Passive && x.AdvanceTo.CompanyId == companyId && x.DirectorId == x.AdvanceTo.PatronId,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -107,7 +108,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
-                        DirectorId = x.DirectorId
+                        DirectorId = x.DirectorId,
+                        Currency = x.Currency
                     },
                     where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -126,7 +128,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         Id = x.Id,
                         Description = x.Description,
                         RequestedAmount = x.RequestedAmount,
-                        AdvanceToId = x.AdvanceToId
+                        AdvanceToId = x.AdvanceToId,
+                        Currency = x.Currency
                     },
                     where: x => x.Id == id && (x.Status != Status.Deleted),
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -155,7 +158,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
-                        DirectorId = x.DirectorId
+                        DirectorId = x.DirectorId,
+                        Currency = x.Currency
                     },
                     where: x => x.AdvanceTo.Id == id && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.CreateDate),
@@ -192,7 +196,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
-                        DirectorId = x.DirectorId
+                        DirectorId = x.DirectorId,
+                        Currency = x.Currency
                     },
                     where: x => x.Id == id && x.Status != Status.Deleted,
                     orderBy: x => x.OrderBy(x => x.CreateDate),

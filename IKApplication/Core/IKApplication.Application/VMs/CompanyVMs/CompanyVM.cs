@@ -1,4 +1,5 @@
 ﻿using IKApplication.Domain.Entites;
+using IKApplication.Domain.Enums;
 
 namespace IKApplication.Application.VMs.CompanyVMs
 {
@@ -10,5 +11,7 @@ namespace IKApplication.Application.VMs.CompanyVMs
         public string PhoneNumber { get; set; }
         public string SectorName { get; set; }
         public int NumberOfEmployees { get; set; }
+        public string ContactPerson { get; set; }
+        public Status Status { get; set; }
     }
 }

@@ -233,6 +233,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A2"].Value = startDate.ToShortDateString();
             ws.Cells["B2"].Value = "to";
             ws.Cells["C2"].Value = endDate.ToShortDateString();
+            ws.Cells["A1:C2"].Style.Font.Bold = true;
 
             ws.Cells["A5"].Value = "Leave For";
             ws.Cells["B5"].Value = "Approved By";

@@ -1,0 +1,33 @@
+﻿@model ProfessionUpdateDTO
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Update A Profession</h5>
+                <form asp-controller="Profession" asp-action="UpdateProfession" method="post">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="UpdateDate" />
+                        <input type="hidden" asp-for="CompanyId" />
+                        <input type="hidden" asp-for="Status" />
+
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label">Profession Name</label><br />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Profession Name">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-primary btn-block">Save Profession</button>
+                        </div>
+                    </div>
+                </form>
+                <a asp-controller="Profession" asp-action="Index" class="ms-4 mb-2 mt-0">
+                    <button class="btn btn-outline-info">Back to List</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

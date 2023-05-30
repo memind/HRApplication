@@ -27,6 +27,7 @@
                                     <tr>
                                         <th>Short Description</th>
                                         <th>Amount</th>
+                                        <th>Currency</th>
                                         <th>Expense Type</th>
                                         <th>Expense Date</th>
                                         <th>Approved By</th>
@@ -39,7 +40,19 @@
                                     {
                                         <tr>
                                             <td>@item.ShortDescription</td>
-                                            <td>@item.Amount</td>
+                                            <td>@item.Amount,@item.Penny</td>
+                                            @if (item.Currency == Currency.TL)
+                                            {
+                                                <td><p value="&#x20BA;"></p></td>
+                                            }
+                                            @if (item.Currency == Currency.USD)
+                                            {
+                                                <td><p value="&#x24;"></p></td>
+                                            }
+                                            @if (item.Currency == Currency.EUR)
+                                            {
+                                                <td><p value="&#x20AC;"></p></td>
+                                            }
                                             <td>@item.Type</td>
                                             <td>@item.ExpenseDate.ToShortDateString()</td>
                                             <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>

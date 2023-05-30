@@ -1,13 +1,19 @@
 ﻿using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.ExcelVMs;
+using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.UserVMs;
 using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using iTextSharp.tool.xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using OfficeOpenXml;
+using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
@@ -64,24 +70,40 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Companies");
 
             ws.Cells["A1"].Value = "All Companies";
-            ws.Cells["A1"].Style.Font.Bold = true;
+            ws.Cells["A1:B2"].Style.Font.Bold = true;
 
             ws.Cells["A2"].Value = "Date";
-            ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
+            ws.Cells["B2"].Value = $"{date.Day} - {date.Month} - {date.Year}";
 
-            ws.Cells["A5"].Value = "Company Name";
-            ws.Cells["B5"].Value = "Email Address";
-            ws.Cells["C5"].Value = "Phone Number";
-            ws.Cells["D5"].Value = "Sector Name";
-            ws.Cells["E5"].Value = "Number of Employees";
+            ws.Cells["A5"].Value = "Total Company Count: ";
+            ws.Cells["A5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            ws.Cells["A5:E5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:E5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:E5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:E5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:E5"].Style.Font.Bold = true;
+            ws.Cells["B5"].Value = allCompanies.Count;
+            ws.Cells["B5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["B5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            int rowStart = 6;
+            ws.Cells["A5"].Style.Font.Bold = true;
+            ws.Cells["B5"].Style.Font.Bold = true;
+
+            ws.Cells["A6"].Value = "Company Name";
+            ws.Cells["B6"].Value = "Email Address";
+            ws.Cells["C6"].Value = "Phone Number";
+            ws.Cells["D6"].Value = "Sector Name";
+            ws.Cells["E6"].Value = "Number of Employees";
+            ws.Cells["F6"].Value = "Contact Person";
+
+            ws.Cells["A6:F6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:F6"].Style.Font.Bold = true;
+
+            int rowStart = 7;
 
             foreach (var company in allCompanies)
             {
@@ -115,28 +137,99 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
+                ws.Cells[string.Format("F{0}", rowStart)].Value = company.ContactPerson;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
                 rowStart++;
             }
-
-            ws.Cells[string.Format("D{0}", rowStart)].Value = "Total Company Count: ";
-            ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("E{0}", rowStart)].Value = allCompanies.Count;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                                    
-            ws.Cells[string.Format("E{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("D{0}", rowStart)].Style.Font.Bold = true;
 
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Companies_Report_{date.Month}/{date.Year}.xlsx");
+        }
+
+        [HttpGet]
+        public async Task<FileResult> CompanyPDF()
+        {
+            List<CompanyVM> allCompanies = await _companyService.GetAllCompanies();
+            var date = DateTime.Now;
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+            sb.Append("<tr style='border: none'>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append("Total Company Count: ");
+            sb.Append("</td>");
+
+            sb.Append("<td style='font-weight: bold;border: 1px solid #ccc'>");
+            sb.Append(allCompanies.Count());
+            sb.Append("</td>");
+
+            sb.Append("</tr>");
+
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Company Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Email Address</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Phone Number</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Sector Name</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Number of Employees</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Contact Person</th>");
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            foreach (CompanyVM company in allCompanies)
+            {
+
+                sb.Append("<tr>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{company.Name}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{company.Email}");
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(company.PhoneNumber);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(company.SectorName);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(company.NumberOfEmployees);
+                sb.Append("</td>");
+
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(company.ContactPerson);
+                sb.Append("</td>");
+
+                sb.Append("</tr>");
+            }
+
+            //Table end.
+            sb.Append("</table>");
+
+            MemoryStream stream = new MemoryStream();
+            StringReader sr = new StringReader(sb.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", $"All_Companies_Report_{date.Month}/{date.Year}.pdf");
+
         }
     }
 }

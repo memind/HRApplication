@@ -137,7 +137,7 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PatronId")
+                    b.Property<Guid>("PatronId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PhoneNumber")
@@ -147,9 +147,8 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Profession")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<Guid>("ProfessionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecondName")
                         .HasMaxLength(30)
@@ -198,571 +197,11 @@ namespace IKApplication.Persistance.Migrations
 
                     b.HasIndex("PatronId");
 
+                    b.HasIndex("ProfessionId");
+
                     b.HasIndex("TitleId");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6901b157-66e3-4bac-8f21-b26df69271b9"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2057, 12, 10, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4413),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            ConcurrencyStamp = "5c98a753-c5d0-4111-9b02-745daec9ba5c",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4406),
-                            Email = "test1@test.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "41147520600",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hüseyin",
-                            NormalizedEmail = "TEST1@TEST.COM",
-                            NormalizedUserName = "TEST1@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIPAspTxy1kEHZswlpkCoNLgAVergHIuHGjzOXMxQuzO56ugvGOqtUSg79PKPTEsPQ==",
-                            PhoneNumber = "+905761518029",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Designer",
-                            SecurityStamp = "E2IFZ4G67XD3CTIHNJERELZ4TJ5T5FYN",
-                            Status = 1,
-                            Surname = "Yıldırım",
-                            TitleId = new Guid("0145678b-29da-4271-81bf-6eb19d8794fd"),
-                            TwoFactorEnabled = false,
-                            UserName = "test1@test.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("a96a9599-3a63-49bb-a414-672875b515ea"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2068, 3, 9, 23, 21, 47, 992, DateTimeKind.Local).AddTicks(7626),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            ConcurrencyStamp = "bf1cc70c-5549-4bbc-a387-5f8994a70f61",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 992, DateTimeKind.Local).AddTicks(7624),
-                            Email = "test2@test.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "55640861016",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hüseyin",
-                            NormalizedEmail = "TEST2@TEST.COM",
-                            NormalizedUserName = "TEST2@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENajc9z1DM3DWef1iMupPgsQnPd2WxQupQB5O2aePDTEDW6csLlack22vfNMHYss+g==",
-                            PhoneNumber = "+905249444189",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Pharmacist",
-                            SecurityStamp = "QJE28MG6VOTGS7E1NYCI3CA67O3UBF96",
-                            Status = 1,
-                            Surname = "Yıldız",
-                            TitleId = new Guid("2445dcaa-7de1-40e8-9666-a65d9b8f55e2"),
-                            TwoFactorEnabled = false,
-                            UserName = "test2@test.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("2d572fed-fe6c-45ca-a685-b9d38ded93d9"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2047, 8, 2, 23, 21, 47, 994, DateTimeKind.Local).AddTicks(268),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            ConcurrencyStamp = "22184a1a-e72a-4d4b-9267-ab41f6fbf193",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 994, DateTimeKind.Local).AddTicks(266),
-                            Email = "test3@test.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "27122557786",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "İsmail",
-                            NormalizedEmail = "TEST3@TEST.COM",
-                            NormalizedUserName = "TEST3@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEH7ynIk7xRMLAT/Q0f350JeRhCSuek+oX9Kiswn6832kRiKOfipNxlCcl+gBs+BQtQ==",
-                            PhoneNumber = "+905912360712",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Florist",
-                            SecurityStamp = "VSFVD6HK4BQ8LUQ02O0DNJ9G6KJIS3OW",
-                            Status = 1,
-                            Surname = "Yıldız",
-                            TitleId = new Guid("5f3dec08-752e-4576-9c59-90f1eaa860c5"),
-                            TwoFactorEnabled = false,
-                            UserName = "test3@test.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("4333f255-1303-403e-addb-fe24d5deac00"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2067, 11, 26, 23, 21, 47, 995, DateTimeKind.Local).AddTicks(2837),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            ConcurrencyStamp = "0bb7a7de-9021-4789-a2c1-3bbb56cb571e",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 995, DateTimeKind.Local).AddTicks(2836),
-                            Email = "test4@test.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "76607846150",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "İsmail",
-                            NormalizedEmail = "TEST4@TEST.COM",
-                            NormalizedUserName = "TEST4@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKyzNdvzJBiOEjaX4hGk1FT1g8QgDJdnqOa8WeKKJ2rSiHCaWC3F7lxAPaf6Rc1ZXw==",
-                            PhoneNumber = "+905808817181",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Butcher",
-                            SecurityStamp = "HGMDB3HYAUZQL8VYK02BNGVV2D4TDIPX",
-                            Status = 1,
-                            Surname = "Yılmaz",
-                            TitleId = new Guid("132212a7-024d-4d91-ac95-7a35e0305b22"),
-                            TwoFactorEnabled = false,
-                            UserName = "test4@test.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("df8ab2ae-e30d-4911-8dc0-1ee188187264"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2073, 11, 17, 23, 21, 47, 996, DateTimeKind.Local).AddTicks(5604),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            ConcurrencyStamp = "c1ddbc37-a018-4e7a-939c-d286fa9418b7",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 996, DateTimeKind.Local).AddTicks(5603),
-                            Email = "test5@test.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "40266674218",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Mehmet",
-                            NormalizedEmail = "TEST5@TEST.COM",
-                            NormalizedUserName = "TEST5@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJS8XIZNMUCqpzTPPSt0sYw4Vz8qSUpBC9sJ/3I/iraCl8eOmJ9Zk3d5SnAZ2OiMuA==",
-                            PhoneNumber = "+905218608533",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Engineer",
-                            SecurityStamp = "95EANOFSVKGC9UXCTAF48RG9EQGZ9G6C",
-                            Status = 1,
-                            Surname = "Özdemir",
-                            TitleId = new Guid("de0f8db0-8d13-4506-92a7-2b3898293cad"),
-                            TwoFactorEnabled = false,
-                            UserName = "test5@test.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("55fe4f08-c32e-447f-bd33-8c55d26745ed"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2074, 3, 20, 23, 21, 47, 997, DateTimeKind.Local).AddTicks(8155),
-                            CompanyId = new Guid("125a275f-35dc-41da-acde-fc5fef7d6914"),
-                            ConcurrencyStamp = "a1f64bfc-a180-4bdb-8aa9-1f96c27b3e88",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 997, DateTimeKind.Local).AddTicks(8153),
-                            Email = "osman.ozdemir@yahoo.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "18870855170",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Osman",
-                            NormalizedEmail = "OSMAN.OZDEMIR@YAHOO.COM",
-                            NormalizedUserName = "OSMAN.OZDEMIR@YAHOO.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPzI1XbFuyaWM2qAJrZdOIYFskKO4vYAeLlo982Ycf9ySunilg7qXya8oBA3RybA1g==",
-                            PhoneNumber = "+905876630683",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Mechanic",
-                            SecurityStamp = "A6HC5XGVZ0GVMG3QQS157UTPCUZJKI8U",
-                            Status = 3,
-                            Surname = "Özdemir",
-                            TitleId = new Guid("ef6e2f03-4511-4823-81dd-1bb1d7f43a52"),
-                            TwoFactorEnabled = false,
-                            UserName = "osman.ozdemir@yahoo.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("77df8fe2-8845-4057-b131-755b44bafaec"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2076, 1, 29, 23, 21, 47, 999, DateTimeKind.Local).AddTicks(684),
-                            CompanyId = new Guid("9b09bc40-5ee7-4de1-9649-cc503037ff06"),
-                            ConcurrencyStamp = "85768bbe-b0b8-4346-8756-e477309ec969",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 999, DateTimeKind.Local).AddTicks(683),
-                            Email = "ismail.kaya@yandex.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "52123552140",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "İsmail",
-                            NormalizedEmail = "ISMAIL.KAYA@YANDEX.COM",
-                            NormalizedUserName = "ISMAIL.KAYA@YANDEX.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBE30xn4Z4Yl0fNGleb4efv67kJwTDCHD/LIQVGX9fmxDthJKZvpBZ0Y2h6JtHNksw==",
-                            PhoneNumber = "+905799989391",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Shop assistant",
-                            SecurityStamp = "MNA6W7O5Y9RCL2CV8NLUCNS3HX4GWAK2",
-                            Status = 3,
-                            Surname = "Kaya",
-                            TitleId = new Guid("c0b0ec2f-ced3-48f9-940b-8a2568965bc3"),
-                            TwoFactorEnabled = false,
-                            UserName = "ismail.kaya@yandex.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("8fa63403-d72d-434d-b906-f73d31399e11"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2059, 9, 14, 23, 21, 48, 0, DateTimeKind.Local).AddTicks(2978),
-                            CompanyId = new Guid("9e0615ad-e0b4-46e7-a9fa-07bb6cc8044b"),
-                            ConcurrencyStamp = "e3f5850f-97d7-4c3b-8c93-4d178d8c2091",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 0, DateTimeKind.Local).AddTicks(2978),
-                            Email = "yusuf.sahin@outlook.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "72713758066",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Yusuf",
-                            NormalizedEmail = "YUSUF.SAHIN@OUTLOOK.COM",
-                            NormalizedUserName = "YUSUF.SAHIN@OUTLOOK.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEAA6RM6qNSEuNBiPCNI21yd87N1WHo8gOEhr3onfgrmRVaSdxzpQlkF466ayayyRw==",
-                            PhoneNumber = "+905160493261",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Travel agent",
-                            SecurityStamp = "YZ0HC4HYVSSHPV7ULSEUJYMNZJ048IZW",
-                            Status = 3,
-                            Surname = "Şahin",
-                            TitleId = new Guid("561b6703-032c-4898-83a0-652662422653"),
-                            TwoFactorEnabled = false,
-                            UserName = "yusuf.sahin@outlook.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("1e1dd18b-909d-449a-bd27-885fcb077f2b"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2070, 9, 7, 23, 21, 48, 1, DateTimeKind.Local).AddTicks(5271),
-                            CompanyId = new Guid("5a9d227a-03e3-4a17-ae49-dddd1f20452a"),
-                            ConcurrencyStamp = "85f453c8-33bc-400f-b8e4-3dcbfb53079e",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 1, DateTimeKind.Local).AddTicks(5270),
-                            Email = "ahmet.yildirim@microsoft.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "41048320866",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Ahmet",
-                            NormalizedEmail = "AHMET.YILDIRIM@MICROSOFT.COM",
-                            NormalizedUserName = "AHMET.YILDIRIM@MICROSOFT.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDc1+S5gu9Qd8Fsnn3eBVAilM5fYqIarwTmIJpa3IYxmOASG2LJ6g0MvjwVbILJ1NA==",
-                            PhoneNumber = "+905771985021",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Painter",
-                            SecurityStamp = "XOFAV45SD85MLZO59ZAKS3NREF9MCEG7",
-                            Status = 3,
-                            Surname = "Yıldırım",
-                            TitleId = new Guid("fec2960f-90d1-49bf-9150-53ae8ebec5e4"),
-                            TwoFactorEnabled = false,
-                            UserName = "ahmet.yildirim@microsoft.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("d65c9449-777f-41f6-8557-1360bb841640"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2062, 10, 3, 23, 21, 48, 2, DateTimeKind.Local).AddTicks(7996),
-                            CompanyId = new Guid("7b7b68d2-839c-4c78-8529-c091bfe05424"),
-                            ConcurrencyStamp = "90f07dda-c336-4377-9a10-945f50cf78b6",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 2, DateTimeKind.Local).AddTicks(7995),
-                            Email = "hasan.aydin@microsoft.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "15768147188",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hasan",
-                            NormalizedEmail = "HASAN.AYDIN@MICROSOFT.COM",
-                            NormalizedUserName = "HASAN.AYDIN@MICROSOFT.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA0Rek8PY/1AbaX8E7a5henAS/sn0tq4mjCw3twfoWLlX9+uAFPRrgKrz56RTIn5/Q==",
-                            PhoneNumber = "+905743521368",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Travel agent",
-                            SecurityStamp = "GOK2RD8QUXEPPX52EAJF4JC76JLUG2EF",
-                            Status = 3,
-                            Surname = "Aydın",
-                            TitleId = new Guid("8ecf60a5-d184-4449-a929-360952e7a22a"),
-                            TwoFactorEnabled = false,
-                            UserName = "hasan.aydin@microsoft.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("54644449-4b2b-4a9f-9ba9-329dca7e2f16"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2067, 9, 27, 23, 21, 48, 4, DateTimeKind.Local).AddTicks(639),
-                            CompanyId = new Guid("fca46396-6bbe-4429-bfcc-1392d058a5ec"),
-                            ConcurrencyStamp = "c3648155-f032-4188-95f5-34075b15b2d4",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 4, DateTimeKind.Local).AddTicks(638),
-                            Email = "yusuf.ozturk@outlook.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "56576675210",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Yusuf",
-                            NormalizedEmail = "YUSUF.OZTURK@OUTLOOK.COM",
-                            NormalizedUserName = "YUSUF.OZTURK@OUTLOOK.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAFuJ3HXLv3wAI0uE8xxTowrxyOzfxAaycxM610TO9Jn/xo/VDfQKTBIw+eRxcobTw==",
-                            PhoneNumber = "+905288977819",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Nurse",
-                            SecurityStamp = "GZEOBOPGIUP362EVIM1OWZ1T5NY3G30F",
-                            Status = 3,
-                            Surname = "Öztürk",
-                            TitleId = new Guid("eeaa3009-9ab8-4d37-aab9-0324fc8ea76d"),
-                            TwoFactorEnabled = false,
-                            UserName = "yusuf.ozturk@outlook.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("38858de8-3533-4ae7-b553-27831ce7c6e1"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2073, 12, 20, 23, 21, 48, 5, DateTimeKind.Local).AddTicks(2959),
-                            CompanyId = new Guid("d7427d72-19da-4e32-9cfd-9c1a5f1dbbb9"),
-                            ConcurrencyStamp = "faca8582-1337-4670-86c4-a25c558f7ff4",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 5, DateTimeKind.Local).AddTicks(2958),
-                            Email = "yusuf.ozdemir@google.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "34265323772",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Yusuf",
-                            NormalizedEmail = "YUSUF.OZDEMIR@GOOGLE.COM",
-                            NormalizedUserName = "YUSUF.OZDEMIR@GOOGLE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEP29j2wcf9zdQZmltDIwQSeSLtqRWBO0MZfrb9AHmH2wjsVBy6v94mXQ45LA7n8bGw==",
-                            PhoneNumber = "+905220804346",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Businessman",
-                            SecurityStamp = "M4JK1PVL8XRYPWC9XHQHDF9N0P36SY13",
-                            Status = 3,
-                            Surname = "Özdemir",
-                            TitleId = new Guid("69ceab8b-1a1d-47ee-9583-9db248e94839"),
-                            TwoFactorEnabled = false,
-                            UserName = "yusuf.ozdemir@google.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("b59ba530-8e49-4580-8384-9f6e1b69d29c"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2050, 12, 19, 23, 21, 48, 6, DateTimeKind.Local).AddTicks(5132),
-                            CompanyId = new Guid("cc8ec419-e188-4664-8cce-24d9d7db0d7f"),
-                            ConcurrencyStamp = "edb59ebd-ac3e-4331-98f6-a9af5b3b7af6",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 6, DateTimeKind.Local).AddTicks(5131),
-                            Email = "mehmet.sahin@yandex.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "18040260360",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Mehmet",
-                            NormalizedEmail = "MEHMET.SAHIN@YANDEX.COM",
-                            NormalizedUserName = "MEHMET.SAHIN@YANDEX.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMPmVDS5XZ9nuziyO9oeTBC8r7EGnDfZqW+IB7cgtRoI1mVBlqjr0OdZxyHuAAy6Ig==",
-                            PhoneNumber = "+905620090312",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Designer",
-                            SecurityStamp = "DMW66CDOACXS62TWI24MGU8HYIA5I402",
-                            Status = 3,
-                            Surname = "Şahin",
-                            TitleId = new Guid("b62875d8-7c7e-41d2-95cd-17ad8f08de31"),
-                            TwoFactorEnabled = false,
-                            UserName = "mehmet.sahin@yandex.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("df988a2b-8cad-45ac-89c4-32eae542d174"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2058, 7, 8, 23, 21, 48, 7, DateTimeKind.Local).AddTicks(8152),
-                            CompanyId = new Guid("79ef3352-91c5-4840-88ae-b5076f3db6cf"),
-                            ConcurrencyStamp = "3a53e3b0-c843-4575-936e-9f5db602a68a",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 7, DateTimeKind.Local).AddTicks(8150),
-                            Email = "hasan.yildiz@yandex.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "74281153786",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hasan",
-                            NormalizedEmail = "HASAN.YILDIZ@YANDEX.COM",
-                            NormalizedUserName = "HASAN.YILDIZ@YANDEX.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIZMbxNdt09Hj8hrQjjcacTui5twvrXp92E65KE7vDJeANWPKEQm2I+SpQeJSa/Xvw==",
-                            PhoneNumber = "+905520830887",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Florist",
-                            SecurityStamp = "LJC8TM8H7LN78B5I3B6FE0913J3STEY7",
-                            Status = 3,
-                            Surname = "Yıldız",
-                            TitleId = new Guid("05c8018f-53ca-47ed-b612-6c6ac9012d40"),
-                            TwoFactorEnabled = false,
-                            UserName = "hasan.yildiz@yandex.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("88091bf1-84d4-40bd-ae63-b378a887ad39"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2043, 12, 1, 23, 21, 48, 9, DateTimeKind.Local).AddTicks(913),
-                            CompanyId = new Guid("4f83adf7-8fa9-4c1e-b6c7-5718290f523a"),
-                            ConcurrencyStamp = "9ab06440-dda5-4e03-a727-b94bd873a41c",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 9, DateTimeKind.Local).AddTicks(912),
-                            Email = "mehmet.celik@outlook.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "62740340556",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Mehmet",
-                            NormalizedEmail = "MEHMET.CELIK@OUTLOOK.COM",
-                            NormalizedUserName = "MEHMET.CELIK@OUTLOOK.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL52tT4z6ChKq4kQDPRU750wTb6sxOJnP18VRHPxNMkze61LrwzB5NIPddNIDjxZiA==",
-                            PhoneNumber = "+905572713841",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Secretary",
-                            SecurityStamp = "I3H18GR8GKWU99TBW2JD1JI4RRESJ9KU",
-                            Status = 3,
-                            Surname = "Çelik",
-                            TitleId = new Guid("2e5d6ab4-0498-4af4-93bc-64212e0e880d"),
-                            TwoFactorEnabled = false,
-                            UserName = "mehmet.celik@outlook.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("6dc2134b-7159-432a-bfef-ae263da2dd96"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2065, 3, 8, 23, 21, 48, 10, DateTimeKind.Local).AddTicks(3653),
-                            CompanyId = new Guid("e93f4331-4e64-4886-a6b6-ef87c48d1307"),
-                            ConcurrencyStamp = "53dc020c-26eb-4b7d-9057-434dc9d6ffb0",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 10, DateTimeKind.Local).AddTicks(3652),
-                            Email = "hasan.yildirim@yandex.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "83870343286",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hasan",
-                            NormalizedEmail = "HASAN.YILDIRIM@YANDEX.COM",
-                            NormalizedUserName = "HASAN.YILDIRIM@YANDEX.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFA+OW6EN+VHE+sD3Xd102B6nQ654siUceah9UBJmxwgNqRY9bXUxqkyeZLlTnE3nQ==",
-                            PhoneNumber = "+905695017148",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Hairdresser",
-                            SecurityStamp = "T2EU69QEUITNELH7DQPWV1RXZYO1JCAZ",
-                            Status = 3,
-                            Surname = "Yıldırım",
-                            TitleId = new Guid("b626ed62-4a58-4f8d-a01a-053e5e03ab96"),
-                            TwoFactorEnabled = false,
-                            UserName = "hasan.yildirim@yandex.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("4249fef1-c5c9-492b-b2e5-5f94a9e1e26b"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2050, 2, 13, 23, 21, 48, 11, DateTimeKind.Local).AddTicks(6629),
-                            CompanyId = new Guid("89703451-fd75-4b63-aa70-d62b273c9f9e"),
-                            ConcurrencyStamp = "c4588239-0ff7-422c-86d1-be343809b0dc",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 11, DateTimeKind.Local).AddTicks(6628),
-                            Email = "ismail.aydin@outlook.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "25667751324",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "İsmail",
-                            NormalizedEmail = "ISMAIL.AYDIN@OUTLOOK.COM",
-                            NormalizedUserName = "ISMAIL.AYDIN@OUTLOOK.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHa6zMBo1PtjvfatOM/rEom9Dap5gOzszdsUdJaykTYHQM7ctg/3+EStKISzXLTQ/g==",
-                            PhoneNumber = "+905681841896",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Soldier",
-                            SecurityStamp = "EQ4BS9402CI0WUZ2SKH9JGDDY4ZFQO8H",
-                            Status = 3,
-                            Surname = "Aydın",
-                            TitleId = new Guid("0ea92fc7-6e3b-4bf6-be5d-f30209a4bab7"),
-                            TwoFactorEnabled = false,
-                            UserName = "ismail.aydin@outlook.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("c34f1eba-dcf0-4133-a093-49190afc4620"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2056, 7, 23, 23, 21, 48, 12, DateTimeKind.Local).AddTicks(9234),
-                            CompanyId = new Guid("fdcec0d7-359d-4866-bb82-3a13dab81940"),
-                            ConcurrencyStamp = "6b895845-7e9a-4004-a144-093417460ccb",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 12, DateTimeKind.Local).AddTicks(9233),
-                            Email = "osman.yildirim@microsoft.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "78641843652",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Osman",
-                            NormalizedEmail = "OSMAN.YILDIRIM@MICROSOFT.COM",
-                            NormalizedUserName = "OSMAN.YILDIRIM@MICROSOFT.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEH2z8dc82BGs2yKRbBSiiSlla39ZgwRadWUSo8TRfF9RFC4Wgq6GVDmO+FQNXBfGAw==",
-                            PhoneNumber = "+905791436341",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Newsreader",
-                            SecurityStamp = "ZT8FCK63JGEBCPNEL0SKULEH0Y2AC1IV",
-                            Status = 3,
-                            Surname = "Yıldırım",
-                            TitleId = new Guid("fc9c00cd-7d3c-4cb0-8635-105462da3a0c"),
-                            TwoFactorEnabled = false,
-                            UserName = "osman.yildirim@microsoft.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("b43ea1c7-6d3c-4b6b-8d64-8348a4490931"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2070, 3, 27, 23, 21, 48, 14, DateTimeKind.Local).AddTicks(1686),
-                            CompanyId = new Guid("bfa1f2eb-867a-4068-9129-c2622111a84f"),
-                            ConcurrencyStamp = "039cae4d-9594-4567-b39a-c873cdf31be9",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 14, DateTimeKind.Local).AddTicks(1685),
-                            Email = "ahmet.sahin@hotmail.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "20074010194",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Ahmet",
-                            NormalizedEmail = "AHMET.SAHIN@HOTMAIL.COM",
-                            NormalizedUserName = "AHMET.SAHIN@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKAYshQRKn1qhzxILuFxn4uSt86TQCjnLsQw4eZgawBFGk3ApftkfTCxuAmbVjdlgA==",
-                            PhoneNumber = "+905518807272",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Butcher",
-                            SecurityStamp = "ZUNCOGQLRPIVPEE9XHP3O1492UWCAVBH",
-                            Status = 3,
-                            Surname = "Şahin",
-                            TitleId = new Guid("27278d5b-9870-4e4f-8c11-c578b175bc17"),
-                            TwoFactorEnabled = false,
-                            UserName = "ahmet.sahin@hotmail.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("845c1ed1-d421-4609-80fc-040562a3cad0"),
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2047, 7, 30, 23, 21, 48, 15, DateTimeKind.Local).AddTicks(4246),
-                            CompanyId = new Guid("25d2a0de-be8c-4850-8bac-2f155de0d098"),
-                            ConcurrencyStamp = "b1a56e65-2507-4bf5-9ca6-138e978719ad",
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 15, DateTimeKind.Local).AddTicks(4245),
-                            Email = "huseyin.celik@yahoo.com",
-                            EmailConfirmed = false,
-                            IdentityNumber = "41312125470",
-                            ImagePath = "/images/UserPhotos/defaultuser.jpg",
-                            JobStartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            Name = "Hüseyin",
-                            NormalizedEmail = "HUSEYIN.CELIK@YAHOO.COM",
-                            NormalizedUserName = "HUSEYIN.CELIK@YAHOO.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELGWj3UsFytkDy8cZwD0+oz9EyJmHIIMoj9kMX/nEhp877stJnAVTekLOC7TuSZAaw==",
-                            PhoneNumber = "+905157567425",
-                            PhoneNumberConfirmed = false,
-                            Profession = "Veterinary doctor(Vet)",
-                            SecurityStamp = "MXMUH915B800GBH85NEIKZICEK4LRGI3",
-                            Status = 3,
-                            Surname = "Çelik",
-                            TitleId = new Guid("f4a1fc3b-9d09-4491-ad97-e2c71e285ebe"),
-                            TwoFactorEnabled = false,
-                            UserName = "huseyin.celik@yahoo.com"
-                        });
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.CashAdvance", b =>
@@ -779,6 +218,9 @@ namespace IKApplication.Persistance.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
@@ -858,184 +300,6 @@ namespace IKApplication.Persistance.Migrations
                     b.HasIndex("SectorId");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4182),
-                            Email = "ikapp@ikapp.com",
-                            Name = "IKApp A.Ş.",
-                            NumberOfEmployees = 5,
-                            PhoneNumber = "+905695074111",
-                            SectorId = new Guid("59393dcb-1853-439f-96bb-9a5a3f974dec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("125a275f-35dc-41da-acde-fc5fef7d6914"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 997, DateTimeKind.Local).AddTicks(8138),
-                            Email = "info@ozdemirkollektifsirketi.com",
-                            Name = "Özdemir Kollektif Şirketi",
-                            NumberOfEmployees = 87,
-                            PhoneNumber = "+905297614506",
-                            SectorId = new Guid("29499a8d-f87f-4b4c-9bf0-7a098d117914"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("9b09bc40-5ee7-4de1-9649-cc503037ff06"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 999, DateTimeKind.Local).AddTicks(672),
-                            Email = "info@kayakomanditsirketi.com",
-                            Name = "Kaya Komandit Şirketi",
-                            NumberOfEmployees = 19,
-                            PhoneNumber = "+905848742982",
-                            SectorId = new Guid("3abe0ed1-f03f-4c92-8743-56cc657e7c6e"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("9e0615ad-e0b4-46e7-a9fa-07bb6cc8044b"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 0, DateTimeKind.Local).AddTicks(2971),
-                            Email = "info@sahinlimitedsirketi.com",
-                            Name = "Şahin Limited Şirketi",
-                            NumberOfEmployees = 27,
-                            PhoneNumber = "+905626738106",
-                            SectorId = new Guid("2853b6c6-e499-467b-bc22-e2db9459b7a1"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("5a9d227a-03e3-4a17-ae49-dddd1f20452a"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 1, DateTimeKind.Local).AddTicks(5258),
-                            Email = "info@yildirimkooperatifsirketi.com",
-                            Name = "Yıldırım Kooperatif Şirketi",
-                            NumberOfEmployees = 44,
-                            PhoneNumber = "+905309508500",
-                            SectorId = new Guid("7f7bf24a-d470-44cd-8986-a4fdb9236da6"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("7b7b68d2-839c-4c78-8529-c091bfe05424"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 2, DateTimeKind.Local).AddTicks(7985),
-                            Email = "info@aydinkomanditsirketi.com",
-                            Name = "Aydın Komandit Şirketi",
-                            NumberOfEmployees = 7,
-                            PhoneNumber = "+905653426733",
-                            SectorId = new Guid("f1aaa859-d763-449d-8155-e7d990fd197f"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("fca46396-6bbe-4429-bfcc-1392d058a5ec"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 4, DateTimeKind.Local).AddTicks(630),
-                            Email = "info@ozturkkollektifsirketi.com",
-                            Name = "Öztürk Kollektif Şirketi",
-                            NumberOfEmployees = 78,
-                            PhoneNumber = "+905212831775",
-                            SectorId = new Guid("59393dcb-1853-439f-96bb-9a5a3f974dec"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("d7427d72-19da-4e32-9cfd-9c1a5f1dbbb9"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 5, DateTimeKind.Local).AddTicks(2951),
-                            Email = "info@ozdemiranonimsirketi.com",
-                            Name = "Özdemir Anonim Şirketi",
-                            NumberOfEmployees = 100,
-                            PhoneNumber = "+905722203828",
-                            SectorId = new Guid("3abe0ed1-f03f-4c92-8743-56cc657e7c6e"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("cc8ec419-e188-4664-8cce-24d9d7db0d7f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 6, DateTimeKind.Local).AddTicks(5120),
-                            Email = "info@sahinlimitedsirketi.com",
-                            Name = "Şahin Limited Şirketi",
-                            NumberOfEmployees = 72,
-                            PhoneNumber = "+905576108660",
-                            SectorId = new Guid("7337aa77-85aa-407e-8929-6e3a750f64c6"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("79ef3352-91c5-4840-88ae-b5076f3db6cf"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 7, DateTimeKind.Local).AddTicks(8132),
-                            Email = "info@yildizlimitedsirketi.com",
-                            Name = "Yıldız Limited Şirketi",
-                            NumberOfEmployees = 31,
-                            PhoneNumber = "+905900674122",
-                            SectorId = new Guid("1ca6df0b-529e-4972-ab52-851336bc39d4"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("4f83adf7-8fa9-4c1e-b6c7-5718290f523a"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 9, DateTimeKind.Local).AddTicks(863),
-                            Email = "info@celikkomanditsirketi.com",
-                            Name = "Çelik Komandit Şirketi",
-                            NumberOfEmployees = 61,
-                            PhoneNumber = "+905946738532",
-                            SectorId = new Guid("1ca6df0b-529e-4972-ab52-851336bc39d4"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("e93f4331-4e64-4886-a6b6-ef87c48d1307"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 10, DateTimeKind.Local).AddTicks(3644),
-                            Email = "info@yildirimanonimsirketi.com",
-                            Name = "Yıldırım Anonim Şirketi",
-                            NumberOfEmployees = 63,
-                            PhoneNumber = "+905567573653",
-                            SectorId = new Guid("1ca6df0b-529e-4972-ab52-851336bc39d4"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("89703451-fd75-4b63-aa70-d62b273c9f9e"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 11, DateTimeKind.Local).AddTicks(6613),
-                            Email = "info@aydinlimitedsirketi.com",
-                            Name = "Aydın Limited Şirketi",
-                            NumberOfEmployees = 10,
-                            PhoneNumber = "+905912757534",
-                            SectorId = new Guid("6bd82328-e1b0-4000-bf17-1790a28c0b86"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("fdcec0d7-359d-4866-bb82-3a13dab81940"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 12, DateTimeKind.Local).AddTicks(9221),
-                            Email = "info@yildirimlimitedsirketi.com",
-                            Name = "Yıldırım Limited Şirketi",
-                            NumberOfEmployees = 14,
-                            PhoneNumber = "+905570987318",
-                            SectorId = new Guid("eb3d38e4-9604-4eb3-9f86-7d1f62c04ac9"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("bfa1f2eb-867a-4068-9129-c2622111a84f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 14, DateTimeKind.Local).AddTicks(1678),
-                            Email = "info@sahinlimitedsirketi.com",
-                            Name = "Şahin Limited Şirketi",
-                            NumberOfEmployees = 58,
-                            PhoneNumber = "+905807522282",
-                            SectorId = new Guid("2dff11e4-e699-4591-b329-9ba69b449577"),
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("25d2a0de-be8c-4850-8bac-2f155de0d098"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 15, DateTimeKind.Local).AddTicks(4239),
-                            Email = "info@celikkomanditsirketi.com",
-                            Name = "Çelik Komandit Şirketi",
-                            NumberOfEmployees = 88,
-                            PhoneNumber = "+905919136928",
-                            SectorId = new Guid("6bd82328-e1b0-4000-bf17-1790a28c0b86"),
-                            Status = 3
-                        });
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Expense", b =>
@@ -1044,8 +308,8 @@ namespace IKApplication.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ApprovedById")
                         .HasColumnType("uniqueidentifier");
@@ -1055,6 +319,9 @@ namespace IKApplication.Persistance.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
@@ -1068,6 +335,9 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<string>("LongDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Penny")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
@@ -1146,6 +416,38 @@ namespace IKApplication.Persistance.Migrations
                     b.ToTable("Leaves");
                 });
 
+            modelBuilder.Entity("IKApplication.Domain.Entites.Profession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Professions");
+                });
+
             modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1171,176 +473,6 @@ namespace IKApplication.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sectors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f1aaa859-d763-449d-8155-e7d990fd197f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3679),
-                            Name = "Ahşap Teknolojisi",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("59393dcb-1853-439f-96bb-9a5a3f974dec"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3696),
-                            Name = "Bilişim",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7f7bf24a-d470-44cd-8986-a4fdb9236da6"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3698),
-                            Name = "Cam, Çimento ve ToprakÇevre",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d1cf6c4c-4996-4964-8101-4c7084bbef11"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3700),
-                            Name = "Eğitim",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("29499a8d-f87f-4b4c-9bf0-7a098d117914"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3701),
-                            Name = "Elektrik ve Elektronik",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("3abe0ed1-f03f-4c92-8743-56cc657e7c6e"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3786),
-                            Name = "Enerji",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("73564f12-904b-4e56-8ddf-65887f045754"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3788),
-                            Name = "Finans",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("310af52b-fa44-4ab2-b005-8c6945ac9048"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3789),
-                            Name = "Gıda",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c4f1a3bc-3723-4cca-a87f-4348972619f6"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3791),
-                            Name = "İnşaat",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2dff11e4-e699-4591-b329-9ba69b449577"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3793),
-                            Name = "İş ve Yönetimi",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("eb3d38e4-9604-4eb3-9f86-7d1f62c04ac9"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3795),
-                            Name = "Kimya, Petrol, Lastik ve PLastik",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("38097d31-5e5f-4368-b42b-7fb1f892da98"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3797),
-                            Name = "Kültür, Sanat ve Tasarım",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1ca6df0b-529e-4972-ab52-851336bc39d4"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3798),
-                            Name = "Maden",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2853b6c6-e499-467b-bc22-e2db9459b7a1"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3803),
-                            Name = "Medya, İletişim ve Yayıncılık",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("afa42780-9173-4d80-bc37-b372ce2ed474"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3805),
-                            Name = "Metal",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("12073634-f5ba-449b-9d41-a9aafc8c4429"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3806),
-                            Name = "Otomotiv",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b514565d-6045-4829-91e1-22d8a10829f1"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3808),
-                            Name = "Sağlık ve Sosyal Hizmetler",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("635eb060-7767-4f4a-98e1-30de3ca70b4e"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3811),
-                            Name = "Spor ve Rekreasyon",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1dc4a384-574e-4c50-b095-edc51da44d36"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3813),
-                            Name = "Tarım, Avcılık ve Balıkçılık",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6bd82328-e1b0-4000-bf17-1790a28c0b86"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3815),
-                            Name = "Tekstil, Hazır Giyim, Deri",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("fc05fef3-c7da-4f95-afe2-929da3a5c709"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3817),
-                            Name = "Ticaret (Satış ve Pazarlama)",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("be04fdaa-f2f5-439b-a937-30ea3389288e"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3820),
-                            Name = "Toplumsal ve Kişisel Hizmetler",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7337aa77-85aa-407e-8929-6e3a750f64c6"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3821),
-                            Name = "Turizm, Konaklama, Yiyecek-İçecek Hizmetleri",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2c47139c-33e9-49c1-b9a8-4b7ef20846b1"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(3823),
-                            Name = "Ulaştırma, Lojistik ve Haberleşme",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Title", b =>
@@ -1373,568 +505,6 @@ namespace IKApplication.Persistance.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Titles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("de0f8db0-8d13-4506-92a7-2b3898293cad"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4218),
-                            Name = "VP of Sales",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("56ffe139-f4e4-4d18-8d87-e0ca236b8c8b"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4224),
-                            Name = "National Sales Director",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0145678b-29da-4271-81bf-6eb19d8794fd"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4226),
-                            Name = "Regional Sales Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bf1c64e5-ea25-4dd0-87ed-bcd5d1491427"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4228),
-                            Name = "Sales Representative",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6c6c585d-5d25-411e-bfee-6367e0d618ca"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4229),
-                            Name = "Sales Associate",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("86513bf4-38dc-4d86-8ed1-b9eb1efb229b"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4232),
-                            Name = "CMO (Chief Marketing Officer)",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bbe594aa-15c7-4eea-b8c5-af6c47d0896c"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4234),
-                            Name = "Marketing Director",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d87959e6-7ee3-4ed0-8ce7-ed9876baf75a"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4238),
-                            Name = "Sr. Marketing Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0bd0a3c1-af0b-4c8d-bcda-bef8e6786ad6"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4240),
-                            Name = "Marketing Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5f3dec08-752e-4576-9c59-90f1eaa860c5"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4242),
-                            Name = "Marketing Coordinator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b6968cc3-3f12-4714-a942-d745e6776c20"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4244),
-                            Name = "VP of Finance",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("dcb3ba0f-e99a-4552-a3e4-9b854ad3f552"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4246),
-                            Name = "Procurement Director",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("38d5177f-61c8-4d6a-acac-753b52d466c2"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4248),
-                            Name = "Investment Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bf13d68b-0c37-4673-a085-623c39d646e1"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4249),
-                            Name = "Credit Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2445dcaa-7de1-40e8-9666-a65d9b8f55e2"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4251),
-                            Name = "Risk Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6c92fdf2-de54-4f81-9650-46a45e1b3fd3"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4254),
-                            Name = "VP of Client Services",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e9cb13b2-887e-4f16-b3a6-7be8932574b1"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4255),
-                            Name = "Account Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5eacc33a-0bfd-46c5-abf2-b02e56e7bfc7"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4258),
-                            Name = "Customer Success Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5ad5013f-9dcc-4530-8f0a-95b55697ac55"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4259),
-                            Name = "Customer Service Representative",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c79d54b3-4d36-45ea-8f3f-0980978af9c7"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4261),
-                            Name = "Support Specialist",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0838c158-44a5-443b-8a9a-35c1d31e77d6"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4263),
-                            Name = "COO (Chief Operating Officer)",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("62ef2d0d-7b47-4aae-b87e-fdad4de51e73"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4264),
-                            Name = "Director of Business Operations",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d8afd8c1-0e36-4c04-91c8-60dcf324e9d4"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4266),
-                            Name = "Operations Supervisor",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d9df31f9-0b11-4928-951d-7b4e32d254b1"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4269),
-                            Name = "Sr. Manager of HR",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("91e25da9-eaf2-4470-84ed-49cd190597d1"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4271),
-                            Name = "HR Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2539d3a4-c2a6-4d1e-81b0-f828a05a59df"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4272),
-                            Name = "Director of Information Security",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("defdaaa3-bcb7-4531-9dc4-23025c2c1173"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4273),
-                            Name = "Software Engineer I, II, III",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1dc04c09-458c-4335-b28d-5ce9fddf9c64"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4323),
-                            Name = "Full Stack Developer",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4b38434f-2c88-4e01-9b86-ac0fd2013084"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4325),
-                            Name = "Systems Administrator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d093ddb0-783f-4829-b627-0a344b8ce0fb"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4327),
-                            Name = "Data Analyst",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7ad9249b-80fc-4b9d-b184-d7ab8af238f7"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4329),
-                            Name = "Other Industries:",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e4bbf790-6d30-4a82-95ac-b39714f4b812"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4333),
-                            Name = "Registered Nurse",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("70ba4b0c-1687-41f7-bbd1-12c6e41d4eb5"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4335),
-                            Name = "Pharmacy Technician",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1a3359a7-d65e-4f2a-b048-bff3ed017b72"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4338),
-                            Name = "Physical Therapist",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4c65989d-0f86-4bca-b793-bba29b74a7e9"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4339),
-                            Name = "Nursing Assistant",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("36ba850e-4fb0-41a3-b7d7-18187cdaa192"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4341),
-                            Name = "Clinical Laboratory Technician",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4c255a80-2340-4754-af81-9949e803d51f"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4343),
-                            Name = "Occupational Therapy Aide",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6a18d755-ddd4-45e1-85f1-464b2d968c3e"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4345),
-                            Name = "Administrator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6595a2e1-f955-4fce-9240-28323cfebd2c"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4346),
-                            Name = "Principal",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1fd5e6d2-cf69-4aff-8611-020922b3eacf"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4350),
-                            Name = "Registrar",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b130744b-7434-4efd-bc52-123ed317da22"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4353),
-                            Name = "School Counselor",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("25dd0f37-2a96-4737-ae4c-ab88ef0f911a"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4354),
-                            Name = "Teacher",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("228f3752-4870-4b7e-9a32-36185f8efdbc"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4357),
-                            Name = "Teaching Assistant",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f205f53d-b05d-46aa-9a52-0705c3a35c3a"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4359),
-                            Name = "General Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e3c95c70-95ca-4d27-b056-f61391531000"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4360),
-                            Name = "Guest Services Supervisor",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("dc86951f-620e-4cbf-9217-df86879c4fd7"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4362),
-                            Name = "Concierge",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a7ffbc0a-ea8b-42d0-a86f-2972c65852d2"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4364),
-                            Name = "Front Desk Associate",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("132212a7-024d-4d91-ac95-7a35e0305b22"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4368),
-                            Name = "Server/Host/Hostess",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7815e4c2-0d47-4c34-9276-5475f8877019"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4369),
-                            Name = "Hotel Receptionist",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("98b2d5d0-b1c5-4508-b408-16e516737973"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4371),
-                            Name = "Construction Foreman",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("115f8e76-6e21-4ab5-80ab-21a136e21ae2"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4373),
-                            Name = "Safety Director",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("dbc7466e-ce02-40fc-9c26-e0737c316d4f"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4375),
-                            Name = "Project Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("cd06c93a-1c32-42fd-8b32-b88900ea5b4b"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4376),
-                            Name = "Contract Administrator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8bf2c68b-6b26-4969-a461-34f9ec4f7d3f"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4378),
-                            Name = "Project Appraisal Engineer",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f63b5a55-a9de-4b5a-843b-7cd2f0656fbe"),
-                            CompanyId = new Guid("cd3927a7-93d4-4068-bebb-c258090f4a2f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 991, DateTimeKind.Local).AddTicks(4380),
-                            Name = "Inspector",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ef6e2f03-4511-4823-81dd-1bb1d7f43a52"),
-                            CompanyId = new Guid("125a275f-35dc-41da-acde-fc5fef7d6914"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 997, DateTimeKind.Local).AddTicks(8145),
-                            Name = "Sr. Marketing Manager",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c0b0ec2f-ced3-48f9-940b-8a2568965bc3"),
-                            CompanyId = new Guid("9b09bc40-5ee7-4de1-9649-cc503037ff06"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 47, 999, DateTimeKind.Local).AddTicks(677),
-                            Name = "Teacher",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("561b6703-032c-4898-83a0-652662422653"),
-                            CompanyId = new Guid("9e0615ad-e0b4-46e7-a9fa-07bb6cc8044b"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 0, DateTimeKind.Local).AddTicks(2974),
-                            Name = "Contract Administrator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("fec2960f-90d1-49bf-9150-53ae8ebec5e4"),
-                            CompanyId = new Guid("5a9d227a-03e3-4a17-ae49-dddd1f20452a"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 1, DateTimeKind.Local).AddTicks(5266),
-                            Name = "Contract Administrator",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8ecf60a5-d184-4449-a929-360952e7a22a"),
-                            CompanyId = new Guid("7b7b68d2-839c-4c78-8529-c091bfe05424"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 2, DateTimeKind.Local).AddTicks(7988),
-                            Name = "Director of Business Operations",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("eeaa3009-9ab8-4d37-aab9-0324fc8ea76d"),
-                            CompanyId = new Guid("fca46396-6bbe-4429-bfcc-1392d058a5ec"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 4, DateTimeKind.Local).AddTicks(634),
-                            Name = "Customer Service Representative",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("69ceab8b-1a1d-47ee-9583-9db248e94839"),
-                            CompanyId = new Guid("d7427d72-19da-4e32-9cfd-9c1a5f1dbbb9"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 5, DateTimeKind.Local).AddTicks(2954),
-                            Name = "Pharmacy Technician",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b62875d8-7c7e-41d2-95cd-17ad8f08de31"),
-                            CompanyId = new Guid("cc8ec419-e188-4664-8cce-24d9d7db0d7f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 6, DateTimeKind.Local).AddTicks(5127),
-                            Name = "Teacher",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("05c8018f-53ca-47ed-b612-6c6ac9012d40"),
-                            CompanyId = new Guid("79ef3352-91c5-4840-88ae-b5076f3db6cf"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 7, DateTimeKind.Local).AddTicks(8137),
-                            Name = "VP of Sales",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2e5d6ab4-0498-4af4-93bc-64212e0e880d"),
-                            CompanyId = new Guid("4f83adf7-8fa9-4c1e-b6c7-5718290f523a"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 9, DateTimeKind.Local).AddTicks(866),
-                            Name = "National Sales Director",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b626ed62-4a58-4f8d-a01a-053e5e03ab96"),
-                            CompanyId = new Guid("e93f4331-4e64-4886-a6b6-ef87c48d1307"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 10, DateTimeKind.Local).AddTicks(3648),
-                            Name = "Other Industries:",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0ea92fc7-6e3b-4bf6-be5d-f30209a4bab7"),
-                            CompanyId = new Guid("89703451-fd75-4b63-aa70-d62b273c9f9e"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 11, DateTimeKind.Local).AddTicks(6623),
-                            Name = "VP of Client Services",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("fc9c00cd-7d3c-4cb0-8635-105462da3a0c"),
-                            CompanyId = new Guid("fdcec0d7-359d-4866-bb82-3a13dab81940"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 12, DateTimeKind.Local).AddTicks(9225),
-                            Name = "Full Stack Developer",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("27278d5b-9870-4e4f-8c11-c578b175bc17"),
-                            CompanyId = new Guid("bfa1f2eb-867a-4068-9129-c2622111a84f"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 14, DateTimeKind.Local).AddTicks(1681),
-                            Name = "Front Desk Associate",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f4a1fc3b-9d09-4491-ad97-e2c71e285ebe"),
-                            CompanyId = new Guid("25d2a0de-be8c-4850-8bac-2f155de0d098"),
-                            CreateDate = new DateTime(2023, 5, 24, 23, 21, 48, 15, DateTimeKind.Local).AddTicks(4241),
-                            Name = "Customer Service Representative",
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -1963,29 +533,6 @@ namespace IKApplication.Persistance.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e"),
-                            ConcurrencyStamp = "MUJ6X77TXGL3BE2QJU9Y5Q4BO8JM1V0F",
-                            Name = "Site Administrator",
-                            NormalizedName = "SITE ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b"),
-                            ConcurrencyStamp = "TS2TJWT8MVNJUIT59QKLDZLWB1VH0HA7",
-                            Name = "Company Administrator",
-                            NormalizedName = "COMPANY ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("3f60e383-ddaf-482c-9f7f-0982d34d6ad0"),
-                            ConcurrencyStamp = "YVXKHB9WRBTJMXWIYX1Y1OCHYGHB0MLP",
-                            Name = "Personal",
-                            NormalizedName = "PERSONAL"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -2070,108 +617,6 @@ namespace IKApplication.Persistance.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("6901b157-66e3-4bac-8f21-b26df69271b9"),
-                            RoleId = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e")
-                        },
-                        new
-                        {
-                            UserId = new Guid("a96a9599-3a63-49bb-a414-672875b515ea"),
-                            RoleId = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e")
-                        },
-                        new
-                        {
-                            UserId = new Guid("2d572fed-fe6c-45ca-a685-b9d38ded93d9"),
-                            RoleId = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e")
-                        },
-                        new
-                        {
-                            UserId = new Guid("4333f255-1303-403e-addb-fe24d5deac00"),
-                            RoleId = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e")
-                        },
-                        new
-                        {
-                            UserId = new Guid("df8ab2ae-e30d-4911-8dc0-1ee188187264"),
-                            RoleId = new Guid("03b82678-87fe-4887-86bb-78d550d93d2e")
-                        },
-                        new
-                        {
-                            UserId = new Guid("55fe4f08-c32e-447f-bd33-8c55d26745ed"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("77df8fe2-8845-4057-b131-755b44bafaec"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("8fa63403-d72d-434d-b906-f73d31399e11"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("1e1dd18b-909d-449a-bd27-885fcb077f2b"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("d65c9449-777f-41f6-8557-1360bb841640"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("54644449-4b2b-4a9f-9ba9-329dca7e2f16"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("38858de8-3533-4ae7-b553-27831ce7c6e1"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("b59ba530-8e49-4580-8384-9f6e1b69d29c"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("df988a2b-8cad-45ac-89c4-32eae542d174"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("88091bf1-84d4-40bd-ae63-b378a887ad39"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("6dc2134b-7159-432a-bfef-ae263da2dd96"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("4249fef1-c5c9-492b-b2e5-5f94a9e1e26b"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("c34f1eba-dcf0-4133-a093-49190afc4620"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("b43ea1c7-6d3c-4b6b-8d64-8348a4490931"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        },
-                        new
-                        {
-                            UserId = new Guid("845c1ed1-d421-4609-80fc-040562a3cad0"),
-                            RoleId = new Guid("9b3c8ef8-5124-4d9b-a02b-4820acb0857b")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -2209,7 +654,14 @@ namespace IKApplication.Persistance.Migrations
                     b.HasOne("IKApplication.Domain.Entites.AppUser", "Patron")
                         .WithMany("Employees")
                         .HasForeignKey("PatronId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("IKApplication.Domain.Entites.Profession", "Profession")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("ProfessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("IKApplication.Domain.Entites.Title", "Title")
                         .WithMany("AppUsers")
@@ -2222,6 +674,8 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Patron");
+
+                    b.Navigation("Profession");
 
                     b.Navigation("Title");
                 });
@@ -2292,6 +746,17 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("ApprovedBy");
+                });
+
+            modelBuilder.Entity("IKApplication.Domain.Entites.Profession", b =>
+                {
+                    b.HasOne("IKApplication.Domain.Entites.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Title", b =>
@@ -2384,6 +849,11 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("CompanyManagers");
 
                     b.Navigation("Titles");
+                });
+
+            modelBuilder.Entity("IKApplication.Domain.Entites.Profession", b =>
+                {
+                    b.Navigation("AppUsers");
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>

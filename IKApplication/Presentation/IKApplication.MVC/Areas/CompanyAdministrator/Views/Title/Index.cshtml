@@ -23,28 +23,34 @@
                                 {
                                     <tr>
                                         <td>@item.Name</td>
-                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                        @if (item.Status == Status.Active || item.Status == Status.Modified)
                                         {
                                             <td>
                                                 Active
                                             </td>
                                         }
-                                        @if (@item.Status == Status.Passive)
+                                        @if (item.Status == Status.Passive)
                                         {
                                             <td>
                                                 Passive
                                             </td>
                                         }
-                                        @if (@item.Status == Status.Deleted)
+                                        @if (item.Status == Status.Deleted)
                                         {
                                             <td>
                                                 Deleted
                                             </td>
                                         }
                                         <td>
-
-                                            <button class="btn btn-outline-primary" asp-controller="Title" asp-action="UpdateTitle" asp-route-id="@item.Id">Update</button>
-                                            <button class="btn btn-outline-danger" asp-controller="Title" asp-action="DeleteTitle" asp-route-id="@item.Id">Delete</button>
+                                            @if (item.Status == Status.Deleted)
+                                            {
+                                                <button class="btn btn-outline-primary" asp-controller="Title" asp-action="RecoverTitle" asp-route-id="@item.Id">Recover</button>
+                                            }
+                                            @if (item.Status != Status.Deleted)
+                                            {
+                                                <button class="btn btn-outline-primary" asp-controller="Title" asp-action="UpdateTitle" asp-route-id="@item.Id">Update</button>
+                                                <button class="btn btn-outline-danger" asp-controller="Title" asp-action="DeleteTitle" asp-route-id="@item.Id">Delete</button>
+                                            }
                                         </td>
                                     </tr>
                                 }

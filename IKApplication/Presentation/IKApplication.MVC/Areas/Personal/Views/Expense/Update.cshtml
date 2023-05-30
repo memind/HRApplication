@@ -26,9 +26,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="AmountString" class="form-label">Amount</label><br />
-                            <span asp-validation-for="AmountString" class="text-danger"></span>
-                            <input asp-for="AmountString" type="text" class="form-control mb-3">
+                            <label asp-for="Amount" class="form-label">Amount</label><br />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                            <input asp-for="Amount" type="text" class="form-control mb-3">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Penny" class="form-label">Pennies</label><br />
+                            <span asp-validation-for="Penny" class="text-danger"></span>
+                            <input asp-for="Penny" type="text" class="form-control mb-3">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Currency" class="form-label">Currency</label><br />
+                            <span asp-validation-for="Currency" class="text-danger"></span>
+                            <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()"></select>
                         </div>
 
                         <div class="form-group">

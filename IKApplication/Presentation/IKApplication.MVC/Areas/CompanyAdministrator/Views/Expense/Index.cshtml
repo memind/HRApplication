@@ -17,58 +17,71 @@
             <div class="col-12">
                 <div class="table-responsive">
                     <form>
-                         @if (Model == null || Model.Count == 0)
+                        @if (Model == null || Model.Count == 0)
                         {
                             <p class="text-center mt-4" style="font-style: italic;">Has no data</p>
                         }
                         else
                         {
-                        <table id="order-listing" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Expense By</th>
-                                    <th>Approved By</th>
-                                    <th>Short Description</th>
-                                    <th>Amount</th>
-                                    <th>Expense Type</th>
-                                    <th>Expense Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
+                            <table id="order-listing" class="table">
+                                <thead>
                                     <tr>
-                                        <td>@item.ExpenseBy.Name @item.ExpenseBy.SecondName @item.ExpenseBy.Surname</td>
-                                        <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
-                                        <td>@item.ShortDescription</td>
-                                        <td>@item.Amount</td>
-                                        <td>@item.Type</td>
-                                        <td>@item.ExpenseDate.ToShortDateString()</td>
-                                        @if (@item.Status == Status.Active || item.Status == Status.Modified)
-                                        {
-                                            <td>
-                                                Approved
-                                            </td>
-                                        }
-                                        @if (@item.Status == Status.Passive)
-                                        {
-                                            <td>
-                                                In Pending
-                                            </td>
-                                        }
-                                        <td>
-                                            @if ((item.Status == Status.Passive || item.Status == Status.Deleted) && item.CurrentUserId == item.ExpenseById)
-                                            {
-                                                <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                            }
-                                            <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
-                                        </td>
+                                        <th>Expense By</th>
+                                        <th>Approved By</th>
+                                        <th>Short Description</th>
+                                        <th>Amount</th>
+                                        <th>Currency</th>
+                                        <th>Expense Type</th>
+                                        <th>Expense Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.ExpenseBy.Name @item.ExpenseBy.SecondName @item.ExpenseBy.Surname</td>
+                                            <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
+                                            <td>@item.ShortDescription</td>
+                                            <td>@item.Amount,@item.Penny</td>
+                                            @if (item.Currency == Currency.TL)
+                                            {
+                                                <td>&#x20BA;</td>
+                                            }
+                                            @if (item.Currency == Currency.USD)
+                                            {
+                                                <td>&#x24;</td>
+                                            }
+                                            @if (item.Currency == Currency.EUR)
+                                            {
+                                                <td>&#x20AC;</td>
+                                            }
+                                            <td>@item.Type</td>
+                                            <td>@item.ExpenseDate.ToShortDateString()</td>
+                                            @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                            {
+                                                <td>
+                                                    Approved
+                                                </td>
+                                            }
+                                            @if (@item.Status == Status.Passive)
+                                            {
+                                                <td>
+                                                    In Pending
+                                                </td>
+                                            }
+                                            <td>
+                                                @if ((item.Status == Status.Passive || item.Status == Status.Deleted) && item.CurrentUserId == item.ExpenseById)
+                                                {
+                                                    <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                }
+                                                <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         }
                     </form>
                 </div>

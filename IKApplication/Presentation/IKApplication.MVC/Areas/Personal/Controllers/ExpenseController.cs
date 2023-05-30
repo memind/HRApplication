@@ -66,7 +66,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             {
                 model.ExpenseById = expenseBy.Id;
                 model.Id = Guid.NewGuid();
-                model.Amount = decimal.Parse(model.AmountString);
                 await _expenseService.CreateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Create(), new ToastrOptions { Title = "Creating Expense" });
 
@@ -93,7 +92,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             var expense = await _expenseService.GetById(id);
             var map = _mapper.Map<ExpenseUpdateDTO>(expense);
-            map.AmountString = map.Amount.ToString();
             return View(map);
         }
 
@@ -102,7 +100,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Amount = Convert.ToDecimal(model.AmountString);
                 await _expenseService.UpdateExpense(model);
                 _toast.AddSuccessToastMessage(Messages.Expense.Update(), new ToastrOptions { Title = "Updating Expense" });
                 return RedirectToAction("Index", "Expense");

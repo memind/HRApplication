@@ -9,7 +9,8 @@ namespace IKApplication.Application.VMs.ExpenseVMs
         public Status Status { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public decimal Amount { get; set; }
+        public int Amount { get; set; }
+        public int? Penny { get; set; }
         public DateTime ExpenseDate { get; set; }
         public Guid ApprovedById { get; set; }
         public AppUser? ApprovedBy { get; set; }
@@ -18,6 +19,7 @@ namespace IKApplication.Application.VMs.ExpenseVMs
         public Guid CompanyId { get; set; }
         public AppUser ExpenseBy { get; set; }
         public ExpenseType Type { get; set; }
+        public Currency Currency { get; set; }
         public string? FullName { get; set; }
         public DateTime CreateDate { get; set; }
     }

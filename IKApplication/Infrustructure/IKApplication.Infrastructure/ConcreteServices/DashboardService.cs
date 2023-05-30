@@ -43,6 +43,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
             dashboardVM.CompanyExpenseRequestsCount = (await _expenseService.GetExpenseRequests(companyId)).Count();
             dashboardVM.CompanyCashAdvanceRequestsCount = (await _cashAdvanceService.GetAdvanceRequests(companyId)).Count();
 
+            dashboardVM.ActiveCompanies = (await _companyService.GetAllCompanies()).Count();
+            dashboardVM.PassiveCompanies = (await _companyService.GetAllPassiveCompanies()).Count();
+            dashboardVM.ActiveUsers = (await _appUserService.GetAllUsers()).Count();
+            dashboardVM.ActiveUsers = (await _appUserService.GetAllPassiveUsers()).Count();
+
             return dashboardVM;
         }
     }

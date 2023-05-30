@@ -1,43 +1,100 @@
 ﻿@model List<CompanyVM>
 
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Company List</h4>
-        <div class="row">
-            <div class="col-12">
-                <div class="table-responsive">
-                    <form>
-                        <table id="order-listing" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Sector Name</th>
-                                    <th>Number of Employees</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Name</td>
-                                        <td>@item.Email</td>
-                                        <td>@item.SectorName</td>
-                                        <td>@item.NumberOfEmployees</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </form>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Company List</h4>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <div id="order-listing_filter" class="dataTables_filter">
+                                        <label>
+                                            <input type="search" id="searchBar" onkeyup="search()" class="form-control" placeholder="Search" aria-controls="order-listing">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="companyList" class="table" aria-describedby="order-listing_info">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Sector Name</th>
+                                                <th>Number Of Employees</th>
+                                                <th>Contact Person</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.SectorName</td>
+                                                    <td>@item.NumberOfEmployees</td>
+                                                    <td>@item.ContactPerson</td>
+                                                    <td>
+                                                        <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+
+    <div class="row col-12 m-4">
+        <div class="col-2">
+            <a asp-controller="Company" asp-action="CompanyExcel" class="m-4">
+                <button class="btn btn-outline-primary">Export to Excel</button>
+            </a>
+        </div>
+        <div class="col-2">
+            <a asp-controller="Company" asp-action="CompanyPDF" class="m-4">
+                <button class="btn btn-outline-primary">Export to PDF</button>
+            </a>
+        </div>
     </div>
-    <a asp-controller="Company" asp-action="CompanyExcel" class="m-4">
-        <button class="btn btn-outline-primary">Export to Excel</button>
-    </a>
-</div>
+    </div>
+
+
+<script>
+    var searchInput = document.getElementById('searchBar');
+    var table = document.getElementById('companyList');
+    var tableRows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function (event) {
+        var searchText = event.target.value.toLowerCase();
+
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowData = row.getElementsByTagName('td');
+            var match = false;
+
+            for (var j = 0; j < rowData.length; j++) {
+                var cellData = rowData[j].innerText.toLowerCase();
+                if (cellData.indexOf(searchText) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>

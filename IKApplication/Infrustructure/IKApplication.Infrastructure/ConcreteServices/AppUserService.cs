@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.DTOs.CompanyDTOs;
+using IKApplication.Application.DTOs.ProfessionDTOs;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.UserVMs;
@@ -20,10 +21,11 @@ namespace IKApplication.Infrastructure.ConcreteServices
         private readonly IMapper _mapper;
         private readonly ICompanyService _companyService;
         private readonly ITitleService _titleService;
+        private readonly IProfessionService _professionService;
         private readonly ISectorService _sectorService;
 
         //Dependency Injection
-        public AppUserService(IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper, ICompanyService companyService, ITitleService titleService, ISectorService sectorService)
+        public AppUserService(IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper, ICompanyService companyService, ITitleService titleService, ISectorService sectorService, IProfessionService professionService)
         {
             _appUserRepository = appUserRepository;
             _signInManager = signInManager;
@@ -32,6 +34,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             _companyService = companyService;
             _titleService = titleService;
             _sectorService = sectorService;
+            _professionService = professionService;
         }
 
         //USerName ile AppUser tablosunda bulunan (eğer varsa) AppUser satrını çekeriz ve UpdateProfileDTO nesnesini doldururuz.
@@ -47,6 +50,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     Surname = x.Surname,
                     BloodGroup = x.BloodGroup,
                     Profession = x.Profession,
+                    ProfessionId = x.ProfessionId,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
@@ -99,7 +103,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     SecondName = x.SecondName,
                     Surname = x.Surname,
                     BloodGroup = x.BloodGroup,
-                    Profession = x.Profession,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
@@ -110,7 +113,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Profession = x.Profession,
+                    ProfessionId = x.ProfessionId
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -135,7 +140,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     SecondName = x.SecondName,
                     Surname = x.Surname,
                     BloodGroup = x.BloodGroup,
-                    Profession = x.Profession,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
@@ -146,10 +150,12 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Profession = x.Profession,
+                    ProfessionId = x.ProfessionId
                 },
                 where: x => (x.Status == Status.Active || x.Status == Status.Modified) && (x.CompanyId == companyId),
-                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron).Include(x => x.Profession));
 
             foreach (var user in users)
             {
@@ -188,7 +194,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     SecondName = x.SecondName,
                     Surname = x.Surname,
                     BloodGroup = x.BloodGroup,
-                    Profession = x.Profession,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
@@ -199,7 +204,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Profession = x.Profession,
+                    ProfessionId = x.ProfessionId
                 },
                 where: x => x.UserName == userName,
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -220,7 +227,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     SecondName = x.SecondName,
                     Surname = x.Surname,
                     BloodGroup = x.BloodGroup,
-                    Profession = x.Profession,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
                     ImagePath = x.ImagePath,
@@ -231,7 +237,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
                     PatronId = x.PatronId,
-                    Patron = x.Patron
+                    Patron = x.Patron,
+                    Profession = x.Profession,
+                    ProfessionId = x.ProfessionId
                 },
                 where: x => x.Id == id,
                 include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
@@ -282,12 +290,14 @@ namespace IKApplication.Infrastructure.ConcreteServices
         public async Task<IdentityResult> CreateUser(AppUserCreateDTO model, string role)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
+            model.Profession = null;
 
             if (user == null && model.Password != null && model.Password == model.ConfirmPassword)
             {
                 var appUser = _mapper.Map<AppUser>(model);
                 appUser.UserName = model.Email;
                 appUser.Id = Guid.NewGuid();
+                appUser.PatronId = appUser.Id;
 
                 var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
                 if (result.Succeeded)
@@ -325,6 +335,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.UpdateDate = model.UpdateDate;
                 user.Status = model.Status;
                 user.PatronId = model.PatronId;
+                user.ProfessionId = model.ProfessionId;
 
                 await _userManager.UpdateAsync(user);
             }
@@ -375,6 +386,15 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             await _titleService.Create(title);
 
+            ProfessionCreateDTO profession = new ProfessionCreateDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = register.UserProfession,
+                CompanyId = company.Id
+            };
+
+            await _professionService.Create(profession);
+
             AppUserCreateDTO user = new AppUserCreateDTO()
             {
                 Name = register.UserName,
@@ -390,7 +410,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 ConfirmPassword = register.UserConfirmPassword,
                 ImagePath = register.UserImagePath,
                 CompanyId = company.Id,
-                TitleId = title.Id
+                TitleId = title.Id,
+                ProfessionId = profession.Id
             };
             await CreateUser(user, role);
         }
@@ -410,6 +431,43 @@ namespace IKApplication.Infrastructure.ConcreteServices
         {
             AppUser user = await _userManager.FindByNameAsync(userName);
             return user.Id;
+        }
+
+        public async Task<List<AppUserVM>> GetAllPassiveUsers()
+        {
+            var users = await _appUserRepository.GetFilteredList(
+                select: x => new AppUserVM
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Name = x.Name,
+                    SecondName = x.SecondName,
+                    Surname = x.Surname,
+                    BloodGroup = x.BloodGroup,
+                    BirthDate = x.BirthDate,
+                    IdentityNumber = x.IdentityNumber,
+                    ImagePath = x.ImagePath,
+                    CompanyId = x.CompanyId,
+                    TitleId = x.TitleId,
+                    CompanyName = x.Company.Name,
+                    Title = x.Title,
+                    JobStartDate = x.JobStartDate,
+                    PhoneNumber = x.PhoneNumber,
+                    PatronId = x.PatronId,
+                    Patron = x.Patron,
+                    Profession = x.Profession,
+                    ProfessionId = x.ProfessionId
+                },
+                where: x => (x.Status == Status.Passive),
+                include: x => x.Include(x => x.Company).Include(x => x.Title).Include(x => x.Patron));
+
+            foreach (var user in users)
+            {
+                user.Roles = (List<string>)await _userManager.GetRolesAsync(await _userManager.FindByNameAsync(user.UserName));
+            }
+
+            return users;
         }
     }
 }

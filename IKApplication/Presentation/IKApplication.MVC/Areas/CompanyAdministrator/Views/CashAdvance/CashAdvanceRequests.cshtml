@@ -18,6 +18,7 @@
                                         <th>Advance To</th>
                                         <th>Approved By</th>
                                         <th>Requested Amount</th>
+                                        <th>Currency</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -29,6 +30,18 @@
                                             <td>@item.FullName</td>
                                             <td>@item.Director.Name @item.Director.SecondName @item.Director.Surname</td>
                                             <td>@item.RequestedAmount</td>
+                                            @if (item.Currency == Currency.TL)
+                                            {
+                                                <td>&#x20BA;</td>
+                                            }
+                                            @if (item.Currency == Currency.USD)
+                                            {
+                                                <td>&#x24;</td>
+                                            }
+                                            @if (item.Currency == Currency.EUR)
+                                            {
+                                                <td>&#x20AC;</td>
+                                            }
                                             @if (@item.Status == Status.Active || item.Status == Status.Modified)
                                             {
                                                 <td>

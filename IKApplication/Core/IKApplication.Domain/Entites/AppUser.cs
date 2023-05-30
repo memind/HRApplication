@@ -20,7 +20,6 @@ namespace IKApplication.Domain.Entites
         public string? SecondName { get; set; }
         public string Surname { get; set; }
         public BloodGroup? BloodGroup { get; set; }   // kan grubu
-        public string? Profession { get; set; }   //meslek
         [Range(typeof(DateTime), "1900-01-01", "2005-01-01", ErrorMessage = "You must be older than 18.")]
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }  // TC Kimlik No - Pasaport no vb.
@@ -32,8 +31,10 @@ namespace IKApplication.Domain.Entites
         public Guid? AddressId { get; set; }
         public Guid TitleId { get; set; }   // Unvan
         public Guid PatronId { get; set; }
+        public Guid ProfessionId { get; set; }
 
         // Navigation Properties
+        public Profession Profession { get; set; }   //meslek
         public AppUser Patron { get; set; }
         public Company Company { get; set; }
         public Address? Address { get; set; }

@@ -30,7 +30,7 @@
                                         <tr>
                                             <td>@item.FullName</td>
                                             <td>@item.ShortDescription</td>
-                                            <td>@item.Amount</td>
+                                            <td>@item.Amount,@item.Penny</td>
                                             <td>@item.Type</td>
                                             <td>@item.ExpenseDate.ToShortDateString()</td>
                                             @if (@item.Status == Status.Active || item.Status == Status.Modified)

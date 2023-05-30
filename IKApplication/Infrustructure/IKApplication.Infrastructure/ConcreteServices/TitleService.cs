@@ -60,7 +60,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        CompanyId = x.CompanyId
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
                     },
                     where: x => (x.Status == Status.Active || x.Status == Status.Modified),
                     orderBy: x => x.OrderBy(x => x.CreateDate));
@@ -82,9 +83,28 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        CompanyId = x.CompanyId
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
                     },
                     where: x => x.CompanyId == companyId && (x.Status != Status.Deleted),
+                    orderBy: x => x.OrderBy(x => x.Name),
+                    include: x => x.Include(x => x.Company)
+                );
+
+            return companyTitles;
+        }
+        public async Task<List<TitleVM>> GetCompanyTitlesWithDeleted(Guid companyId)
+        {
+            var companyTitles = await _titleRepository.GetFilteredList
+                (
+                    select: x => new TitleVM()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        CompanyId = x.CompanyId,
+                        Status = x.Status
+                    },
+                    where: x => x.CompanyId == companyId && (x.Status != Status.Passive),
                     orderBy: x => x.OrderBy(x => x.Name),
                     include: x => x.Include(x => x.Company)
                 );
@@ -108,6 +128,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 );
 
             return expense;
+        }
+
+        public async Task Recover(Guid titleId)
+        {
+            var title = await _titleRepository.GetDefault(x => x.Id == titleId);
+
+            title.DeleteDate = null;
+            title.Status = Status.Modified;
+
+            await _titleRepository.Update(title);
         }
     }
 }
