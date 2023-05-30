@@ -25,6 +25,7 @@
                                             <th>Email</th>
                                             <th>Title</th>
                                             <th>Company Name</th>
+                                            <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -34,13 +35,10 @@
 
                                             <div class="d-flex justify-content-center mb-2">
                                                 <div class="col-md-3 m-3">
-                                                    <button class="btn btn-outline-primary" asp-action="CreateCompanyManager">New Company Manager</button>
+                                                    <button class="btn btn-outline-primary" asp-action="CreateCompanyManagerAndPersonal">New USER</button>
                                                 </div>
                                                 <div class="col-md-3 m-3">
                                                     <button class="btn btn-outline-primary" asp-action="StaffCards">Go to Staff Summary</button>
-                                                </div>
-                                                <div class="col-md-3 m-3">
-                                                    <button class="btn btn-outline-primary" asp-action="CreatePersonal">New Personal</button>
                                                 </div>
                                             </div>
                                         }
@@ -52,6 +50,19 @@
                                                 <td>@item.Email</td>
                                                 <td>@item.Title.Name</td>
                                                 <td>@item.CompanyName</td>
+
+                                                @if (item.Status == Status.Active || item.Status == Status.Modified)
+                                                {
+                                                    <td>Active</td>
+                                                }
+
+                                                @if (item.Status == Status.Passive)
+                                                {
+                                                    <td>In Pending</td>
+                                                }
+
+
+
                                                 <td>
                                                     <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
                                                     <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
