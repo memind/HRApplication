@@ -47,15 +47,18 @@
                         </div>
 
                     </div>
-                    <a asp-controller="Leave" asp-action="AcceptLeave" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#acceptModal">
-                        <button class="btn btn-outline-primary">Accept Leave</button>
-                    </a>
-                    <a asp-controller="Leave" asp-action="RefuseLeave" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#refuseModal">
-                        <button class="btn btn-outline-danger">Refuse Leave</button>
-                    </a>
-                    <a asp-controller="Leave" asp-action="LeaveRequests">
-                        <button class="btn btn-outline-info">Back to List</button>
-                    </a>
+                    <div class="form-group d-flex justify-content-between">
+                        <a asp-controller="Leave" asp-action="AcceptLeave" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#acceptModal">
+                            <button class="btn btn-outline-primary">Accept Leave</button>
+                        </a>
+                        <a asp-controller="Leave" asp-action="RefuseLeave" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#refuseModal">
+                            <button class="btn btn-outline-danger">Refuse Leave</button>
+                        </a>
+                        <a asp-controller="Leave" asp-action="LeaveRequests">
+                            <button class="btn btn-outline-info">Back to List</button>
+                        </a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
