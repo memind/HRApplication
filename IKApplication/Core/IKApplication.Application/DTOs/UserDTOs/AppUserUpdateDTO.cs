@@ -1,4 +1,5 @@
 ﻿using IKApplication.Application.VMs.CompanyVMs;
+using IKApplication.Application.VMs.ProfessionVMs;
 using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
@@ -15,7 +16,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public string? SecondName { get; set; }
         public string Surname { get; set; }
         public BloodGroup? BloodGroup { get; set; }
-        public Profession Profession { get; set; }
+        public Profession? Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }
         public string Email { get; set; }
@@ -36,5 +37,6 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Guid? AddressId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
+        public List<ProfessionVM>? Professions { get; set; }
     }
 }

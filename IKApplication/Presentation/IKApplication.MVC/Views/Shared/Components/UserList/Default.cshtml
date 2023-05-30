@@ -35,10 +35,14 @@
 
                                             <div class="d-flex justify-content-center mb-2">
                                                 <div class="col-md-3 m-3">
-                                                    <button class="btn btn-outline-primary" asp-action="CreateCompanyManagerAndPersonal">New USER</button>
+                                                    <a asp-controller="User" asp-action="CreateCompanyManagerAndPersonal">
+                                                        <button class="btn btn-outline-primary">New USER</button>
+                                                    </a>
                                                 </div>
                                                 <div class="col-md-3 m-3">
-                                                    <button class="btn btn-outline-primary" asp-action="StaffCards">Go to Staff Summary</button>
+                                                    <a asp-controller="User" asp-action="StaffCards">
+                                                        <button class="btn btn-outline-primary">Go to Staff Summary</button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         }
@@ -64,8 +68,12 @@
 
 
                                                 <td>
-                                                    <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                                    <button class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                    <a asp-action="Update" asp-route-id="@item.Id">
+                                                        <button class="btn btn-outline-primary">Update</button>
+                                                    </a>
+                                                    <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">
+                                                        <button class="btn btn-outline-danger">Delete</button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         }

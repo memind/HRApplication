@@ -27,15 +27,19 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly ICompanyService _companyService;
+        private readonly IProfessionService _professionService;
+        private readonly ITitleService _titleService;
         private readonly IToastNotification _toast;
         private readonly IEmailService _emailService;
 
-        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast, IEmailService emailService)
+        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast, IEmailService emailService, IProfessionService professionService, ITitleService titleService)
         {
             _appUserService = appUserSerives;
             _companyService = companyService;
             _toast = toast;
             _emailService = emailService;
+            _professionService = professionService;
+            _titleService = titleService;
         }
 
         [HttpGet]
@@ -113,6 +117,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
+            user.Professions = await _professionService.GetAllProfessions();
             return View("Update", user);
         }
 
@@ -121,12 +126,15 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         {
             var user = await _appUserService.GetById(id);
             ViewBag.Title = "Update User";
+            user.Titles = await _titleService.GetCompanyTitles(user.CompanyId);
+            user.Professions = await _professionService.GetAllProfessions();
             return View("Update", user);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {
+            user.Profession = null;
             if (ModelState.IsValid)
             {
                 await _appUserService.UpdateUser(user);

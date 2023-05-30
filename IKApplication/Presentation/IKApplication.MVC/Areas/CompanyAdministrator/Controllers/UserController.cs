@@ -71,6 +71,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
+            user.Professions = await _professionService.GetAllProfessions();
             return View("Update", user);
         }
 
@@ -78,12 +79,16 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
         public async Task<IActionResult> Update(Guid id)
         {
             ViewBag.Title = "Update User";
-            return View(await _appUserService.GetById(id));
+            var model = await _appUserService.GetById(id);
+            model.Professions = await _professionService.GetAllProfessions();
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(AppUserUpdateDTO user)
         {
+            user.Profession = null;
+
             if (ModelState.IsValid)
             {
                 if (user.Password == user.ConfirmPassword)
@@ -99,12 +104,19 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 }
             }
 
+            var currentUser = await _appUserService.GetByUserName(User.Identity.Name);
+            var companies = await _companyService.GetAllCompanies();
+            user.CompanyId = currentUser.CompanyId;
+            user.PatronId = currentUser.Id;
+            user.Companies = companies;
+            user.Professions = await _professionService.GetAllProfessions();
+            user.Titles = await _titleService.GetAllTitles();
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
             return View(user);
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateCompanyManager()
+        public async Task<IActionResult> CreateCompanyManagerAndPersonal()
         {
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             var companies = await _companyService.GetAllCompanies();
@@ -115,6 +127,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
             var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123", Professions = professions };
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateCompanyManagerAndPersonal(AppUserCreateDTO model)
@@ -128,14 +141,10 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.ConfirmPassword = "123";
                 string role = model.Role;
 
-
-
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
                 if (role == "companyManager")   // role burada belirlenecek
                 {
                     await _appUserService.CreateUser(model, "Company Administrator");
-                    var company = await _companyService.GetById(user.CompanyId);
+                    var company = await _companyService.GetById(model.CompanyId);
                     await _appUserService.AddCompanyManager(model, company);
                 }
                 else if (role == "personal")
@@ -144,6 +153,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
                 }
 
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
@@ -151,8 +161,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 string body = "To set your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
 
                 _emailService.SendMail(model.Email, subject, body);
-
-
 
                 _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Create(model.Email), new ToastrOptions { Title = "Creating User" });
                 return RedirectToAction("Index", "User");
@@ -176,70 +184,6 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
 
             return View(model);
         }
-
-        /*
-        [HttpGet]
-        public async Task<IActionResult> CreatePersonal()
-        {
-            var user = await _appUserService.GetByUserName(User.Identity.Name);
-            var companies = await _companyService.GetAllCompanies();
-            var titles = await _titleService.GetAllTitles();
-            var companyTitles = titles.Where(x => x.CompanyId == user.CompanyId).ToList();
-            var professions = await _professionService.GetCompanyProfessions(user.CompanyId);
-
-            var model = new AppUserCreateDTO() { CompanyId = user.CompanyId, Companies = companies, Titles = titles, Password = "123", ConfirmPassword = "123", Professions = professions };
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreatePersonal(AppUserCreateDTO model)
-        {
-            var patron = await _appUserService.GetByUserName(User.Identity.Name);
-
-            if (ModelState.IsValid)
-            {
-
-                model.PatronId = patron.Id;
-                model.Id = Guid.NewGuid();
-                model.Password = "123";
-                model.ConfirmPassword = "123";
-
-                await _appUserService.CreateUser(model, "Personal");
-
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
-                string subject = "Set Your Password";
-                string body = "To set your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
-
-                _emailService.SendMail(user.Email, subject, body);
-
-
-                _toast.AddSuccessToastMessage(Messages.Personal.Create(model.Email), new ToastrOptions { Title = "Creating Personal" });
-                return RedirectToAction("Index", "User");
-            }
-
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Personal" });
-
-            var currentUser = await _appUserService.GetByUserName(User.Identity.Name);
-            var companies = await _companyService.GetAllCompanies();
-            var titles = await _titleService.GetAllTitles();
-            var companyTitles = titles.Where(x => x.CompanyId == currentUser.CompanyId).ToList();
-            var professions = await _professionService.GetCompanyProfessions(patron.CompanyId);
-
-            model.CompanyId = currentUser.CompanyId;
-            model.PatronId = currentUser.Id;
-            model.Companies = companies;
-            model.Titles = titles;
-            model.Professions = professions;
-            model.Password = "123";
-            model.ConfirmPassword = "123";
-
-            return View(model);
-        }
-        */
-
 
         [AllowAnonymous]
         public async Task<IActionResult> SetPassword(string email, string Code)

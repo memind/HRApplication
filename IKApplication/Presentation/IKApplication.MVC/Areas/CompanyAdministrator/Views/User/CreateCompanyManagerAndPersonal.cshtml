@@ -144,3 +144,52 @@
         return true;
     }
 </script>
+
+<script>
+    // JavaScript kodunu belirtilen form ve input alanıyla eşleştirmek için gerekli id'leri kullanın
+    var formId = "form"; // Formun id'si
+    var inputId = "birthDateInput"; // DateTime input alanının id'si
+    var jobStartId = "jobStart"; // DateTime input alanının id'si
+
+    // Form gönderildiğinde tetiklenen fonksiyon
+    function validateDate() {
+        var form = document.getElementById(formId); // Formu al
+        var input = document.getElementById(inputId); // Input alanını al
+        var job = document.getElementById(jobStartId); // Input alanını al
+
+        // Şu anki tarihi al
+        var now = new Date();
+
+        // Giriş yapılan tarihi al
+        var enteredDate = new Date(input.value);
+        var jobDate = new Date(job.value);
+
+        // Şuandan 1 yıl öncesini hesapla
+        var ago = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
+
+        // Şuandan 1 yıl öncesini hesapla
+        var twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate());
+        var threeMonthsLater = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
+
+        // Girilen tarih şuandan 3 ay sonrasını geçiyorsa
+        if (jobDate > threeMonthsLater) {
+            alert("You cannot select more than a 3 month later from now as Start Date!");
+            return false;
+        }
+
+        // Girilen tarih şuandan 2 ay öncesini geçiyorsa
+        if (jobDate < twoMonthsAgo) {
+            alert("You cannot select more than a 2 month ago from now as Start Date!");
+            return false;
+        }
+
+        // Girilen tarih şuandan 1 yıl öncesine denk geliyorsa
+        if (ago <= enteredDate) {
+            alert("You must be at least 18 years old to register.");
+            return false;
+        }
+
+        // Formu gönder
+        form.submit();
+    }
+</script>

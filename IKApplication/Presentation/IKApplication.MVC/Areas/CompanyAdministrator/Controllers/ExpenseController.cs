@@ -61,8 +61,10 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View();
         }
 

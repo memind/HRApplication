@@ -132,7 +132,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 leave.PersonalFullName = await _leaveService.GetPersonalName(leave.AppUserId);
                 leave.CurrentUserId = user.Id;
             }
-            
+
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View();
         }
 
