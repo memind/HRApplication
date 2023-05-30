@@ -32,14 +32,14 @@
                             <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()"></select>
                         </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-outline-primary btn-block">Save Cash Advance</button>
+                        <div class="form-group d-flex justify-content-between">
+                            <button type="submit" class="btn btn-outline-primary">Save Cash Advance</button>
+                            <a asp-controller="CashAdvance" asp-action="Index" class="ms-4 mb-2 mt-0">
+                                <button class="btn btn-outline-info">Back to List</button>
+                            </a>
                         </div>
                     </div>
                 </form>
-                <a asp-controller="CashAdvance" asp-action="Index" class="ms-4 mb-2 mt-0">
-                    <button class="btn btn-outline-info">Back to List</button>
-                </a>
             </div>
         </div>
     </div>
