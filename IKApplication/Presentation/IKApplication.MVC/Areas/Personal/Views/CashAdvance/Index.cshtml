@@ -22,6 +22,7 @@
                                         <th>Approved By</th>
                                         <th>Amount</th>
                                         <th>Currency</th>
+                                        <th>Installment Count</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -44,6 +45,7 @@
                                             {
                                                 <td>&#x20AC;</td>
                                             }
+                                            <td>@item.InstallmentCount</td>
                                             @if (@item.Status == Status.Active || item.Status == Status.Modified)
                                             {
                                                 <td>
@@ -57,11 +59,17 @@
                                                 </td>
                                             }
                                             <td>
-                                                @if (item.Status == Status.Passive || item.Status == Status.Deleted)
+                                                @if (item.Status == Status.Passive)
                                                 {
                                                     <button class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                    <button class="btn btn-outline-danger disabled" disabled>Delete</button>
+
                                                 }
-                                                <button class="btn btn-outline-danger" asp-controller="CashAdvance" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                else
+                                                {
+                                                    <button class="btn btn-outline-primary disabled" disabled>Update</button>
+                                                    <button class="btn btn-outline-danger" asp-controller="CashAdvance" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                }
                                             </td>
                                         </tr>
                                     }

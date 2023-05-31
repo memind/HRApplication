@@ -53,11 +53,17 @@
                                                 </td>
                                             }
                                             <td>
-                                                @if (item.Status == Status.Passive || item.Status == Status.Deleted)
+                                                @if (item.Status == Status.Passive && item.CurrentUserId == item.AppUserId)
                                                 {
                                                     <button class="btn btn-outline-primary" asp-action="EditLeave" asp-route-id="@item.Id">Update</button>
+                                                    <button class="btn btn-outline-danger disabled" disabled>Delete</button>
+
                                                 }
-                                                <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                else
+                                                {
+                                                    <button class="btn btn-outline-primary disabled" disabled>Update</button>
+                                                    <button class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                }
                                             </td>
                                         </tr>
                                     }

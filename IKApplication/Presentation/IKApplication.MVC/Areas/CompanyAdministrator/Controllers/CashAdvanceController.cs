@@ -71,15 +71,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         public async Task<IActionResult> Create(CashAdvanceCreateDTO model)
         {
             var advanceTo = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            //var advanceToMap = _mapper.Map<Domain.Entites.AppUser>(advanceTo);
-
-            //var company = await _companyService.GetById(advanceTo.CompanyId);
-            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            //var companyManager = companyManagers.Where(x => x.CompanyId == advanceTo.CompanyId).First();
-
-            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
 
             if (ModelState.IsValid)
             {
@@ -94,7 +85,6 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
 
                 _emailService.SendMail(mailAdvance.AdvanceTo.Patron.Email, subject, body);
-
                 return RedirectToAction("Index", "CashAdvance");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Advance" });
@@ -220,21 +210,35 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A6"].Value = "Advance To";
             ws.Cells["B6"].Value = "Approved By";
             ws.Cells["C6"].Value = "Requested Amount";
-            ws.Cells["D6"].Value = "Description";
-            ws.Cells["E6"].Value = "Create Date";
-            ws.Cells["F6"].Value = "Status";
+            ws.Cells["D6"].Value = "Currency";
+            ws.Cells["E6"].Value = "Installment Count";
+            ws.Cells["F6"].Value = "Description";
+            ws.Cells["G6"].Value = "Create Date";
+            ws.Cells["H6"].Value = "Status";
 
-            ws.Cells["A6:F6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A6:F6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A6:F6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A6:F6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A6:F6"].Style.Font.Bold = true;
+            ws.Cells["A6:H6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:H6"].Style.Font.Bold = true;
 
             int rowStart = 5;
             decimal totalAmount = 0;
+
             foreach (var advance in advanceList)
             {
-                totalAmount += advance.RequestedAmount;
+                if (advance.Currency == Domain.Enums.Currency.TL)
+                {
+                    totalAmount += advance.RequestedAmount;
+                }
+                if (advance.Currency == Domain.Enums.Currency.USD)
+                {
+                    totalAmount += (advance.RequestedAmount * 20.15m);
+                }
+                if (advance.Currency == Domain.Enums.Currency.EUR)
+                {
+                    totalAmount += (advance.RequestedAmount * 21.58m);
+                }
             }
 
             ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Cash Advance Amount: ";
@@ -291,23 +295,35 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("C{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("D{0}", rowStart)].Value = advance.Description;
+                ws.Cells[string.Format("D{0}", rowStart)].Value = advance.Currency.ToString();
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("E{0}", rowStart)].Value = advance.CreateDate.ToShortDateString();
+                ws.Cells[string.Format("E{0}", rowStart)].Value = advance.InstallmentCount;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("F{0}", rowStart)].Value = advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("F{0}", rowStart)].Value = advance.Description;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("F{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("G{0}", rowStart)].Value = advance.CreateDate.ToShortDateString();
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("G{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                ws.Cells[string.Format("H{0}", rowStart)].Value = advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Active";
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
                 rowStart++;
             }
@@ -331,6 +347,22 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             List<CashAdvanceVM> advances = allAdvances.Where(x => x.Status != Domain.Enums.Status.Deleted).Where(x => x.CreateDate >= startDate && x.CreateDate <= endDateHours).ToList();
 
             decimal totalAmount = 0;
+
+            foreach (var advance in advances)
+            {
+                if (advance.Currency == Domain.Enums.Currency.TL)
+                {
+                    totalAmount += advance.RequestedAmount;
+                }
+                if (advance.Currency == Domain.Enums.Currency.USD)
+                {
+                    totalAmount += (advance.RequestedAmount * 20.15m);
+                }
+                if (advance.Currency == Domain.Enums.Currency.EUR)
+                {
+                    totalAmount += (advance.RequestedAmount * 21.58m);
+                }
+            }
 
             //Building an HTML string.
             StringBuilder sb = new StringBuilder();
@@ -358,6 +390,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Advance To</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Approved By</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Requested Amount</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Currency</th>");
+            sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Installment Count</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Description</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Create Date</th>");
             sb.Append("<th style='font-weight: bold;border: 1px solid #ccc'>Status</th>");
@@ -374,34 +408,39 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 {
                     sb.Append("<tr>");
                 }
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}");
+                sb.Append("</td>");
 
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append($"{advance.Director.Name} {advance.Director.SecondName} {advance.Director.Surname}");
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append($"{advance.Director.Name} {advance.Director.SecondName} {advance.Director.Surname}");
+                sb.Append("</td>");
 
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.RequestedAmount);
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.RequestedAmount);
+                sb.Append("</td>");
 
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.Description);
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.Currency);
+                sb.Append("</td>");
 
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.CreateDate.ToShortDateString());
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.InstallmentCount);
+                sb.Append("</td>");
 
-                    sb.Append("<td style='border: 1px solid #ccc'>");
-                    sb.Append(advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
-                    sb.Append("</td>");
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.Description);
+                sb.Append("</td>");
 
-                    sb.Append("</tr>");
-                
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.CreateDate.ToShortDateString());
+                sb.Append("</td>");
 
-                totalAmount += advance.RequestedAmount;
+                sb.Append("<td style='border: 1px solid #ccc'>");
+                sb.Append(advance.Status == Domain.Enums.Status.Passive ? "In Pending" : "Approved");
+                sb.Append("</td>");
+
+                sb.Append("</tr>");
             }
 
             //Table end.
@@ -409,7 +448,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            Document pdfDoc = new Document(PageSize.A4, 4f, 4f, 30f, 10f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

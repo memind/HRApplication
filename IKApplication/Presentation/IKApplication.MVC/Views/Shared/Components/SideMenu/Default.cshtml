@@ -239,5 +239,16 @@
                 </a>
             </li>
         }
+        @if (area == "Personal")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="User" asp-action="StaffCards">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-account-multiple"></i>
+                    </span>
+                    <span class="menu-title">Company Staff</span>
+                </a>
+            </li>
+        }
     </ul>
 </nav>

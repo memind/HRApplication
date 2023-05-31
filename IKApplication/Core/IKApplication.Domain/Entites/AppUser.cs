@@ -31,12 +31,12 @@ namespace IKApplication.Domain.Entites
         public Guid CompanyId { get; set; }
         public Guid? AddressId { get; set; }
         public Guid TitleId { get; set; }   // Unvan
-        public Guid PatronId { get; set; }
+        public Guid? PatronId { get; set; }
         public Guid ProfessionId { get; set; }
 
         // Navigation Properties
         public Profession Profession { get; set; }   //meslek
-        public AppUser Patron { get; set; }
+        public AppUser? Patron { get; set; }
         public Company Company { get; set; }
         public Address? Address { get; set; }
         public Title Title { get; set; }

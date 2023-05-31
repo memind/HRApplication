@@ -24,7 +24,7 @@ namespace IKApplication.Application.VMs.UserVMs
         public Guid CompanyId { get; set; }
         public Guid TitleId { get; set; }
         public Guid ProfessionId { get; set; }
-        public Guid PatronId { get; set; }
+        public Guid? PatronId { get; set; }
         public AppUser Patron { get; set; }
         public string CompanyName { get; set; }
         public Title Title { get; set; }

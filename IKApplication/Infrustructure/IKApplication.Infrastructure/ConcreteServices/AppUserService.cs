@@ -59,7 +59,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     TitleId = x.TitleId,
                     JobStartDate = x.JobStartDate,
                     PhoneNumber = x.PhoneNumber,
-                    PatronId = x.PatronId,
+                    PatronId = (Guid)x.PatronId,
                 },
                 where: x => x.UserName == userName);
 

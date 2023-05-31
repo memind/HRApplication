@@ -29,6 +29,7 @@
                                         <th>Approved By</th>
                                         <th>Requested Amount</th>
                                         <th>Currency</th>
+                                        <th>Installment Count</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -52,6 +53,7 @@
                                             {
                                                 <td>&#x20AC;</td>
                                             }
+                                            <td>@item.InstallmentCount</td>
                                             @if (@item.Status == Status.Active || item.Status == Status.Modified)
                                             {
                                                 <td>
