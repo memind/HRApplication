@@ -307,6 +307,19 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             if (user == null && model.Password != null && model.Password == model.ConfirmPassword)
             {
+                #region Creating Users Photo
+                if (model.UploadPath != null)
+                {
+                    var resource = Directory.GetCurrentDirectory();
+                    var extension = Path.GetExtension(model.UploadPath.FileName);
+                    var imageName = Guid.NewGuid() + extension;
+                    var saveLocation = resource + "/wwwroot/images/UserPhotos/" + imageName;
+                    var stream = new FileStream(saveLocation, FileMode.Create);
+                    await model.UploadPath.CopyToAsync(stream);
+                    model.ImagePath = "/images/UserPhotos/" + imageName;
+                }
+                #endregion
+
                 var appUser = _mapper.Map<AppUser>(model);
                 appUser.UserName = model.Email;
                 appUser.Id = Guid.NewGuid();
@@ -332,6 +345,19 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
                 }
 
+                #region Creating Users Photo
+                if (model.UploadPath != null)
+                {
+                    var resource = Directory.GetCurrentDirectory();
+                    var extension = Path.GetExtension(model.UploadPath.FileName);
+                    var imageName = Guid.NewGuid() + extension;
+                    var saveLocation = resource + "/wwwroot/images/UserPhotos/" + imageName;
+                    var stream = new FileStream(saveLocation, FileMode.Create);
+                    await model.UploadPath.CopyToAsync(stream);
+                    user.ImagePath = "/images/UserPhotos/" + imageName;
+                }
+                #endregion
+
                 user.Name = model.Name;
                 user.SecondName = model.SecondName;
                 user.Surname = model.Surname;
@@ -341,7 +367,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.JobStartDate = model.JobStartDate;
                 user.IdentityNumber = model.IdentityNumber;
                 user.PersonalEmail = model.PersonalEmail;
-                user.ImagePath = model.ImagePath;
                 user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
                 user.PhoneNumber = model.PhoneNumber;
@@ -439,12 +464,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var companyUpdate = _mapper.Map<CompanyUpdateDTO>(companyMap);
 
             await _companyService.Update(companyUpdate);
-        }
-
-        public async Task<Guid> GetUserId(string userName)
-        {
-            AppUser user = await _userManager.FindByNameAsync(userName);
-            return user.Id;
         }
 
         public async Task<List<AppUserVM>> GetAllPassiveUsers()

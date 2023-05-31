@@ -157,5 +157,10 @@
             alert('You must be at least 18 years old to register.');
             event.preventDefault(); // Formun gönderilmesini engelle
         }
+
+        if (age >= 60) {
+            alert("You must be less than 60 years old!");
+            event.preventDefault();
+        }
     });
 </script>
