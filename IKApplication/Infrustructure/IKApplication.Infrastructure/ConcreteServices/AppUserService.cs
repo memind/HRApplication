@@ -418,7 +418,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 BirthDate = register.UserBirthDate,
                 IdentityNumber = register.UserIdentityNumber,
                 PersonalEmail = register.PersonalEmail,
-                Email = register.UserName + "." + register.UserSurname + "@" + register.CompanyName + ".com",
+                Email = register.UserName.ToLower() + "." + register.UserSurname.ToLower() + "@" + register.CompanyName + ".com",
                 PhoneNumber = register.UserPhoneNumber,
                 Password = register.UserPassword,
                 ConfirmPassword = register.UserConfirmPassword,

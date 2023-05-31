@@ -127,7 +127,7 @@ namespace IKApplication.MVC.Controllers
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { email = user.Email, Code = code });
                 string subject = "Password Reset";
-                string body = "To reset your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
+                string body = "To reset your password, please click the link below: hrapplication.azurewebsites.net" + callbackUrl;
 
                 _emailService.SendMail(user.Email, subject, body);
 

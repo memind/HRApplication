@@ -82,7 +82,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 var mailAdvance = await _cashAdvanceService.GetVMById(model.Id);
 
                 string subject = "New Advance Request Arrived";
-                string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
+                string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
 
                 _emailService.SendMail(mailAdvance.AdvanceTo.Patron.Email, subject, body);
                 return RedirectToAction("Index", "CashAdvance");
