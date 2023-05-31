@@ -102,6 +102,12 @@
                             </div>
 
                             <div class="form-group">
+                                <label asp-for="PersonalEmail" class="form-label">Personal Email</label><br />
+                                <span asp-validation-for="PersonalEmail" class="text-danger"></span>
+                                <input asp-for="PersonalEmail" type="email" class="form-control mb-3" placeholder="Enter Personal Email">
+                            </div>
+
+                            <div class="form-group">
                                 <label asp-for="PhoneNumber" class="form-label">Phone Number</label><br />
                                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                 <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" placeholder="Enter Phone Number">

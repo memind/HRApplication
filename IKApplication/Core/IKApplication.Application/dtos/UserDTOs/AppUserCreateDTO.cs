@@ -20,7 +20,8 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime? JobStartDate { get; set; }
         public string IdentityNumber { get; set; }
         public string? Role { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
+        public string? PersonalEmail { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string PhoneNumber { get; set; }
@@ -31,8 +32,8 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public Status Status => Status.Passive;
         public Guid CompanyId { get; set; }
         public Guid? PatronId { get; set; }
-        public Guid TitleId { get; set; }
-        public Guid ProfessionId { get; set; }
+        public Guid? TitleId { get; set; }
+        public Guid? ProfessionId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }
         public List<ProfessionVM>? Professions { get; set; }

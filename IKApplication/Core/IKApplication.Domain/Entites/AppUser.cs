@@ -24,22 +24,23 @@ namespace IKApplication.Domain.Entites
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }  // TC Kimlik No - Pasaport no vb.
         //public string? Role { get; set; }  //------------------------------------------------------
+        public string? PersonalEmail { get; set; }
         public DateTime JobStartDate { get; set; }  // işe başlama tarihi
         public string ImagePath { get; set; }  // Fotoğraf Yolu
         [NotMapped]   // DB ile bağlantı olmasın
         public IFormFile? UploadPath { get; set; }  // IFormFile usinglere eklendi.  (using Microsoft.AspNetCore.Http;)  bir tane resim seçeceğiz resmi tutabilmek için bunu kullanacağız. Veritabanı ile bağlantı olmadan.  ImagePath veritabanı ile bağlantılı olacak, resmin yolu
         public Guid CompanyId { get; set; }
         public Guid? AddressId { get; set; }
-        public Guid TitleId { get; set; }   // Unvan
+        public Guid? TitleId { get; set; }   // Unvan
         public Guid? PatronId { get; set; }
-        public Guid ProfessionId { get; set; }
+        public Guid? ProfessionId { get; set; }
 
         // Navigation Properties
-        public Profession Profession { get; set; }   //meslek
+        public Profession? Profession { get; set; }   //meslek
         public AppUser? Patron { get; set; }
         public Company Company { get; set; }
         public Address? Address { get; set; }
-        public Title Title { get; set; }
+        public Title? Title { get; set; }
         public List<Expense>? Expenses { get; set; }
         public List<AppUser>? Employees { get; set; }
         public List<CashAdvance>? CashAdvances { get; set; }

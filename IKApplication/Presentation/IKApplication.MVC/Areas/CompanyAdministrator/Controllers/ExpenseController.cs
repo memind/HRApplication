@@ -83,7 +83,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 var mailExpense = await _expenseService.GetVMById(model.Id);
 
                 string subject = "New Expense Request Arrived";
-                string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
+                string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
 
                 _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
 

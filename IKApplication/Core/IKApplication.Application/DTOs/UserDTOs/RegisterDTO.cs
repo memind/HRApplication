@@ -19,7 +19,8 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime UserBirthDate { get; set; }
         public string UserIdentityNumber { get; set; }
         public string UserTitle { get; set; }
-        public string UserEmail { get; set; }
+        public string? UserEmail { get; set; }
+        public string PersonalEmail { get; set; }
         public string UserPassword { get; set; }
         public string UserPhoneNumber { get; set; }
         public string UserConfirmPassword { get; set; }

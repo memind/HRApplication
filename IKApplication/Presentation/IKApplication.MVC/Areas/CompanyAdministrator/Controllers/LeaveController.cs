@@ -159,7 +159,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 var mailLeave = await _leaveService.GetVMById(model.Id);
 
                 string subject = "New Leave Request Arrived";
-                string body = $"The user {mailLeave.AppUser.Name} {mailLeave.AppUser.SecondName} {mailLeave.AppUser.Surname} requested a leave. See request by clicking the link: https://ikapp.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
+                string body = $"The user {mailLeave.AppUser.Name} {mailLeave.AppUser.SecondName} {mailLeave.AppUser.Surname} requested a leave. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
 
                 _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
 

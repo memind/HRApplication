@@ -93,7 +93,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             }
 
             var subject = "Registration Request Accepted";
-            var body = "Your registration request has been accepted. To Login, click the link : ikapp.azurewebsites.net";
+            var body = "Your registration request has been accepted. To Login, click the link : hrapplication.azurewebsites.net";
             _emailService.SendMail(user.Email, subject, body);
 
             return RedirectToAction("RegistrationList");

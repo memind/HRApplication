@@ -148,12 +148,13 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.Id = Guid.NewGuid();
                 model.Password = "123";
                 model.ConfirmPassword = "123";
+                var company = await _companyService.GetById(model.CompanyId);
+                model.Email = model.Name.ToLower() + "." + model.Surname.ToLower() + "@" + company.Name + ".com";
                 string role = model.Role;
 
                 if (role == "companyManager")   // role burada belirlenecek
                 {
                     await _appUserService.CreateUser(model, "Company Administrator");
-                    var company = await _companyService.GetById(model.CompanyId);
                     await _appUserService.AddCompanyManager(model, company);
                 }
                 else if (role == "personal")
@@ -167,9 +168,9 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("SetPassword", "User", new { email = user.Email, Code = code });
                 string subject = "Set Your Password";
-                string body = "To set your password, please click the link below: ikapp.azurewebsites.net" + callbackUrl;
+                string body = "To set your password, please click the link below: hrapplication.azurewebsites.net" + callbackUrl;
 
-                _emailService.SendMail(model.Email, subject, body);
+                _emailService.SendMail(model.PersonalEmail, subject, body);
 
                 _toast.AddSuccessToastMessage(Messages.CompanyAdminAndPersonal.Create(model.Email), new ToastrOptions { Title = "Creating User" });
                 return RedirectToAction("Index", "User");
