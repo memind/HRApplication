@@ -1,0 +1,34 @@
+﻿@model List<AppUserVM>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Staff</h4>
+        <div class="col-md-12">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 grid-margin stretch-card">
+                        <div class="card" style="border-color: #33394a;">
+                            <div class="card-body">
+                                <div class="d-flex flex-row">
+                                    <img src="@item.ImagePath" class="img-lg rounded" alt="umage">
+                                    <div class="ms-3">
+                                        <h6>@item.FullName</h6>
+                                        <p class="mt-2 text-success font-weight-bold">@item.Title.Name - @item.Profession.Name</p>
+                                        <p class="text-muted">@item.Email</p>
+                                        <p class="text-muted">@item.PhoneNumber</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <a asp-controller="User" asp-action="Index" class="ms-4 mb-2 mt-0">
+            <button class="btn btn-outline-info">Back to List</button>
+        </a>
+    </div>
+</div>

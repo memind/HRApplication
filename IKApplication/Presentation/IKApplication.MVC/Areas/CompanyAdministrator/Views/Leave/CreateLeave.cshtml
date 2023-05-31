@@ -14,17 +14,17 @@
                                 <div class="form-group">
                                     <label asp-for="StartDate" class="form-label">Start Date</label><br />
                                     <span asp-validation-for="StartDate" class="text-danger"></span>
-                                    <input asp-for="StartDate" id="StartDate" type="date" class="form-control mb-3" onchange="calculateDuration()">
+                                    <input asp-for="StartDate" type="date" class="form-control mb-3">
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="EndDate" class="form-label">End Date</label><br />
                                     <span asp-validation-for="EndDate" class="text-danger"></span>
-                                    <input asp-for="EndDate" id="EndDate" type="date" class="form-control mb-3" onchange="calculateDuration()">
+                                    <input asp-for="EndDate" type="date" class="form-control mb-3">
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Explanation" class="form-label">Explanation</label><br />
                                     <span asp-validation-for="Explanation" class="text-danger"></span>
-                                    <input asp-for="Explanation" type="text" class="form-control mb-3" placeholder="Enter Explanation" onfocus="calculateDuration()">
+                                    <input asp-for="Explanation" type="text" class="form-control mb-3" placeholder="Enter Explanation">
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="LeaveTypes">Leave Type</label><br />
@@ -33,7 +33,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="TotalLeaveDays" class="form-label">Total Leave Days</label><br />
-                                    <input asp-for="TotalLeaveDays" type="number" class="form-control mb-3" readonly>
+                                    <span asp-validation-for="TotalLeaveDays" class="text-danger"></span>
+                                    <input asp-for="TotalLeaveDays" type="number" class="form-control mb-3">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Approved By</label><br />
@@ -53,23 +54,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function calculateDuration() {
-        var startDate = new Date(document.getElementById("StartDate").value);
-        var endDate = new Date(document.getElementById("EndDate").value);
-        var millisecondsPerDay = 1000 * 60 * 60 * 24;
-        var duration = 0;
-
-        // Loop through each day in the date range
-        while (startDate <= endDate) {
-            // Increment duration if it's not a Saturday or Sunday
-            if (startDate.getDay() !== 6 && startDate.getDay() !== 0) {
-                duration++;
-            }
-            startDate.setTime(startDate.getTime() + millisecondsPerDay);
-        }
-
-        document.getElementById("TotalLeaveDays").value = duration;
-    }
-</script>

@@ -170,7 +170,7 @@
         {
             public static string Create()
             {
-                return $"Expense created successfully!";
+                return $"Expense created successfully! The request email has been sent to your patron!";
             }
             public static string Update()
             {
@@ -194,7 +194,7 @@
         {
             public static string Create()
             {
-                return $"Advance created successfully!";
+                return $"Advance created successfully! The request email has been sent to your patron!";
             }
             public static string Update()
             {
@@ -218,7 +218,7 @@
         {
             public static string Create()
             {
-                return $"Leave created successfully!";
+                return $"Leave created successfully! The request email has been sent to your patron!";
             }
             public static string Update()
             {

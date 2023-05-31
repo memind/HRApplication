@@ -12,6 +12,7 @@ namespace IKApplication.Application.VMs.CashAdvanceVMs
         public AppUser AdvanceTo { get; set; }
         public PaymentStatus IsPaymentProcessed { get; set; }
         public DateTime? FinalDateRequest { get; set; }
+        public int InstallmentCount { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }

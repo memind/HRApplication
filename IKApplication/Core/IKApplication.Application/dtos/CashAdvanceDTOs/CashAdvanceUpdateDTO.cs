@@ -13,5 +13,6 @@ namespace IKApplication.Application.dtos.CashAdvanceDTOs
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
         public Currency Currency { get; set; }
+        public int InstallmentCount { get; set; }
     }
 }

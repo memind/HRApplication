@@ -77,6 +77,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         UpdateDate = x.UpdateDate,
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
+                        InstallmentCount = x.InstallmentCount,
                         AdvanceToId = x.AdvanceToId,
                         DirectorId = x.DirectorId,
                         Currency = x.Currency
@@ -105,6 +106,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         FinalDateRequest = x.FinalDateRequest,
                         CreateDate = x.CreateDate,
                         UpdateDate = x.UpdateDate,
+                        InstallmentCount = x.InstallmentCount,
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
@@ -157,6 +159,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         UpdateDate = x.UpdateDate,
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
+                        InstallmentCount = x.InstallmentCount,
                         AdvanceToId = x.AdvanceToId,
                         DirectorId = x.DirectorId,
                         Currency = x.Currency
@@ -196,6 +199,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         DeleteDate = x.DeleteDate,
                         CompanyId = x.CompanyId,
                         AdvanceToId = x.AdvanceToId,
+                        InstallmentCount = x.InstallmentCount,
                         DirectorId = x.DirectorId,
                         Currency = x.Currency
                     },

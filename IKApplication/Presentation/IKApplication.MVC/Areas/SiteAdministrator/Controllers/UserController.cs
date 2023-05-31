@@ -118,6 +118,9 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             var user = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
             user.Professions = await _professionService.GetAllProfessions();
+            var patron = await _appUserService.GetCurrentUserInfo(user.Id);
+
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             return View("Update", user);
         }
 
@@ -125,7 +128,11 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var user = await _appUserService.GetById(id);
+            var patron = await _appUserService.GetCurrentUserInfo(id);
+
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             ViewBag.Title = "Update User";
+
             user.Titles = await _titleService.GetCompanyTitles(user.CompanyId);
             user.Professions = await _professionService.GetAllProfessions();
             return View("Update", user);
@@ -141,7 +148,9 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
                 _toast.AddSuccessToastMessage(Messages.User.Update(user.Email), new ToastrOptions { Title = "Updating User" });
                 return RedirectToAction("Index", "Dashboard");
             }
+            var patron = await _appUserService.GetCurrentUserInfo(user.Id);
 
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating User" });
             return View(user);
         }

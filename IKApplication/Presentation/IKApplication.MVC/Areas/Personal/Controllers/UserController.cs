@@ -38,11 +38,23 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         {
             return RedirectToAction("Index","Dashboard");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> StaffCards()
+        {
+            var user = await _appUserService.GetByUserName(User.Identity.Name);
+            var users = await _appUserService.GetUsersByCompany(user.CompanyId);
+            return View(users);
+        }
+
         [HttpGet]
         public async Task<IActionResult> ProfileDetails()
         {
             var personal = await _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Title = "Profile Details";
+            var patron = await _appUserService.GetCurrentUserInfo(personal.Id);
+
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             personal.Professions = await _professionService.GetAllProfessions();
             return View("Update", personal);
         }
@@ -53,6 +65,9 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             ViewBag.Title = "Update Personal";
             ViewBag.Area = "Personal";
             var user = await _appUserService.GetById(id);
+            var patron = await _appUserService.GetCurrentUserInfo(id);
+
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             user.Titles = await _titleService.GetCompanyTitles(user.CompanyId);
             user.Professions = await _professionService.GetAllProfessions();
             return View(user);
@@ -78,6 +93,9 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
             }
 
             personal.Titles = await _titleService.GetCompanyTitles(personal.CompanyId);
+            var patron = await _appUserService.GetCurrentUserInfo(personal.Id);
+
+            ViewBag.Patron = $"{patron.Patron.Name} {patron.Patron.SecondName} {patron.Patron.Surname}";
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Personal" });
             return View(personal);
         }
