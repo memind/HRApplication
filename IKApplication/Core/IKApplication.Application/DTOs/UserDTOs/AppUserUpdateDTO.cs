@@ -20,6 +20,7 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime BirthDate { get; set; }
         public string IdentityNumber { get; set; }
         public string Email { get; set; }
+        public string? PersonalEmail { get; set; }
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
         public string PhoneNumber { get; set; }
@@ -31,9 +32,9 @@ namespace IKApplication.Application.DTOs.UserDTOs
         public DateTime UpdateDate => DateTime.Now;
         public Status Status => Status.Modified;
         public Guid CompanyId { get; set; }
-        public Guid TitleId { get; set; }
+        public Guid? TitleId { get; set; }
         public Guid PatronId { get; set; }
-        public Guid ProfessionId { get; set; }
+        public Guid? ProfessionId { get; set; }
         public Guid? AddressId { get; set; }
         public List<CompanyVM>? Companies { get; set; }
         public List<TitleVM>? Titles { get; set; }

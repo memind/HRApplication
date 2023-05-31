@@ -148,12 +148,13 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                 model.Id = Guid.NewGuid();
                 model.Password = "123";
                 model.ConfirmPassword = "123";
+                var company = await _companyService.GetById(model.CompanyId);
+                model.Email = model.Name + "." + model.Surname + "@" + company.Name + ".com";
                 string role = model.Role;
 
                 if (role == "companyManager")   // role burada belirlenecek
                 {
                     await _appUserService.CreateUser(model, "Company Administrator");
-                    var company = await _companyService.GetById(model.CompanyId);
                     await _appUserService.AddCompanyManager(model, company);
                 }
                 else if (role == "personal")

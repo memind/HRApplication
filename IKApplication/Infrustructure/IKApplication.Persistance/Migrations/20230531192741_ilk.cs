@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IKApplication.Persistance.Migrations
 {
-    public partial class MED_Penny_Profession : Migration
+    public partial class ilk : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -167,12 +167,13 @@ namespace IKApplication.Persistance.Migrations
                     BloodGroup = table.Column<int>(type: "int", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdentityNumber = table.Column<string>(type: "nchar(11)", fixedLength: true, maxLength: 11, nullable: false),
+                    PersonalEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TitleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PatronId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PatronId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProfessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -317,6 +318,7 @@ namespace IKApplication.Persistance.Migrations
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     RequestedAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsPaymentProcessed = table.Column<int>(type: "int", nullable: false),
+                    InstallmentCount = table.Column<int>(type: "int", nullable: false),
                     FinalDateRequest = table.Column<DateTime>(type: "date", nullable: true),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),

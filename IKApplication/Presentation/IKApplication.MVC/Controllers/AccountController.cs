@@ -85,14 +85,14 @@ namespace IKApplication.MVC.Controllers
                 _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
 
                 string subject = "Registration Request Arrived";
-                string body = model.CompanyName + " sent a registration request. See request by clicking the link: https://ikapp.azurewebsites.net/SiteAdministrator/User/RegistrationList";
+                string body = model.CompanyName + " sent a registration request. See request by clicking the link: https://hrapplication.azurewebsites.net/SiteAdministrator/User/RegistrationList";
 
                 _emailService.SendMail(_configuration.GetSection("AdminEmails").GetSection("DefaultAdminEmail").Value, subject, body);
 
                 subject = "Registration Request Sent";
                 body = " Your registration request has been arrived. We will send you the result via Email.";
 
-                _emailService.SendMail(model.UserEmail, subject, body);
+                _emailService.SendMail(model.PersonalEmail, subject, body);
 
                 return RedirectToAction("Login", "Account");
             }

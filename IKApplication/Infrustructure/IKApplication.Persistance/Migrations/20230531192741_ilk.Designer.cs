@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IKApplication.Persistance.Migrations
 {
     [DbContext(typeof(IKAppDbContext))]
-    [Migration("20230530044749_MED_Penny_Profession")]
-    partial class MED_Penny_Profession
+    [Migration("20230531192741_ilk")]
+    partial class ilk
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,8 +139,11 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PatronId")
+                    b.Property<Guid?>("PatronId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PersonalEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -149,7 +152,8 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ProfessionId")
+                    b.Property<Guid?>("ProfessionId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecondName")
@@ -167,7 +171,8 @@ namespace IKApplication.Persistance.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<Guid>("TitleId")
+                    b.Property<Guid?>("TitleId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -237,6 +242,9 @@ namespace IKApplication.Persistance.Migrations
 
                     b.Property<DateTime?>("FinalDateRequest")
                         .HasColumnType("date");
+
+                    b.Property<int>("InstallmentCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("IsPaymentProcessed")
                         .HasColumnType("int");
@@ -656,8 +664,7 @@ namespace IKApplication.Persistance.Migrations
                     b.HasOne("IKApplication.Domain.Entites.AppUser", "Patron")
                         .WithMany("Employees")
                         .HasForeignKey("PatronId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IKApplication.Domain.Entites.Profession", "Profession")
                         .WithMany("AppUsers")
@@ -753,7 +760,7 @@ namespace IKApplication.Persistance.Migrations
             modelBuilder.Entity("IKApplication.Domain.Entites.Profession", b =>
                 {
                     b.HasOne("IKApplication.Domain.Entites.Company", "Company")
-                        .WithMany()
+                        .WithMany("Professions")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -849,6 +856,8 @@ namespace IKApplication.Persistance.Migrations
             modelBuilder.Entity("IKApplication.Domain.Entites.Company", b =>
                 {
                     b.Navigation("CompanyManagers");
+
+                    b.Navigation("Professions");
 
                     b.Navigation("Titles");
                 });

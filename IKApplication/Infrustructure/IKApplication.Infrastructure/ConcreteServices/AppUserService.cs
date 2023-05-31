@@ -10,6 +10,7 @@ using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 
 namespace IKApplication.Infrastructure.ConcreteServices
 {
@@ -53,6 +54,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     ProfessionId = x.ProfessionId,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CreateDate = x.CreateDate,
                     CompanyId = x.CompanyId,
@@ -107,6 +109,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     BloodGroup = x.BloodGroup,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
@@ -145,6 +148,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     BloodGroup = x.BloodGroup,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
@@ -200,6 +204,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     BloodGroup = x.BloodGroup,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
@@ -234,6 +239,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     BloodGroup = x.BloodGroup,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,
@@ -266,6 +272,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     UserSecondName = x.SecondName,
                     UserSurname = x.Surname,
                     UserTitle = x.Title.Name,
+                    PersonalEmail = x.PersonalEmail,
                     CompanyId = x.Company.Id,
                     CompanyName = x.Company.Name,
                     CompanySector = x.Company.Sector.Name,
@@ -333,6 +340,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 user.BirthDate = model.BirthDate;
                 user.JobStartDate = model.JobStartDate;
                 user.IdentityNumber = model.IdentityNumber;
+                user.PersonalEmail = model.PersonalEmail;
                 user.ImagePath = model.ImagePath;
                 user.TitleId = model.TitleId;
                 user.CreateDate = model.CreateDate;
@@ -409,7 +417,8 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 Profession = register.UserProfession,
                 BirthDate = register.UserBirthDate,
                 IdentityNumber = register.UserIdentityNumber,
-                Email = register.UserEmail,
+                PersonalEmail = register.PersonalEmail,
+                Email = register.UserName + "." + register.UserSurname + "@" + register.CompanyName + ".com",
                 PhoneNumber = register.UserPhoneNumber,
                 Password = register.UserPassword,
                 ConfirmPassword = register.UserConfirmPassword,
@@ -452,6 +461,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                     BloodGroup = x.BloodGroup,
                     BirthDate = x.BirthDate,
                     IdentityNumber = x.IdentityNumber,
+                    PersonalEmail = x.PersonalEmail,
                     ImagePath = x.ImagePath,
                     CompanyId = x.CompanyId,
                     TitleId = x.TitleId,

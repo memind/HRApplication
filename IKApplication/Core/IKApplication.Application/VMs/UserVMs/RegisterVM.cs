@@ -16,6 +16,7 @@ namespace IKApplication.Application.VMs.UserVMs
         public string FullName => UserName + " " + UserSecondName + " " + UserSurname;
         public string UserTitle { get; set; }
         public string UserEmail { get; set; }
+        public string? PersonalEmail { get; set; }
         public string CompanyName { get; set; }
         public string CompanySector { get; set; }
         public int NumberOfEmployees { get; set; }
