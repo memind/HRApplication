@@ -350,7 +350,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             //    stream.Close();
             //}
 
-            await _reportService.Create(report);
+            //await _reportService.Create(report);
 
             return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
