@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Create a USER</h5>
+                <h5 class="card-header">New Personal</h5>
                 <form id="form" asp-controller="User" asp-action="CreateCompanyManagerAndPersonal" method="post" enctype="multipart/form-data" onsubmit="return validateDate();">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
@@ -39,11 +39,12 @@
                                     <input asp-for="Name" type="text" class="form-control mb-3" placeholder="Enter Name">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group"/>
                                     <label asp-for="SecondName" class="form-label">Second Name</label><br />
                                     <span asp-validation-for="SecondName" class="text-danger"></span>
                                     <input asp-for="SecondName" type="text" class="form-control mb-3" placeholder="Enter Second Name">
-                                </div>
+
+                            </div>
 
                                 <div class="form-group">
                                     <label asp-for="Surname" class="form-label">Surname</label><br />
@@ -116,15 +117,18 @@
 
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-outline-primary btn-block">Add User</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-block">Add Personal</button>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </form>
-                <a asp-controller="User" asp-action="Index" class="ms-4 mb-2 mt-0">
-                    <button class="btn btn-outline-info">Back to List</button>
-                </a>
+                <div class="d-flex justify-content-center mb-2">
+                    <div class="col-md-2">
+                        <a asp-controller="User" asp-action="Index" class="ms-4 mb-2 mt-0">
+                            <button class="btn btn-outline-info">Back to List</button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -160,6 +164,9 @@
         // Şu anki tarihi al
         var now = new Date();
 
+        // 60 yıl öncesini al
+        var sixtyYearsAgo = new Date(now.getFullYear() - 60, now.getMonth(), now.getDate());
+
         // Giriş yapılan tarihi al
         var enteredDate = new Date(input.value);
         var jobDate = new Date(job.value);
@@ -180,6 +187,12 @@
         // Girilen tarih şuandan 2 ay öncesini geçiyorsa
         if (jobDate < twoMonthsAgo) {
             alert("You cannot select more than a 2 month ago from now as Start Date!");
+            return false;
+        }
+
+        // Girilen tarih şuandan 60 yıl öncesine denk geliyorsa
+        if (enteredDate <= sixtyYearsAgo) {
+            alert("Staff must be less than 60 years old!");
             return false;
         }
 

@@ -165,7 +165,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                     await _appUserService.CreateUser(model, "Personal");
 
                 }
-
+                model.Email = _appUserService.ReplaceInvalidChars(model.Name.ToLower()) + "." + _appUserService.ReplaceInvalidChars(model.Surname.ToLower()) + "@" + _appUserService.ReplaceInvalidChars(company.Name.ToLower()) + ".com";
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -235,7 +235,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                     string subject = "New Personal";
                     string body = $"Personal {mailUser.Name} {mailUser.SecondName} {mailUser.Surname} has been active.";
 
-                    _emailService.SendMail(mailUser.Patron.Email, subject, body);
+                    _emailService.SendMail(mailUser.Patron.PersonalEmail, subject, body);
 
                     _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Set(), new ToastrOptions { Title = "Success" });
                     return RedirectToAction("Login", "Account", new { Area = "" });
