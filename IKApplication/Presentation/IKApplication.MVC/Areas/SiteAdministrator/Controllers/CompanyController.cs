@@ -162,7 +162,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = $"All_Companies_Report_{date.Month}/{date.Year}",
-                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".xlsx",
+                ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".xlsx",
                 CreatorId = currentUser.Id,
                 FileType = FileType.xls,
             };
@@ -262,7 +262,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = $"All_Companies_Report_{date.Month}/{date.Year}",
-                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".pdf",
+                ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".pdf",
                 CreatorId = currentUser.Id,
                 FileType = FileType.pdf,
             };

@@ -338,7 +338,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
-                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".xlsx",
+                ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".xlsx",
                 CreatorId = user.Id,
                 FileType = FileType.xls,
             };
@@ -483,7 +483,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = $"Leave_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
-                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".pdf",
+                ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".pdf",
                 CreatorId = user.Id,
                 FileType = FileType.pdf,
             };
