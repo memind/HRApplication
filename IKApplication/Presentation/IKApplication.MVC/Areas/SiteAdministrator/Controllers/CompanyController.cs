@@ -15,6 +15,8 @@ using NToastNotify;
 using OfficeOpenXml;
 using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
+using IKApplication.Application.DTOs.ReportDTOs;
+using IKApplication.Domain.Enums;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
@@ -24,10 +26,15 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
     {
         private readonly ICompanyService _companyService;
         private readonly IToastNotification _toast;
-        public CompanyController(ICompanyService companyService, IToastNotification toast)
+        private readonly IReportService _reportService;
+        private readonly IAppUserService _appUserService;
+
+        public CompanyController(ICompanyService companyService, IToastNotification toast, IReportService reportService, IAppUserService appUserService)
         {
             _companyService = companyService;
             _toast = toast;
+            _reportService = reportService;
+            _appUserService = appUserService;
         }
 
         public async Task<IActionResult> Index()
@@ -65,6 +72,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             var endDate = new DateTime(date.Year, date.Month + 1, 1);
 
             List<CompanyVM> allCompanies = await _companyService.GetAllCompanies();
+            var currentUser = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Companies");
@@ -149,13 +157,34 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Companies_Report_{date.Month}/{date.Year}.xlsx");
+
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"All_Companies_Report_{date.Month}/{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".xlsx",
+                CreatorId = currentUser.Id,
+                FileType = FileType.xls,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                byte[] bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, (int)stream.Length);
+                file.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         [HttpGet]
         public async Task<FileResult> CompanyPDF()
         {
             List<CompanyVM> allCompanies = await _companyService.GetAllCompanies();
+            var currentUser = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
             var date = DateTime.Now;
 
             //Building an HTML string.
@@ -228,8 +257,27 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
             pdfDoc.Close();
-            return File(stream.ToArray(), "application/pdf", $"All_Companies_Report_{date.Month}/{date.Year}.pdf");
 
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"All_Companies_Report_{date.Month}/{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".pdf",
+                CreatorId = currentUser.Id,
+                FileType = FileType.pdf,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                var memoryStream = new MemoryStream(stream.ToArray());
+                byte[] bytes = new byte[memoryStream.Length];
+                memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+                file.Write(bytes, 0, bytes.Length);
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/pdf");
         }
     }
 }

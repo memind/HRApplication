@@ -132,6 +132,19 @@
                 </a>
             </li>
         }
+
+        @if (area == "CompanyAdministrator")
+        {
+            <li class="nav-item menu-items">
+                <a class="nav-link" asp-area="@area" asp-controller="Report" asp-action="Index">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-file-chart"></i>
+                    </span>
+                    <span class="menu-title">Reports</span>
+                </a>
+            </li>
+        }
+
         @if (area == "CompanyAdministrator")
         {
             <li class="nav-item nav-category">
@@ -160,6 +173,7 @@
                 </a>
             </li>
         }
+
         @if (area == "SiteAdministrator")
         {
             <li class="nav-item nav-category">
@@ -199,6 +213,7 @@
                 </a>
             </li>
         }
+
         @if (area == "Personal")
         {
             <li class="nav-item nav-category">

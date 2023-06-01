@@ -17,18 +17,16 @@
                                 <input asp-for="End" type="date" class="form-control">
                             </div>
                         </div>
-                        <div class="form-group d-flex justify-content-between">
-                        
-                            <button type="submit" class="btn btn-outline-primary btn-block" asp-controller="Leave" asp-action="LeaveExcel">Export to Excel</button>
-                            <button type="submit" class="btn btn-outline-primary btn-block" asp-controller="Leave" asp-action="LeavePDF">Export to PDF</button>
-                            <a asp-controller="Leave" asp-action="Index" class="ms-4 mb-2 mt-0">
-                                <button class="btn btn-outline-info">Back to List</button>
-                            </a>
+                        <div class="form-group mx-4">
+                            <button type="submit" class="btn btn-outline-primary btn-block" asp-controller="Leave" asp-action="LeaveExcel" formtarget="_blank">Export to Excel</button>
+                            <button type="submit" class="btn btn-outline-primary btn-block" asp-controller="Leave" asp-action="LeavePDF" formtarget="_blank">Export to PDF</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
+    <a asp-controller="Leave" asp-action="Index" class="ms-4 mb-2 mt-0">
+        <button class="btn btn-outline-info">Back to List</button>
+    </a>
 </div>

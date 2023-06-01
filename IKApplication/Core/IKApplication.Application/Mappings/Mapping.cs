@@ -5,6 +5,7 @@ using IKApplication.Application.dtos.TitleDTOs;
 using IKApplication.Application.DTOs.CompanyDTOs;
 using IKApplication.Application.DTOs.LeaveDTOs;
 using IKApplication.Application.DTOs.ProfessionDTOs;
+using IKApplication.Application.DTOs.ReportDTOs;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.DTOs.UserDTOs;
 using IKApplication.Application.VMs.CashAdvanceVMs;
@@ -53,6 +54,8 @@ namespace IKApplication.Application.Mappings
             CreateMap<Leave, LeaveVM>().ReverseMap();
             CreateMap<Leave, CreateLeaveDTO>().ReverseMap();
             CreateMap<Leave, UpdateLeaveDTO>().ReverseMap();
+
+            CreateMap<Report, CreateReportDTO>().ReverseMap();
         }
     }
 }

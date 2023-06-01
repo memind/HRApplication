@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.CashAdvanceDTOs;
-using IKApplication.Application.dtos.ExpenseDTOs;
 using IKApplication.Application.VMs.CashAdvanceVMs;
 using IKApplication.Application.VMs.ExcelVMs;
-using IKApplication.Application.VMs.ExpenseVMs;
-using IKApplication.Domain.Entites;
-using IKApplication.Infrastructure.ConcreteServices;
 using IKApplication.MVC.ResultMessages;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
@@ -18,7 +14,10 @@ using OfficeOpenXml;
 using System.Data;
 using System.Drawing;
 using System.Text;
-using static IKApplication.MVC.ResultMessages.Messages;
+using IKApplication.Application.DTOs.ReportDTOs;
+using IKApplication.Domain.Enums;
+using IKApplication.Application.VMs.UserVMs;
+using Microsoft.VisualBasic.FileIO;
 
 namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 {
@@ -32,7 +31,8 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
         private readonly IToastNotification _toast;
-        public CashAdvanceController(IMapper mapper, IToastNotification toast, IAppUserService appUserService, ICompanyService companyService, ICashAdvanceService cashAdvanceService, IEmailService emailService)
+        private readonly IReportService _reportService;
+        public CashAdvanceController(IMapper mapper, IToastNotification toast, IAppUserService appUserService, ICompanyService companyService, ICashAdvanceService cashAdvanceService, IEmailService emailService, IReportService reportService)
         {
             _mapper = mapper;
             _toast = toast;
@@ -40,6 +40,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             _companyService = companyService;
             _cashAdvanceService = cashAdvanceService;
             _emailService = emailService;
+            _reportService = reportService;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -331,8 +332,29 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.xlsx");
+
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".xlsx",
+                CreatorId = user.Id,
+                FileType = FileType.xls,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                byte[] bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, (int)stream.Length);
+                file.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
+
         [HttpPost]
         public async Task<FileResult> CashAdvancePDF(ExcelDateVM dates)
         {
@@ -453,8 +475,27 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
             pdfDoc.Close();
-            return File(stream.ToArray(), "application/pdf", $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}.pdf");
 
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".pdf",
+                CreatorId = user.Id,
+                FileType = FileType.pdf,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                var memoryStream = new MemoryStream(stream.ToArray());
+                byte[] bytes = new byte[memoryStream.Length];
+                memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+                file.Write(bytes, 0, bytes.Length);
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/pdf");
         }
     }
 }

@@ -48,6 +48,7 @@ namespace IKApplication.Domain.Entites
         public List<Leave>? ApproveLeaves { get; set; }
         public List<Expense>? ApproveExpenses { get; set; }
         public List<CashAdvance>? ApproveCashAdvances { get; set; }
+        public List<Report>? Reports { get; set; }
 
         public AppUser()
         {
@@ -58,6 +59,7 @@ namespace IKApplication.Domain.Entites
             Expenses = new List<Expense>();
             ApproveLeaves = new List<Leave>();
             Leaves = new List<Leave>();
+            Reports = new List<Report>();
         }
     }
 }

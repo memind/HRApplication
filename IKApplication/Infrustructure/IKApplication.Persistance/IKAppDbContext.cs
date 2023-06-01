@@ -22,6 +22,7 @@ namespace IKApplication.Persistance
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<CashAdvance> CashAdvances { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,7 @@ namespace IKApplication.Persistance
             builder.ApplyConfiguration(new LeaveConfig());
             builder.ApplyConfiguration(new ProfessionConfig());
             builder.ApplyConfiguration(new CashAdvanceConfig());
+            builder.ApplyConfiguration(new ReportConfig());
 
             //SeedData.Seed(builder);
             base.OnModelCreating(builder);

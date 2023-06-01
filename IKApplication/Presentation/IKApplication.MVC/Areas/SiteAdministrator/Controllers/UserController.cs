@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Text;
 using static IKApplication.MVC.ResultMessages.Messages;
 using IKApplication.Domain.Entites;
+using IKApplication.Application.DTOs.ReportDTOs;
 
 namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 {
@@ -31,8 +32,9 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         private readonly ITitleService _titleService;
         private readonly IToastNotification _toast;
         private readonly IEmailService _emailService;
+        private readonly IReportService _reportService;
 
-        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast, IEmailService emailService, IProfessionService professionService, ITitleService titleService)
+        public UserController(IAppUserService appUserSerives, ICompanyService companyService, IToastNotification toast, IEmailService emailService, IProfessionService professionService, ITitleService titleService, IReportService reportService)
         {
             _appUserService = appUserSerives;
             _companyService = companyService;
@@ -40,6 +42,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             _emailService = emailService;
             _professionService = professionService;
             _titleService = titleService;
+            _reportService = reportService;
         }
 
         [HttpGet]
@@ -172,6 +175,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             var date = DateTime.Now;
 
             List<AppUserVM> allUsersList = await _appUserService.GetAllUsers();
+            var currentUser = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             ExcelPackage pck = new ExcelPackage(stream);
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Users");
@@ -277,7 +281,27 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}.xlsx");
+
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".xlsx",
+                CreatorId = currentUser.Id,
+                FileType = FileType.xls,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                byte[] bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, (int)stream.Length);
+                file.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         [HttpGet]
@@ -285,6 +309,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
         {
             // ffc0cb (pembe)
             var allUsers = await _appUserService.GetAllUsers();
+            var currentUser = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             var date = DateTime.Now;
 
@@ -395,8 +420,27 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
             pdfDoc.Close();
-            return File(stream.ToArray(), "application/pdf", $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}.pdf");
 
+            var report = new CreateReportDTO()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"All_Users_Report_{date.Day}/{date.Month}/{date.Year}",
+                ReportPath = "..\\IKApplication.MVC\\wwwroot\\Reports\\" + Guid.NewGuid() + ".pdf",
+                CreatorId = currentUser.Id,
+                FileType = FileType.pdf,
+            };
+
+            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            {
+                var memoryStream = new MemoryStream(stream.ToArray());
+                byte[] bytes = new byte[memoryStream.Length];
+                memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+                file.Write(bytes, 0, bytes.Length);
+            }
+
+            await _reportService.Create(report);
+
+            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/pdf");
         }
     }
 }
