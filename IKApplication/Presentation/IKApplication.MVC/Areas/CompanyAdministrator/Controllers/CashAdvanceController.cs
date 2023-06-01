@@ -332,15 +332,16 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
             stream.Position = 0;
+            var ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".xlsx";
 
-            var report = new CreateReportDTO()
-            {
-                Id = Guid.NewGuid(),
-                Name = $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
-                ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".xlsx",
-                CreatorId = user.Id,
-                FileType = FileType.xls,
-            };
+            //var report = new CreateReportDTO()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Name = $"Cash_Advance_Report_{startDate.Day}{startDate.Month}{startDate.Year}_{endDateHours.Day}{endDateHours.Month}{endDateHours.Year}_{date.Day}{date.Month}{date.Year}",
+            //    ReportPath = "..\\Reports\\" + Guid.NewGuid() + ".xlsx",
+            //    CreatorId = user.Id,
+            //    FileType = FileType.xls,
+            //};
 
             //using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
             //{
@@ -352,7 +353,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             //await _reportService.Create(report);
 
-            return new FileStreamResult(new FileStream(report.ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return new FileStreamResult(new FileStream(ReportPath, FileMode.Open, FileAccess.Read), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         [HttpPost]
