@@ -342,13 +342,13 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 FileType = FileType.xls,
             };
 
-            using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
-            {
-                byte[] bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, (int)stream.Length);
-                file.Write(bytes, 0, bytes.Length);
-                stream.Close();
-            }
+            //using (FileStream file = new FileStream(report.ReportPath, FileMode.Create, System.IO.FileAccess.Write))
+            //{
+            //    byte[] bytes = new byte[stream.Length];
+            //    stream.Read(bytes, 0, (int)stream.Length);
+            //    file.Write(bytes, 0, bytes.Length);
+            //    stream.Close();
+            //}
 
             await _reportService.Create(report);
 
