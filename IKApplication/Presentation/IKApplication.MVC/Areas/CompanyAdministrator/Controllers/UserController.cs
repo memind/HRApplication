@@ -232,7 +232,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                     string subject = "New Personal";
                     string body = $"Personal {mailUser.Name} {mailUser.SecondName} {mailUser.Surname} has been active.";
 
-                    _emailService.SendMail(mailUser.Patron.Email, subject, body);
+                    _emailService.SendMail(mailUser.Patron.PersonalEmail, subject, body);
 
                     _toast.AddSuccessToastMessage(Messages.ResetPasswordMessage.Set(), new ToastrOptions { Title = "Success" });
                     return RedirectToAction("Login", "Account", new { Area = "" });
