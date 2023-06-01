@@ -24,5 +24,6 @@ namespace IKApplication.Application.AbstractServices
         Task<RegisterDTO> CreateRegister();
         Task RegisterUserWithCompany(RegisterDTO register, string role);
         Task AddCompanyManager(AppUserCreateDTO user, CompanyUpdateDTO company);
+        string ReplaceInvalidChars(string name);
     }
 }

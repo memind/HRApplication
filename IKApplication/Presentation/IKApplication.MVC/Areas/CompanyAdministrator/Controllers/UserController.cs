@@ -162,7 +162,7 @@ namespace IKApplication.MVC.CompanyAdministratorControllers
                     await _appUserService.CreateUser(model, "Personal");
 
                 }
-
+                model.Email = _appUserService.ReplaceInvalidChars(model.Name.ToLower()) + "." + _appUserService.ReplaceInvalidChars(model.Surname.ToLower()) + "@" + _appUserService.ReplaceInvalidChars(company.Name.ToLower()) + ".com";
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);

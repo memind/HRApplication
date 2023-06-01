@@ -321,7 +321,9 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 #endregion
 
                 var appUser = _mapper.Map<AppUser>(model);
-                appUser.UserName = model.Email;
+                var company = await _companyService.GetById(model.CompanyId);
+                appUser.Email = ReplaceInvalidChars(appUser.Name.ToLower()) + "." + ReplaceInvalidChars(appUser.Surname.ToLower()) + "@" + ReplaceInvalidChars(company.Name.ToLower()) + ".com";
+                appUser.UserName = appUser.Email;
                 appUser.Id = Guid.NewGuid();
 
                 var result = await _userManager.CreateAsync(appUser, string.IsNullOrEmpty(model.Password) ? "" : model.Password);
@@ -443,7 +445,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 BirthDate = register.UserBirthDate,
                 IdentityNumber = register.UserIdentityNumber,
                 PersonalEmail = register.PersonalEmail,
-                Email = register.UserName.ToLower() + "." + register.UserSurname.ToLower() + "@" + register.CompanyName + ".com",
+                Email = ReplaceInvalidChars(register.UserName.ToLower()) + "." + ReplaceInvalidChars(register.UserSurname.ToLower()) + "@" + ReplaceInvalidChars(register.CompanyName.ToLower()) + ".com",
                 PhoneNumber = register.UserPhoneNumber,
                 Password = register.UserPassword,
                 ConfirmPassword = register.UserConfirmPassword,
@@ -502,6 +504,58 @@ namespace IKApplication.Infrastructure.ConcreteServices
             }
 
             return users;
+        }
+
+        public string ReplaceInvalidChars(string name)
+        {
+            return name.Replace("İ", "I")
+                 .Replace("ı", "i")
+                 .Replace("Ğ", "G")
+                 .Replace("ğ", "g")
+                 .Replace("Ü", "U")
+                 .Replace("ü", "u")
+                 .Replace("ş", "s")
+                 .Replace("Ş", "S")
+                 .Replace("Ö", "O")
+                 .Replace("ö", "o")
+                 .Replace("Ç", "C")
+                 .Replace("ç", "c")
+                 .Replace("é", "")
+                 .Replace("!", "")
+                 .Replace("'", "")
+                 .Replace("^", "")
+                 .Replace("+", "")
+                 .Replace("%", "")
+                 .Replace("/", "")
+                 .Replace("(", "")
+                 .Replace(")", "")
+                 .Replace("=", "")
+                 .Replace("?", "")
+                 .Replace("_", "")
+                 .Replace("*", "")
+                 .Replace("æ", "")
+                 .Replace("ß", "")
+                 .Replace("@", "")
+                 .Replace("€", "")
+                 .Replace("<", "")
+                 .Replace(">", "")
+                 .Replace("#", "")
+                 .Replace("$", "")
+                 .Replace("½", "")
+                 .Replace("{", "")
+                 .Replace("[", "")
+                 .Replace("]", "")
+                 .Replace("}", "")
+                 .Replace(@"\", "")
+                 .Replace("|", "")
+                 .Replace("~", "")
+                 .Replace("¨", "")
+                 .Replace(",", "")
+                 .Replace(";", "")
+                 .Replace("`", "")
+                 .Replace(".", "")
+                 .Replace(":", "")
+                 .Replace(" ", "");
         }
     }
 }
