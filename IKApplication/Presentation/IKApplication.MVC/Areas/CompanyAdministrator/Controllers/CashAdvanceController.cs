@@ -470,7 +470,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 4f, 4f, 30f, 10f);
+            Document pdfDoc = new Document(PageSize.A3, 4f, 4f, 30f, 10f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

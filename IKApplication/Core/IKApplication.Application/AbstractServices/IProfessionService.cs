@@ -5,8 +5,8 @@ namespace IKApplication.Application.AbstractServices
 {
     public interface IProfessionService
     {
-        Task Create(ProfessionCreateDTO createTitleDTO);
-        Task Update(ProfessionUpdateDTO titleUpdateDTO);
+        Task<bool> Create(ProfessionCreateDTO createTitleDTO);
+        Task<bool> Update(ProfessionUpdateDTO titleUpdateDTO);
         Task Delete(Guid titleId);
         Task Recover(Guid titleId);
         Task<List<ProfessionVM>> GetAllProfessions();

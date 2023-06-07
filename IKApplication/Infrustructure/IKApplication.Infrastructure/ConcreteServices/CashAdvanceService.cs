@@ -47,6 +47,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 advance.Currency = updateCashAdvanceDTO.Currency;
                 advance.Description = updateCashAdvanceDTO.Description;
                 advance.RequestedAmount = updateCashAdvanceDTO.RequestedAmount;
+                advance.FinalDateRequest = updateCashAdvanceDTO.FinalDateRequest;
                 await _cashAdvanceRepository.Update(advance);
             }
         }
@@ -130,6 +131,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         Id = x.Id,
                         Description = x.Description,
                         RequestedAmount = x.RequestedAmount,
+                        FinalDateRequest = (DateTime)x.FinalDateRequest,
                         AdvanceToId = x.AdvanceToId,
                         Currency = x.Currency
                     },

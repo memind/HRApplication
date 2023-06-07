@@ -6,8 +6,8 @@ namespace IKApplication.Application.AbstractServices
 {
     public interface ITitleService
     {
-        Task Create(TitleCreateDTO createTitleDTO);
-        Task Update(TitleUpdateDTO titleUpdateDTO);
+        Task<bool> Create(TitleCreateDTO createTitleDTO);
+        Task<bool> Update(TitleUpdateDTO titleUpdateDTO);
         Task Delete(Guid titleId);
         Task Recover(Guid titleId);
         Task<List<TitleVM>> GetAllTitles();

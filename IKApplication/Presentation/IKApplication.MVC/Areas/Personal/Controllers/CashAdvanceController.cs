@@ -60,15 +60,6 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         public async Task<IActionResult> Create(CashAdvanceCreateDTO model)
         {
             var advanceTo = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            //var advanceToMap = _mapper.Map<Domain.Entites.AppUser>(advanceTo);
-
-            //var company = await _companyService.GetById(advanceTo.CompanyId);
-            //var companyMap = _mapper.Map<Domain.Entites.Company>(company);
-
-            //var companyManagers = await _appUserService.GetUsersByRole("Company Administrator");
-            //var companyManager = companyManagers.Where(x => x.CompanyId == advanceTo.CompanyId).First();
-
-            //var companyManagerMap = _mapper.Map<AppUser>(companyManager);
 
             if (ModelState.IsValid)
             {

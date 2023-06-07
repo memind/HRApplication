@@ -9,6 +9,7 @@ using IKApplication.Application.VMs.TitleVMs;
 using IKApplication.Domain.Entites;
 using IKApplication.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,24 +29,58 @@ namespace IKApplication.Infrastructure.ConcreteServices
             _mapper = mapper;
         }
 
-        public async Task Create(ProfessionCreateDTO createProfessionDTO)
+        public async Task<bool> Create(ProfessionCreateDTO createProfessionDTO)
         {
             var model = _mapper.Map<Profession>(createProfessionDTO);
-            await _professionRepository.Create(model);
+
+            var companyProfessions = await GetCompanyProfessionsWithDeleted(createProfessionDTO.CompanyId);
+            bool validation = true;
+
+            foreach (var profession in companyProfessions)
+            {
+                if (createProfessionDTO.Name.ToLower() == profession.Name.ToLower())
+                {
+                    validation = false;
+                }
+            }
+
+            if (validation)
+            {
+                await _professionRepository.Create(model);
+                return true;
+            }
+
+            return false;
         }
 
-        public async Task Update(ProfessionUpdateDTO professionUpdateDTO)
+        public async Task<bool> Update(ProfessionUpdateDTO professionUpdateDTO)
         {
+            var companyProfessions = await GetCompanyProfessionsWithDeleted(professionUpdateDTO.CompanyId);
+            bool validation = true;
+
+            foreach (var updatingProfession in companyProfessions)
+            {
+                if (professionUpdateDTO.Name.ToLower() == updatingProfession.Name.ToLower())
+                {
+                    validation = false;
+                }
+            }
             var profession = await _professionRepository.GetDefault(x => x.Id == professionUpdateDTO.Id);
 
             if (profession != null)
             {
-                profession.Name = professionUpdateDTO.Name;
-                profession.UpdateDate = professionUpdateDTO.UpdateDate;
-                profession.Status = professionUpdateDTO.Status;
+                if (validation)
+                {
+                    profession.Name = professionUpdateDTO.Name;
+                    profession.UpdateDate = professionUpdateDTO.UpdateDate;
+                    profession.Status = professionUpdateDTO.Status;
 
-                await _professionRepository.Update(profession);
+                    await _professionRepository.Update(profession);
+                    return true;
+                }
             }
+
+            return false;
         }
 
         public async Task Delete(Guid professionId)
@@ -140,7 +175,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
         {
             var profession = await _professionRepository.GetDefault(x => x.Id == professionId);
 
-            profession.DeleteDate = null ;
+            profession.DeleteDate = null;
             profession.Status = Status.Modified;
 
             await _professionRepository.Update(profession);

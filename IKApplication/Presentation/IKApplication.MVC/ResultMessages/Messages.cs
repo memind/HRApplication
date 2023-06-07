@@ -126,6 +126,11 @@
             {
                 return $"Title recovered successfully!";
             }
+
+            public static string Duplicate(string operation)
+            {
+                return $"Title name is duplicating! Title has not been {operation}!";
+            }
         }
 
         public static class Profession
@@ -145,6 +150,10 @@
             public static string Recover()
             {
                 return $"Profession recovered successfully!";
+            }
+            public static string Duplicate(string operation)
+            {
+                return $"Profession name is duplicating! Profession has not been {operation}!";
             }
         }
 

@@ -1,1 +1,12 @@
-﻿@await Component.InvokeAsync("Dashboard", Model)
+﻿@model DashboardVM
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Patron</h4>
+                <p class="card-description"><h5>@ViewBag.PatronName</h5></p>
+            </div>
+        </div>
+    </div>
+</div>

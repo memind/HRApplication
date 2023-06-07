@@ -2,6 +2,7 @@
 using IKApplication.Application.AbstractRepositories;
 using IKApplication.Application.AbstractServices;
 using IKApplication.Application.dtos.TitleDTOs;
+using IKApplication.Application.DTOs.ProfessionDTOs;
 using IKApplication.Application.DTOs.TitleDTOs;
 using IKApplication.Application.VMs.ExpenseVMs;
 using IKApplication.Application.VMs.TitleVMs;
@@ -23,24 +24,59 @@ namespace IKApplication.Infrastructure.ConcreteServices
             _mapper = mapper;
         }
 
-        public async Task Create(TitleCreateDTO createTitleDTO)
+        public async Task<bool> Create(TitleCreateDTO createTitleDTO)
         {
             var model = _mapper.Map<Title>(createTitleDTO);
-            await _titleRepository.Create(model);
+
+            var companyTitles = await GetCompanyTitlesWithDeleted(createTitleDTO.CompanyId);
+            bool validation = true;
+
+            foreach (var title in companyTitles)
+            {
+                if (createTitleDTO.Name.ToLower() == title.Name.ToLower())
+                {
+                    validation = false;
+                }
+            }
+
+            if (validation)
+            {
+                await _titleRepository.Create(model);
+                return true;
+            }
+
+            return false;
         }
 
-        public async Task Update(TitleUpdateDTO titleUpdateDTO)
+        public async Task<bool> Update(TitleUpdateDTO titleUpdateDTO)
         {
+            var companyTitles = await GetCompanyTitlesWithDeleted(titleUpdateDTO.CompanyId);
+            bool validation = true;
+
+            foreach (var updatingTitle in companyTitles)
+            {
+                if (titleUpdateDTO.Name.ToLower() == updatingTitle.Name.ToLower())
+                {
+                    validation = false;
+                }
+            }
+
             var title = await _titleRepository.GetDefault(x => x.Id == titleUpdateDTO.Id);
 
             if (title != null)
             {
-                title.Name = titleUpdateDTO.Name;
-                title.UpdateDate = titleUpdateDTO.UpdateDate;
-                title.Status = titleUpdateDTO.Status;
+                if (validation)
+                {
+                    title.Name = titleUpdateDTO.Name;
+                    title.UpdateDate = titleUpdateDTO.UpdateDate;
+                    title.Status = titleUpdateDTO.Status;
 
-                await _titleRepository.Update(title);
+                    await _titleRepository.Update(title);
+                    return true;
+                }
             }
+
+            return false;
         }
 
         public async Task Delete(Guid titleId)

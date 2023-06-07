@@ -186,23 +186,39 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
             ws.Cells["A2"].Value = "Date";
             ws.Cells["B2"].Value = $"{date.Month} - {date.Year}";
 
-            ws.Cells["A5"].Value = "Full Name";
-            ws.Cells["B5"].Value = "Email Address";
-            ws.Cells["C5"].Value = "Identity Number";
-            ws.Cells["D5"].Value = "Birth Date";
-            ws.Cells["E5"].Value = "Blood Group";
-            ws.Cells["F5"].Value = "Company Name";
-            ws.Cells["G5"].Value = "Title";
-            ws.Cells["H5"].Value = "Profession";
-            ws.Cells["I5"].Value = "Role";
+            ws.Cells[string.Format("A5")].Value = "Total User Count: ";
+            ws.Cells[string.Format("A5")].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A5")].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A5")].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("A5")].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            ws.Cells["A5:I5"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells["A5:I5"].Style.Font.Bold = true;
+            ws.Cells[string.Format("B5")].Value = allUsersList.Count;
+            ws.Cells[string.Format("B5")].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B5")].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B5")].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells[string.Format("B5")].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-            int rowStart = 6;
+            ws.Cells[string.Format("A5")].Style.Font.Bold = true;
+            ws.Cells[string.Format("B5")].Style.Font.Bold = true;
+
+            ws.Cells["A6"].Value = "Full Name";
+            ws.Cells["B6"].Value = "Email Address";
+            ws.Cells["C6"].Value = "Identity Number";
+            ws.Cells["D6"].Value = "Birth Date";
+            ws.Cells["E6"].Value = "Blood Group";
+            ws.Cells["F6"].Value = "Company Name";
+            ws.Cells["G6"].Value = "Title";
+            ws.Cells["H6"].Value = "Profession";
+            ws.Cells["I6"].Value = "Role";
+
+            ws.Cells["A6:I6"].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:I6"].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:I6"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:I6"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            ws.Cells["A6:I6"].Style.Font.Bold = true;
+
+
+            int rowStart = 7;
 
             foreach (var userData in allUsersList)
             {
@@ -262,21 +278,6 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
                 rowStart++;
             }
-
-            ws.Cells[string.Format("H{0}", rowStart)].Value = "Total User Count: ";
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("I{0}", rowStart)].Value = allUsersList.Count;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-            ws.Cells[string.Format("I{0}", rowStart)].Style.Font.Bold = true;
-            ws.Cells[string.Format("H{0}", rowStart)].Style.Font.Bold = true;
 
             ws.Cells["A:AZ"].AutoFitColumns();
             pck.Save();
@@ -415,7 +416,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 5f, 10f, 30f, 5f);
+            Document pdfDoc = new Document(PageSize.A3, 5f, 10f, 30f, 5f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

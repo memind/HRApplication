@@ -11,6 +11,7 @@ namespace IKApplication.Application.dtos.CashAdvanceDTOs
         public decimal RequestedAmount { get; set; }
         public Guid AdvanceToId { get; set; }
         public DateTime UpdateDate => DateTime.Now;
+        public DateTime FinalDateRequest { get; set; }
         public Status Status => Status.Modified;
         public Currency Currency { get; set; }
         public int InstallmentCount { get; set; }

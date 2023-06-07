@@ -10,18 +10,9 @@
     </div>
     <ul class="nav">
         <li class="nav-item profile">
-            <div class="profile-desc">
-                <div class="profile-pic">
-                    <div class="count-indicator">
-                        <img class="img-xs rounded-circle " src="@Model.ImagePath" alt="">
-                        <span class="count bg-success"></span>
-                    </div>
-                    <div class="profile-name">
-                        <h5 class="mb-0 font-weight-normal">@Model.FullName</h5>
-                        <span>@Model.Roles[0]</span>
-                    </div>
-                </div>
-            </div>
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="mdi mdi-menu" style="color:#FFFFFF"></span>
+            </button>
         </li>
         @if (area == "CompanyAdministrator")
         {
