@@ -1,10 +1,10 @@
-﻿@model DashboardVM
+﻿@*Company admin*@
+@model DashboardVM
 
-
-@*Expense counts cards*@
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
+    @*Expense requests count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Expense Requests Count</h4>
                 <p class="card-description"><h5>@Model.CompanyExpenseRequestsCount</h5></p>
@@ -15,8 +15,10 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
+
+    @*Expense count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Approved Expenses Count</h4>
                 <p class="card-description"><h5>@Model.CompanyExpensesCount</h5></p>
@@ -26,12 +28,10 @@
             </div>
         </div>
     </div>
-</div>
 
-@*Cash advance counts cards*@
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
+    @*Cash advance requests count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Cash Advance Requests Count</h4>
                 <p class="card-description"><h5>@Model.CompanyCashAdvanceRequestsCount</h5></p>
@@ -42,10 +42,11 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
+    @*Cash advance count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
-                <h4 class="card-title">Total Approved Cash Advances Count</h4>
+                <h4 class="card-title">Total Approved Advances Count</h4>
                 <p class="card-description"><h5>@Model.CompanyCashAdvancesCount</h5></p>
                 <div class="d-flex gap-2 justify-content-center">
                     <a asp-controller="CashAdvance" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
@@ -53,12 +54,10 @@
             </div>
         </div>
     </div>
-</div>
 
-@*Leave counts cards*@
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
+    @*Leave requests count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Leave Requests Count</h4>
                 <p class="card-description"><h5>@Model.CompanyLeaveRequestsCount</h5></p>
@@ -69,9 +68,10 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
+    @*Leave count card*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body" >
                 <h4 class="card-title">Total Approved Leaves Count</h4>
                 <p class="card-description"><h5>@Model.CompanyLeavesCount</h5></p>
                 <div class="d-flex gap-2 justify-content-center">
@@ -81,5 +81,4 @@
         </div>
     </div>
 </div>
-
 <br />

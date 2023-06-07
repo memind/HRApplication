@@ -1,11 +1,49 @@
-﻿@model DashboardVM
-
+﻿@*personal*@
+@model PersonalDashboardVM
 <div class="row mb-4">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Patron</h4>
                 <p class="card-description"><h5>@ViewBag.PatronName</h5></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Expense Count</h4>
+                <p class="card-description"><h5>@Model.ExpenseCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Expense" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Cash Advance Count</h4>
+                <p class="card-description"><h5>@Model.AdvanceCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="CashAdvance" asp-action="Index" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Leave Count</h4>
+                <p class="card-description"><h5>@Model.LeaveCount</h5></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a asp-controller="Leave" asp-action="ListLeave" style="text-decoration:none;" class="stretched-link"></a>
+                </div>
             </div>
         </div>
     </div>

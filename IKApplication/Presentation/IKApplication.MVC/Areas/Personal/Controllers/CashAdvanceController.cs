@@ -73,7 +73,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 string subject = "New Advance Request Arrived";
                 string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailAdvance.AdvanceTo.Patron.Email, subject, body);
+                _emailService.SendMail(mailAdvance.AdvanceTo.Patron.PersonalEmail, subject, body);
 
                 return RedirectToAction("Index", "CashAdvance");
             }

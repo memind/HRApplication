@@ -82,7 +82,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 string subject = "New Leave Request Arrived";
                 string body = $"The user {mailLeave.AppUser.Name} {mailLeave.AppUser.SecondName} {mailLeave.AppUser.Surname} requested a leave. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
+                _emailService.SendMail(mailLeave.AppUser.Patron.PersonalEmail, subject, body);
 
                 model.TotalLeaveDays = (int)(model.EndDate - model.StartDate).TotalDays;
 

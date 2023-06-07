@@ -237,5 +237,35 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             return userTotal;
         }
+
+        public async Task<List<LeaveVM>> GetPersonelLeaves(Guid id)
+        {
+            var companyLeaves = await _leaveRepository.GetFilteredList
+                (
+                    select: x => new LeaveVM()
+                    {
+                        Id = x.Id,
+                        Status = x.Status,
+                        CreateDate = x.CreateDate,
+                        UpdateDate = x.UpdateDate,
+                        CompanyId = x.CompanyId,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Explanation = x.Explanation,
+                        LeaveStatus = x.LeaveStatus,
+                        ApprovedById = x.ApprovedById,
+                        ApprovedBy = x.ApprovedBy,
+                        AppUserId = x.AppUserId,
+                        AppUser = x.AppUser,
+                        LeaveType = x.LeaveType,
+                        TotalLeaveDays = x.TotalLeaveDays
+                    },
+                    where: x => x.ApprovedById == id && x.Status != Status.Deleted,
+                    orderBy: x => x.OrderBy(x => x.CreateDate),
+                    include: x => x.Include(x => x.AppUser).Include(x => x.ApprovedBy)
+                );
+
+            return companyLeaves;
+        }
     }
 }

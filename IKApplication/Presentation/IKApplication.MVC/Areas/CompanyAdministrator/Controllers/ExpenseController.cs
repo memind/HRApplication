@@ -90,7 +90,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 string subject = "New Expense Request Arrived";
                 string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
+                _emailService.SendMail(mailExpense.ExpenseBy.Patron.PersonalEmail, subject, body);
 
                 return RedirectToAction("Index", "Expense");
             }
@@ -163,7 +163,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Accepted";
             string body = $"Your expense request for '{expense.ShortDescription}' accepted.";
 
-            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.PersonalEmail, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }
@@ -179,7 +179,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Refused";
             string body = $"Your expense request for '{expense.ShortDescription}' refused.";
 
-            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.PersonalEmail, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }

@@ -1,9 +1,10 @@
 ﻿@model DashboardVM
 
-@*Company and company managers count cards*@
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
+
+<div class="row mb-4">
+    @*Company and company managers count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Company Count</h4>
                 <p class="card-description"><h5>@Model.TotalCompanyCount</h5></p>
@@ -11,7 +12,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Total Company Manager Count</h4>
@@ -19,14 +20,10 @@
             </div>
         </div>
     </div>
-</div>
 
-<br />
-
-@*Active and passive companies count cards*@
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
+    @*Active and passive companies count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Active Company Count</h4>
                 <p class="card-description"><h5>@Model.ActiveCompanies</h5></p>
@@ -34,22 +31,18 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Passive Company Count</h4>
                 <p class="card-description"><h5>@Model.PassiveCompanies</h5></p>
             </div>
         </div>
     </div>
-</div>
 
-<br />
-
-@*Active and passive users count cards*@
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
+    @*Active and passive users count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Active Users Count</h4>
                 <p class="card-description"><h5>@Model.ActiveUsers</h5></p>
@@ -57,14 +50,15 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Total Passive Users Count</h4>
                 <p class="card-description"><h5>@Model.PassiveUsers</h5></p>
             </div>
         </div>
     </div>
+
 </div>
 
 <br />
@@ -72,7 +66,7 @@
 @*Company counts by Sector*@
 <div class="row">
     <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
+        <div class="card" style="height: 100%;">
             <div class="card-body">
                 <h4 class="card-title">Company Counts By Sector</h4>
                 <canvas id="myChart"></canvas>

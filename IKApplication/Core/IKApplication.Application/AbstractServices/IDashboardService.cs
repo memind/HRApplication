@@ -6,5 +6,6 @@ namespace IKApplication.Application.AbstractServices
     public interface IDashboardService
     {
         Task<DashboardVM> GetDashboardInfos(Guid companyId);
+        Task<PersonalDashboardVM> GetPersonalDashboardInfos(Guid companyId);
     }
 }

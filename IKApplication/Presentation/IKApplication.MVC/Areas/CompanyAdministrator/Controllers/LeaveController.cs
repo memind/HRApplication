@@ -95,7 +95,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Leave Request Accepted";
             string body = $"Your leave request for '{leave.Explanation}' accepted.";
 
-            _emailService.SendMail(leave.AppUser.Email, subject, body);
+            _emailService.SendMail(leave.AppUser.PersonalEmail, subject, body);
 
             return RedirectToAction("LeaveRequests");
         }
@@ -111,7 +111,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Leave Request Refused";
             string body = $"Your leave request for '{leave.Explanation}' refused.";
 
-            _emailService.SendMail(leave.AppUser.Email, subject, body);
+            _emailService.SendMail(leave.AppUser.PersonalEmail, subject, body);
 
             return RedirectToAction("LeaveRequests");
         }
@@ -164,7 +164,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 string subject = "New Leave Request Arrived";
                 string body = $"The user {mailLeave.AppUser.Name} {mailLeave.AppUser.SecondName} {mailLeave.AppUser.Surname} requested a leave. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Leave/LeaveRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailLeave.AppUser.Patron.Email, subject, body);
+                _emailService.SendMail(mailLeave.AppUser.Patron.PersonalEmail, subject, body);
 
                 model.TotalLeaveDays = (int)(model.EndDate - model.StartDate).TotalDays;
                 return RedirectToAction("Index", "Leave");

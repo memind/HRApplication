@@ -129,7 +129,7 @@ namespace IKApplication.MVC.Controllers
                 string subject = "Password Reset";
                 string body = "To reset your password, please click the link below: hrapplication.azurewebsites.net" + callbackUrl;
 
-                _emailService.SendMail(user.Email, subject, body);
+                _emailService.SendMail(user.PersonalEmail, subject, body);
 
 
                 return RedirectToAction("ResetPasswordConfirmation");

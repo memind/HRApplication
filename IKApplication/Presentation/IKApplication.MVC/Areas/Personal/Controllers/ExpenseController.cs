@@ -74,7 +74,7 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
                 string subject = "New Expense Request Arrived";
                 string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
+                _emailService.SendMail(mailExpense.ExpenseBy.Patron.PersonalEmail, subject, body);
 
                 return RedirectToAction("Index", "Expense");
             }

@@ -88,7 +88,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
                 Guid id = user.Id;
                 user.PatronId = id;
                 await _appUserService.UpdateUser(user);
-                _toast.AddSuccessToastMessage(Messages.User.Accept(user.Email), new ToastrOptions { Title = "User Request" });
+                _toast.AddSuccessToastMessage(Messages.User.Accept(user.PersonalEmail), new ToastrOptions { Title = "User Request" });
             }
             else
             {
@@ -97,7 +97,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
             var subject = "Registration Request Accepted";
             var body = "Your registration request has been accepted. To Login, click the link : hrapplication.azurewebsites.net";
-            _emailService.SendMail(user.Email, subject, body);
+            _emailService.SendMail(user.PersonalEmail, subject, body);
 
             return RedirectToAction("RegistrationList");
         }
@@ -111,7 +111,7 @@ namespace IKApplication.MVC.Areas.SiteAdministrator.Controllers
 
             var subject = "Registration Request Declined";
             var body = "We are sorry to tell you that your registration request has been declined. Check your information and register again";
-            _emailService.SendMail(user.Email, subject, body);
+            _emailService.SendMail(user.PersonalEmail, subject, body);
 
             return RedirectToAction("RegistrationList");
         }

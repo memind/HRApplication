@@ -11,6 +11,7 @@ namespace IKApplication.Application.AbstractServices
         Task Delete(Guid id);
         Task<List<LeaveVM>> GetAllLeaves(Guid companyId);
         Task<List<LeaveVM>> GetPersonelLeaves(string userName);
+        Task<List<LeaveVM>> GetPersonelLeaves(Guid id);
         Task<List<LeaveVM>> GetLeaveRequests(Guid companyId);
         Task<LeaveVM> GetVMById(Guid id);
         Task AcceptLeave(LeaveVM model);
