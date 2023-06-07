@@ -75,6 +75,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ExpenseCreateDTO model)
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
             var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -94,6 +95,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 return RedirectToAction("Index", "Expense");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Expense" });
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View(model);
         }
 
@@ -237,26 +239,19 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             decimal? totalPendingAmount = 0;
             decimal? totalAmount = 0;
 
-            decimal? totalApprovedPenny = 0;
-            decimal? totalPendingPenny = 0;
-            decimal? totalPenny = 0;
-
             foreach (var expense in expenseList)
             {
                 if (expense.Currency == Domain.Enums.Currency.TL)
                 {
                     totalAmount += expense.Amount;
-                    totalPenny += expense.Penny / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
                     totalAmount += (expense.Amount * 20.15m);
-                    totalPenny += (expense.Penny * 20.15m) / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
                     totalAmount += (expense.Amount * 21.58m);
-                    totalPenny += (expense.Penny * 21.58m) / 100m;
                 }
 
 
@@ -266,17 +261,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalPendingAmount += expense.Amount;
-                        totalPendingPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
                         totalPendingAmount += (expense.Amount * 20.15m);
-                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
                         totalPendingAmount += (expense.Amount * 21.58m);
-                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
                     }
 
                 }
@@ -286,24 +278,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalApprovedAmount += expense.Amount;
-                        totalApprovedPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
                         totalApprovedAmount += (expense.Amount * 20.15m);
-                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
                         totalApprovedAmount += (expense.Amount * 21.58m);
-                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
                     }
                 }
             }
-
-            totalAmount += totalPenny;
-            totalApprovedAmount += totalApprovedPenny;
-            totalPendingAmount += totalPendingPenny;
 
             ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Approved Expenses Amount (TL): ";
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -403,7 +388,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}";
+                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Amount;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -479,26 +464,19 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             decimal? totalPendingAmount = 0;
             decimal? totalAmount = 0;
 
-            decimal? totalApprovedPenny = 0;
-            decimal? totalPendingPenny = 0;
-            decimal? totalPenny = 0;
-
             foreach (var expense in customers)
             {
                 if (expense.Currency == Domain.Enums.Currency.TL)
                 {
                     totalAmount += expense.Amount;
-                    totalPenny += expense.Penny / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
                     totalAmount += (expense.Amount * 20.15m);
-                    totalPenny += (expense.Penny * 20.15m) / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
                     totalAmount += (expense.Amount * 21.58m);
-                    totalPenny += (expense.Penny * 21.58m) / 100m;
                 }
 
 
@@ -508,17 +486,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalPendingAmount += expense.Amount;
-                        totalPendingPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
                         totalPendingAmount += (expense.Amount * 20.15m);
-                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
                         totalPendingAmount += (expense.Amount * 21.58m);
-                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
                     }
 
                 }
@@ -528,24 +503,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalApprovedAmount += expense.Amount;
-                        totalApprovedPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
                         totalApprovedAmount += (expense.Amount * 20.15m);
-                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
                         totalApprovedAmount += (expense.Amount * 21.58m);
-                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
                     }
                 }
             }
-
-            totalAmount += totalPenny;
-            totalApprovedAmount += totalApprovedPenny;
-            totalPendingAmount += totalPendingPenny;
 
             //Building an HTML string.
             StringBuilder sb = new StringBuilder();
@@ -637,7 +605,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 sb.Append("</td>");
 
                 sb.Append("<td style='border: 1px solid #ccc'>");
-                sb.Append(expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}");
+                sb.Append(expense.Amount);
                 sb.Append("</td>");
 
                 sb.Append("<td style='border: 1px solid #ccc'>");

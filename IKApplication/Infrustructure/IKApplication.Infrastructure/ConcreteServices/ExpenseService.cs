@@ -27,6 +27,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
             var map = _mapper.Map<Expense>(expenseCreateDTO);
             var expenseBy = await _appUserService.GetCurrentUserInfo(expenseCreateDTO.ExpenseById);
 
+            map.Amount = Convert.ToDecimal(expenseCreateDTO.AmountString);
             map.ApprovedById = (Guid)expenseBy.PatronId;
             map.ExpenseById = expenseBy.Id;
             map.CompanyId = expenseBy.CompanyId;
@@ -44,8 +45,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 expense.DeleteDate = expenseUpdateDTO.DeleteDate;
                 expense.ShortDescription = expenseUpdateDTO.ShortDescription;
                 expense.LongDescription = expenseUpdateDTO.LongDescription;
-                expense.Amount = expenseUpdateDTO.Amount;
-                expense.Penny = expenseUpdateDTO.Penny;
+                expense.Amount = Convert.ToDecimal(expenseUpdateDTO.AmountString);
                 expense.ExpenseDate = expenseUpdateDTO.ExpenseDate;
                 expense.Type = expenseUpdateDTO.Type;
                 expense.Currency = expenseUpdateDTO.Currency;
@@ -73,7 +73,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
-                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -100,8 +99,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         Id = x.Id,
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
-                        Amount = x.Amount,
-                        Penny = x.Penny,
+                        AmountString = x.Amount.ToString(),
                         ExpenseDate = x.ExpenseDate,
                         Type = x.Type,
                         Currency = x.Currency
@@ -126,7 +124,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
-                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -156,7 +153,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
-                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
@@ -194,7 +190,6 @@ namespace IKApplication.Infrastructure.ConcreteServices
                         ShortDescription = x.ShortDescription,
                         LongDescription = x.LongDescription,
                         Amount = x.Amount,
-                        Penny = x.Penny,
                         ExpenseDate = x.ExpenseDate,
                         ApprovedById = x.ApprovedById,
                         ApprovedBy = x.ApprovedBy,
