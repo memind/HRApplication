@@ -234,11 +234,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (advance.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (advance.RequestedAmount * 20.15m);
+                    totalAmount += (advance.RequestedAmount * 23.25m);
                 }
                 if (advance.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (advance.RequestedAmount * 21.58m);
+                    totalAmount += (advance.RequestedAmount * 24.89m);
                 }
             }
 
@@ -378,11 +378,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (advance.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (advance.RequestedAmount * 20.15m);
+                    totalAmount += (advance.RequestedAmount * 23.25m);
                 }
                 if (advance.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (advance.RequestedAmount * 21.58m);
+                    totalAmount += (advance.RequestedAmount * 24.89m);
                 }
             }
 

@@ -247,11 +247,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (expense.Amount * 20.15m);
+                    totalAmount += (expense.Amount * 23.25m);
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (expense.Amount * 21.58m);
+                    totalAmount += (expense.Amount * 24.89m);
                 }
 
 
@@ -264,11 +264,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalPendingAmount += (expense.Amount * 20.15m);
+                        totalPendingAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalPendingAmount += (expense.Amount * 21.58m);
+                        totalPendingAmount += (expense.Amount * 24.89m);
                     }
 
                 }
@@ -281,11 +281,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalApprovedAmount += (expense.Amount * 20.15m);
+                        totalApprovedAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalApprovedAmount += (expense.Amount * 21.58m);
+                        totalApprovedAmount += (expense.Amount * 24.89m);
                     }
                 }
             }
@@ -472,11 +472,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (expense.Amount * 20.15m);
+                    totalAmount += (expense.Amount * 23.25m);
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (expense.Amount * 21.58m);
+                    totalAmount += (expense.Amount * 24.89m);
                 }
 
 
@@ -489,11 +489,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalPendingAmount += (expense.Amount * 20.15m);
+                        totalPendingAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalPendingAmount += (expense.Amount * 21.58m);
+                        totalPendingAmount += (expense.Amount * 24.89m);
                     }
 
                 }
@@ -506,11 +506,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalApprovedAmount += (expense.Amount * 20.15m);
+                        totalApprovedAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalApprovedAmount += (expense.Amount * 21.58m);
+                        totalApprovedAmount += (expense.Amount * 24.89m);
                     }
                 }
             }
