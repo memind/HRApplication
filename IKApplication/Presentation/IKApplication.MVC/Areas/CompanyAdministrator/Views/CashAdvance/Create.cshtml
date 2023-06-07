@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">Add Cash Advance</h5>
-                <form asp-controller="CashAdvance" asp-action="Create" method="post">
+                <form asp-controller="CashAdvance" asp-action="Create" method="post" id="addAdvanceForm" onsubmit="return validateDate();">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <input type="hidden" asp-for="CreateDate" />
@@ -14,7 +14,6 @@
                         <input type="hidden" asp-for="AdvanceToId" />
                         <input type="hidden" asp-for="CompanyId" />
                         <input type="hidden" asp-for="IsPaymentProcessed" />
-                        <input type="hidden" asp-for="FinalDateRequest" />
 
                         <div class="form-group">
                             <label asp-for="Description" class="form-label">Description</label><br />
@@ -32,6 +31,12 @@
                             <label asp-for="InstallmentCount" class="form-label">Installment Count</label><br />
                             <span asp-validation-for="InstallmentCount" class="text-danger"></span>
                             <input id="installmentCountInput" asp-for="InstallmentCount" type="number" class="form-control mb-3">
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="FinalDateRequest" class="form-label">Final Date Request</label><br />
+                            <span asp-validation-for="FinalDateRequest" class="text-danger"></span>
+                            <input id="finalDate" asp-for="FinalDateRequest" type="date" class="form-control mb-3">
                         </div>
 
                         <div class="form-group">
@@ -59,3 +64,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    var formId = "addAdvanceForm";
+    var inputId = "finalDate";
+    function validateDate() {
+        var form = document.getElementById(formId);
+        var input = document.getElementById(inputId);
+        var now = new Date();
+        var enteredDate = new Date(input.value);
+
+        var oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+
+        if (enteredDate < now) {
+            alert("You cannot select a past date!");
+            return false;
+        }
+
+        form.submit();
+    }
+</script>

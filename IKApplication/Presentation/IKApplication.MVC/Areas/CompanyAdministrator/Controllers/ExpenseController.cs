@@ -75,6 +75,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ExpenseCreateDTO model)
         {
+            var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
             var expenseBy = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -89,11 +90,12 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 string subject = "New Expense Request Arrived";
                 string body = $"The user {mailExpense.ExpenseBy.Name} {mailExpense.ExpenseBy.SecondName} {mailExpense.ExpenseBy.Surname} requested an expense. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/Expense/ExpenseRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailExpense.ExpenseBy.Patron.Email, subject, body);
+                _emailService.SendMail(mailExpense.ExpenseBy.Patron.PersonalEmail, subject, body);
 
                 return RedirectToAction("Index", "Expense");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Expense" });
+            ViewBag.ApprovedBy = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
             return View(model);
         }
 
@@ -161,7 +163,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Accepted";
             string body = $"Your expense request for '{expense.ShortDescription}' accepted.";
 
-            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.PersonalEmail, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }
@@ -177,7 +179,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Expense Request Refused";
             string body = $"Your expense request for '{expense.ShortDescription}' refused.";
 
-            _emailService.SendMail(expense.ExpenseBy.Email, subject, body);
+            _emailService.SendMail(expense.ExpenseBy.PersonalEmail, subject, body);
 
             return RedirectToAction("ExpenseRequests");
         }
@@ -237,26 +239,19 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             decimal? totalPendingAmount = 0;
             decimal? totalAmount = 0;
 
-            decimal? totalApprovedPenny = 0;
-            decimal? totalPendingPenny = 0;
-            decimal? totalPenny = 0;
-
             foreach (var expense in expenseList)
             {
                 if (expense.Currency == Domain.Enums.Currency.TL)
                 {
                     totalAmount += expense.Amount;
-                    totalPenny += expense.Penny / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (expense.Amount * 20.15m);
-                    totalPenny += (expense.Penny * 20.15m) / 100m;
+                    totalAmount += (expense.Amount * 23.25m);
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (expense.Amount * 21.58m);
-                    totalPenny += (expense.Penny * 21.58m) / 100m;
+                    totalAmount += (expense.Amount * 24.89m);
                 }
 
 
@@ -266,17 +261,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalPendingAmount += expense.Amount;
-                        totalPendingPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalPendingAmount += (expense.Amount * 20.15m);
-                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
+                        totalPendingAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalPendingAmount += (expense.Amount * 21.58m);
-                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
+                        totalPendingAmount += (expense.Amount * 24.89m);
                     }
 
                 }
@@ -286,24 +278,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalApprovedAmount += expense.Amount;
-                        totalApprovedPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalApprovedAmount += (expense.Amount * 20.15m);
-                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
+                        totalApprovedAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalApprovedAmount += (expense.Amount * 21.58m);
-                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
+                        totalApprovedAmount += (expense.Amount * 24.89m);
                     }
                 }
             }
-
-            totalAmount += totalPenny;
-            totalApprovedAmount += totalApprovedPenny;
-            totalPendingAmount += totalPendingPenny;
 
             ws.Cells[string.Format("A{0}", rowStart)].Value = "Total Approved Expenses Amount (TL): ";
             ws.Cells[string.Format("A{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -403,7 +388,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("D{0}", rowStart)].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
-                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}";
+                ws.Cells[string.Format("E{0}", rowStart)].Value = expense.Amount;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 ws.Cells[string.Format("E{0}", rowStart)].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
@@ -479,26 +464,19 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             decimal? totalPendingAmount = 0;
             decimal? totalAmount = 0;
 
-            decimal? totalApprovedPenny = 0;
-            decimal? totalPendingPenny = 0;
-            decimal? totalPenny = 0;
-
             foreach (var expense in customers)
             {
                 if (expense.Currency == Domain.Enums.Currency.TL)
                 {
                     totalAmount += expense.Amount;
-                    totalPenny += expense.Penny / 100m;
                 }
                 if (expense.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (expense.Amount * 20.15m);
-                    totalPenny += (expense.Penny * 20.15m) / 100m;
+                    totalAmount += (expense.Amount * 23.25m);
                 }
                 if (expense.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (expense.Amount * 21.58m);
-                    totalPenny += (expense.Penny * 21.58m) / 100m;
+                    totalAmount += (expense.Amount * 24.89m);
                 }
 
 
@@ -508,17 +486,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalPendingAmount += expense.Amount;
-                        totalPendingPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalPendingAmount += (expense.Amount * 20.15m);
-                        totalPendingPenny += (expense.Penny * 20.15m) / 100m;
+                        totalPendingAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalPendingAmount += (expense.Amount * 21.58m);
-                        totalPendingPenny += (expense.Penny * 21.58m) / 100m;
+                        totalPendingAmount += (expense.Amount * 24.89m);
                     }
 
                 }
@@ -528,24 +503,17 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                     if (expense.Currency == Domain.Enums.Currency.TL)
                     {
                         totalApprovedAmount += expense.Amount;
-                        totalApprovedPenny += expense.Penny / 100m;
                     }
                     if (expense.Currency == Domain.Enums.Currency.USD)
                     {
-                        totalApprovedAmount += (expense.Amount * 20.15m);
-                        totalApprovedPenny += (expense.Penny * 20.15m) / 100m;
+                        totalApprovedAmount += (expense.Amount * 23.25m);
                     }
                     if (expense.Currency == Domain.Enums.Currency.EUR)
                     {
-                        totalApprovedAmount += (expense.Amount * 21.58m);
-                        totalApprovedPenny += (expense.Penny * 21.58m) / 100m;
+                        totalApprovedAmount += (expense.Amount * 24.89m);
                     }
                 }
             }
-
-            totalAmount += totalPenny;
-            totalApprovedAmount += totalApprovedPenny;
-            totalPendingAmount += totalPendingPenny;
 
             //Building an HTML string.
             StringBuilder sb = new StringBuilder();
@@ -637,7 +605,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 sb.Append("</td>");
 
                 sb.Append("<td style='border: 1px solid #ccc'>");
-                sb.Append(expense.Penny < 10 ? $"{expense.Amount},0{expense.Penny}" : $"{expense.Amount},{expense.Penny}");
+                sb.Append(expense.Amount);
                 sb.Append("</td>");
 
                 sb.Append("<td style='border: 1px solid #ccc'>");
@@ -660,7 +628,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 30f, 10f);
+            Document pdfDoc = new Document(PageSize.A3, 10f, 10f, 30f, 10f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

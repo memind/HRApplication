@@ -53,12 +53,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _professionService.Create(model);
-                _toast.AddSuccessToastMessage(Messages.Profession.Create(), new ToastrOptions { Title = "Creating Profession" });
-
-                return RedirectToAction("Index", "Profession");
+                var result = await _professionService.Create(model);
+                if (result)
+                {
+                    _toast.AddSuccessToastMessage(Messages.Profession.Create(), new ToastrOptions { Title = "Creating Profession" });
+                    return RedirectToAction("Index", "Profession");
+                }
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Profession" });
+            _toast.AddErrorToastMessage(Messages.Profession.Duplicate("created"), new ToastrOptions { Title = "Creating Profession" });
             return View(model);
         }
 
@@ -74,11 +76,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _professionService.Update(model);
-                _toast.AddSuccessToastMessage(Messages.Profession.Update(), new ToastrOptions { Title = "Updating Profession" });
-                return RedirectToAction("Index", "Profession");
+                var result = await _professionService.Update(model);
+                if (result)
+                {
+                    _toast.AddSuccessToastMessage(Messages.Profession.Update(), new ToastrOptions { Title = "Updating Profession" });
+                    return RedirectToAction("Index", "Profession");
+                }
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Profession" });
+            _toast.AddErrorToastMessage(Messages.Profession.Duplicate("updated"), new ToastrOptions { Title = "Updating Profession" });
             return View(model);
         }
 

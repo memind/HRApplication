@@ -15,7 +15,7 @@ namespace IKApplication.Application.dtos.CashAdvanceDTOs
         public AppUser? AdvanceTo { get; set; }
         public AppUser? Director { get; set; }
         public PaymentStatus? IsPaymentProcessed { get; set; }
-        public DateTime? FinalDateRequest { get; set; }
+        public DateTime FinalDateRequest { get; set; }
         public DateTime CreateDate => DateTime.Now;
         public Status Status => Status.Passive;
         public Currency Currency { get; set; }

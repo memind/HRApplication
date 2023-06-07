@@ -85,7 +85,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 string subject = "New Advance Request Arrived";
                 string body = $"The user {mailAdvance.AdvanceTo.Name} {mailAdvance.AdvanceTo.SecondName} {mailAdvance.AdvanceTo.Surname} requested a cash advance. See request by clicking the link: https://hrapplication.azurewebsites.net/CompanyAdministrator/CashAdvance/CashAdvanceRequestDetails/{model.Id}?";
 
-                _emailService.SendMail(mailAdvance.AdvanceTo.Patron.Email, subject, body);
+                _emailService.SendMail(mailAdvance.AdvanceTo.Patron.PersonalEmail, subject, body);
                 return RedirectToAction("Index", "CashAdvance");
             }
             _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Advance" });
@@ -157,7 +157,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Advance Request Accepted";
             string body = $"Your cash advance request for '{advance.Description}' accepted.";
 
-            _emailService.SendMail(advance.AdvanceTo.Email, subject, body);
+            _emailService.SendMail(advance.AdvanceTo.PersonalEmail, subject, body);
 
             return RedirectToAction("CashAdvanceRequests");
         }
@@ -171,7 +171,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
             string subject = "Your Advance Request Refused";
             string body = $"Your cash advance request for '{advance.Description}' refused.";
 
-            _emailService.SendMail(advance.AdvanceTo.Email, subject, body);
+            _emailService.SendMail(advance.AdvanceTo.PersonalEmail, subject, body);
 
             _toast.AddSuccessToastMessage(Messages.Advance.Refuse($"{advance.AdvanceTo.Name} {advance.AdvanceTo.SecondName} {advance.AdvanceTo.Surname}"), new ToastrOptions { Title = "Refusing Advance" });
             return RedirectToAction("CashAdvanceRequests");
@@ -234,11 +234,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (advance.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (advance.RequestedAmount * 20.15m);
+                    totalAmount += (advance.RequestedAmount * 23.25m);
                 }
                 if (advance.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (advance.RequestedAmount * 21.58m);
+                    totalAmount += (advance.RequestedAmount * 24.89m);
                 }
             }
 
@@ -378,11 +378,11 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
                 }
                 if (advance.Currency == Domain.Enums.Currency.USD)
                 {
-                    totalAmount += (advance.RequestedAmount * 20.15m);
+                    totalAmount += (advance.RequestedAmount * 23.25m);
                 }
                 if (advance.Currency == Domain.Enums.Currency.EUR)
                 {
-                    totalAmount += (advance.RequestedAmount * 21.58m);
+                    totalAmount += (advance.RequestedAmount * 24.89m);
                 }
             }
 
@@ -470,7 +470,7 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
 
             MemoryStream stream = new MemoryStream();
             StringReader sr = new StringReader(sb.ToString());
-            Document pdfDoc = new Document(PageSize.A4, 4f, 4f, 30f, 10f);
+            Document pdfDoc = new Document(PageSize.A3, 4f, 4f, 30f, 10f);
             PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
             pdfDoc.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

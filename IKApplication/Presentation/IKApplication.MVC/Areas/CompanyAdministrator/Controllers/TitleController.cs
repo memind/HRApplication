@@ -55,12 +55,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _titleService.Create(model);
-                _toast.AddSuccessToastMessage(Messages.Title.Create(), new ToastrOptions { Title = "Creating Title" });
-
-                return RedirectToAction("Index", "Title");
+                var result = await _titleService.Create(model);
+                if (result)
+                {
+                    _toast.AddSuccessToastMessage(Messages.Title.Create(), new ToastrOptions { Title = "Creating Title" });
+                    return RedirectToAction("Index", "Title");
+                }
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Creating Title" });
+            _toast.AddErrorToastMessage(Messages.Title.Duplicate("created"), new ToastrOptions { Title = "Creating Title" });
             return View(model);
         }
 
@@ -76,11 +78,14 @@ namespace IKApplication.MVC.Areas.CompanyAdministrator.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _titleService.Update(model);
-                _toast.AddSuccessToastMessage(Messages.Title.Update(), new ToastrOptions { Title = "Updating Title" });
-                return RedirectToAction("Index", "Title");
+                var result = await _titleService.Update(model);
+                if (result)
+                {
+                    _toast.AddSuccessToastMessage(Messages.Title.Update(), new ToastrOptions { Title = "Updating Title" });
+                    return RedirectToAction("Index", "Title");
+                }
             }
-            _toast.AddErrorToastMessage(Messages.Errors.Error(), new ToastrOptions { Title = "Updating Title" });
+            _toast.AddErrorToastMessage(Messages.Title.Duplicate("updated"), new ToastrOptions { Title = "Updating Title" });
             return View(model);
         }
 

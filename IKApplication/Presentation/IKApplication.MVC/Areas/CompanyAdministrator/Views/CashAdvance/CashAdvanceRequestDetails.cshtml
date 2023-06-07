@@ -23,7 +23,13 @@
 
                             <div class="form-group">
                                 <label asp-for="InstallmentCount" class="form-label">Installment Count</label><br />
-                                <input asp-for="InstallmentCount" type="number" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: normal;">
+                                <input asp-for="InstallmentCount" type="number" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="FinalDateRequest" class="form-label">Final Date Request</label><br />
+                                <span asp-validation-for="FinalDateRequest" class="text-danger"></span>
+                                <input asp-for="FinalDateRequest" type="date" class="form-control mb-3" disabled style="background-color: #7f7f7f; color: #000000; font-weight: 450;">
                             </div>
 
                             <div class="form-group">

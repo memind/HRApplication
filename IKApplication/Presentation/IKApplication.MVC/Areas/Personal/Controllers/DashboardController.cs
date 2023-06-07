@@ -22,7 +22,8 @@ namespace IKApplication.MVC.Areas.Personal.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _appUserService.GetCurrentUserInfo(User.Identity.Name);
-            return View(await _dashboardService.GetDashboardInfos(user.CompanyId));
+            ViewBag.PatronName = $"{user.Patron.Name} {user.Patron.SecondName} {user.Patron.Surname}";
+            return View(await _dashboardService.GetPersonalDashboardInfos(user.Id));
         }
     }
 }

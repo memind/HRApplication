@@ -50,5 +50,16 @@ namespace IKApplication.Infrastructure.ConcreteServices
 
             return dashboardVM;
         }
+
+        public async Task<PersonalDashboardVM> GetPersonalDashboardInfos(Guid personalId)
+        {
+            PersonalDashboardVM dashboardVM = new PersonalDashboardVM();
+
+            dashboardVM.AdvanceCount = (await _cashAdvanceService.GetPersonalAdvances(personalId)).Count();
+            dashboardVM.ExpenseCount = (await _expenseService.GetPersonalExpenses(personalId)).Count();
+            dashboardVM.LeaveCount = (await _leaveService.GetPersonelLeaves(personalId)).Count();
+
+            return dashboardVM;
+        }
     }
 }

@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <h5 class="card-header">Update A Cash Advance</h5>
-                <form asp-controller="CashAdvance" asp-action="Update" method="post">
+                <form asp-controller="CashAdvance" asp-action="Update" method="post" id="updateAdvanceForm" onsubmit="return validateDate();">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="card-body">
                         <input type="hidden" asp-for="Id" />
@@ -33,6 +33,12 @@
                         </div>
 
                         <div class="form-group">
+                            <label asp-for="FinalDateRequest" class="form-label">Final Date Request</label><br />
+                            <span asp-validation-for="FinalDateRequest" class="text-danger"></span>
+                            <input id="finalDate" asp-for="FinalDateRequest" type="date" class="form-control mb-3">
+                        </div>
+
+                        <div class="form-group">
                             <label asp-for="Currency" class="form-label">Currency</label><br />
                             <span asp-validation-for="Currency" class="text-danger"></span>
                             <select asp-for="Currency" type="text" class="form-control mb-3" asp-items="@Html.GetEnumSelectList<Currency>()"></select>
@@ -50,3 +56,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    var formId = "updateAdvanceForm";
+    var inputId = "finalDate";
+    function validateDate() {
+        var form = document.getElementById(formId);
+        var input = document.getElementById(inputId);
+        var now = new Date();
+        var enteredDate = new Date(input.value);
+
+        if (enteredDate < now) {
+            alert("You cannot select a past date!");
+            return false;
+        }
+
+        form.submit();
+    }
+</script>
