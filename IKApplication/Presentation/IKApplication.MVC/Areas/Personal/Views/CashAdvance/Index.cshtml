@@ -64,13 +64,12 @@
                                                 @if (item.Status == Status.Passive)
                                                 {
                                                     <button class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="Update" asp-route-id="@item.Id">Update</button>
-                                                    <button class="btn btn-outline-danger disabled" disabled>Delete</button>
-
+                                                    <button class="btn btn-outline-danger" asp-controller="CashAdvance" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
                                                 }
                                                 else
                                                 {
                                                     <button class="btn btn-outline-primary disabled" disabled>Update</button>
-                                                    <button class="btn btn-outline-danger" asp-controller="CashAdvance" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                    <button class="btn btn-outline-danger disabled" disabled>Delete</button>
                                                 }
                                             </td>
                                         </tr>

@@ -93,7 +93,7 @@ namespace IKApplication.MVC.Controllers
                 body = " Your registration request has been arrived. We will send you the result via Email.";
 
                 _emailService.SendMail(model.PersonalEmail, subject, body);
-
+                _toast.AddSuccessToastMessage(Messages.Register.Success(), new ToastrOptions { Title = "Registration" });
                 return RedirectToAction("Login", "Account");
             }
 
