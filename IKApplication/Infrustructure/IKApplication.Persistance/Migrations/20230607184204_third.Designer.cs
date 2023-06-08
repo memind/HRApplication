@@ -4,6 +4,7 @@ using IKApplication.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IKApplication.Persistance.Migrations
 {
     [DbContext(typeof(IKAppDbContext))]
-    partial class IKAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230607184204_third")]
+    partial class third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,8 +318,8 @@ namespace IKApplication.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ApprovedById")
                         .HasColumnType("uniqueidentifier");
@@ -343,9 +345,6 @@ namespace IKApplication.Persistance.Migrations
                     b.Property<string>("LongDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Penny")
-                        .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
