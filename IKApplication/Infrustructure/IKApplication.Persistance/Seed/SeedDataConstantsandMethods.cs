@@ -189,7 +189,6 @@
             "Full Stack Developer",
             "Systems Administrator",
             "Data Analyst",
-            "Other Industries:",
             "Registered Nurse",
             "Pharmacy Technician",
             "Physical Therapist",
