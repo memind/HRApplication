@@ -32,7 +32,6 @@
                                     <tbody>
                                         @if (ViewBag.Area != "Site Administrator")
                                         {
-
                                             <div class="d-flex justify-content-center mb-2">
                                                 <div class="col-md-3 m-3">
                                                     <a asp-controller="User" asp-action="CreateCompanyManagerAndPersonal">
@@ -65,17 +64,33 @@
                                                     <td>In Pending</td>
                                                 }
 
-
-
                                                 <td>
                                                     <a asp-action="Update" asp-route-id="@item.Id">
                                                         <button class="btn btn-outline-primary">Update</button>
                                                     </a>
-                                                    <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">
-                                                        <button class="btn btn-outline-danger">Delete</button>
-                                                    </a>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">Delete</button>
                                                 </td>
                                             </tr>
+
+                                            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5">Delete a Personal</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete @item.FullName?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                                                            <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-outline-danger">Delete</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
                                     </tbody>
                                 </table>
@@ -98,10 +113,13 @@
             </a>
         </div>
     </div>
-
-
-
 </div>
+
+
+
+
+
+
 
 
 <script>

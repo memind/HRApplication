@@ -39,7 +39,9 @@
                                                     <td>@item.NumberOfEmployees</td>
                                                     <td>@item.ContactPerson</td>
                                                     <td>
-                                                        <button class="btn btn-outline-primary" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                        <a asp-controller="Company" asp-action="Update" asp-route-id="@item.Id">
+                                                        <button class="btn btn-outline-primary" >Update</button>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             }
