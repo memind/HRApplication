@@ -4,6 +4,7 @@ using IKApplication.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IKApplication.Persistance.Migrations
 {
     [DbContext(typeof(IKAppDbContext))]
-    partial class IKAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531192741_ilk")]
+    partial class ilk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -456,45 +458,6 @@ namespace IKApplication.Persistance.Migrations
                     b.ToTable("Professions");
                 });
 
-            modelBuilder.Entity("IKApplication.Domain.Entites.Report", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FileType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReportPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("IKApplication.Domain.Entites.Sector", b =>
                 {
                     b.Property<Guid>("Id")
@@ -805,17 +768,6 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("IKApplication.Domain.Entites.Report", b =>
-                {
-                    b.HasOne("IKApplication.Domain.Entites.AppUser", "Creator")
-                        .WithMany("Reports")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
             modelBuilder.Entity("IKApplication.Domain.Entites.Title", b =>
                 {
                     b.HasOne("IKApplication.Domain.Entites.Company", "Company")
@@ -899,8 +851,6 @@ namespace IKApplication.Persistance.Migrations
                     b.Navigation("Expenses");
 
                     b.Navigation("Leaves");
-
-                    b.Navigation("Reports");
                 });
 
             modelBuilder.Entity("IKApplication.Domain.Entites.Company", b =>

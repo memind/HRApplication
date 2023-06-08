@@ -37,7 +37,7 @@ namespace IKApplication.Persistance
             builder.ApplyConfiguration(new CashAdvanceConfig());
             builder.ApplyConfiguration(new ReportConfig());
 
-            SeedData.Seed(builder);
+            //SeedData.Seed(builder);
             base.OnModelCreating(builder);
 
         }
