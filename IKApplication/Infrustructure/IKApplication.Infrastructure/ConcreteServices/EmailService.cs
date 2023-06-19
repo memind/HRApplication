@@ -14,7 +14,7 @@ namespace IKApplication.Infrastructure.ConcreteServices
                 client.UseDefaultCredentials = false;
                 client.Port = 587;
                 client.Host = "smtp.gmail.com";
-                client.Credentials = new NetworkCredential("ikappteam3@gmail.com", "ctxvcvhkndtufiua");
+                client.Credentials = new NetworkCredential("", ""); // Enter your email and Google Authenticate token
                 client.EnableSsl = true;
 
                 MailMessage mailMessage = new MailMessage();
